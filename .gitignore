@@ -1,0 +1,30 @@
+# Секреты и конфиги
+.env
+.env.local
+*.pem
+*.key
+
+# Системные файлы
+__pycache__/
+node_modules/
+.DS_Store
+
+# Артефакты сборки и логи
+dist/
+build/
+*.log
+
+# Инструменты Python
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Инструменты TypeScript
+*.tsbuildinfo
+
+# Исключения для проекта
+!.gitignore
+!QWEN.md
+!docs/
+!specs/

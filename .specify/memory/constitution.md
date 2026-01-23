@@ -1,50 +1,50 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Конституция проекта [PROJECT_NAME]
+<!-- Пример: Конституция спецификации, Конституция TaskFlow и т.д. -->
 
-## Core Principles
+## Основные принципы
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### [НАЗВАНИЕ_ПРИНЦИПА_1]
+<!-- Пример: I. Библиотечно-ориентированный подход -->
+[ОПИСАНИЕ_ПРИНЦИПА_1]
+<!-- Пример: Каждая функция начинается как автономная библиотека; Библиотеки должны быть самодостаточными, независимо тестируемыми, документированными; Требуется четкая цель - без библиотек только для организационных нужд -->
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### [НАЗВАНИЕ_ПРИНЦИПА_2]
+<!-- Пример: II. Интерфейс командной строки -->
+[ОПИСАНИЕ_ПРИНЦИПА_2]
+<!-- Пример: Каждая библиотека предоставляет функциональность через CLI; Протокол ввода/вывода текста: stdin/args → stdout, ошибки → stderr; Поддержка JSON и человеко-читаемых форматов -->
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### [НАЗВАНИЕ_ПРИНЦИПА_3]
+<!-- Пример: III. Тестирование в первую очередь (НЕ ПОДЛЕЖИТ ОБСУЖДЕНИЮ) -->
+[ОПИСАНИЕ_ПРИНЦИПА_3]
+<!-- Пример: Обязательный TDD: Сначала пишутся тесты → одобрение пользователем → тесты завершаются неудачно → затем реализация; Цикл Red-Green-Refactor строго соблюдается -->
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### [НАЗВАНИЕ_ПРИНЦИПА_4]
+<!-- Пример: IV. Интеграционное тестирование -->
+[ОПИСАНИЕ_ПРИНЦИПА_4]
+<!-- Пример: Области, требующие интеграционного тестирования: тесты контрактов новых библиотек, изменения контрактов, межсервисное взаимодействие, общие схемы -->
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### [НАЗВАНИЕ_ПРИНЦИПА_5]
+<!-- Пример: V. Наблюдаемость, VI. Версионирование и критические изменения, VII. Простота -->
+[ОПИСАНИЕ_ПРИНЦИПА_5]
+<!-- Пример: Текстовый ввод/вывод обеспечивает отладку; Требуется структурированное ведение журналов; Или: формат MAJOR.MINOR.BUILD; Или: начинайте с простого, принципы YAGNI -->
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## [НАЗВАНИЕ_РАЗДЕЛА_2]
+<!-- Пример: Дополнительные ограничения, Требования безопасности, Стандарты производительности и т.д. -->
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+[СОДЕРЖАНИЕ_РАЗДЕЛА_2]
+<!-- Пример: Требования к технологическому стеку, стандарты соответствия, политики развертывания и т.д. -->
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## [НАЗВАНИЕ_РАЗДЕЛА_3]
+<!-- Пример: Рабочий процесс разработки, Процесс проверки, Контрольные точки качества и т.д. -->
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+[СОДЕРЖАНИЕ_РАЗДЕЛА_3]
+<!-- Пример: Требования к проверке кода, контрольные точки тестирования, процесс утверждения развертывания и т.д. -->
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+## Управление
+<!-- Пример: Конституция превосходит все остальные практики; Изменения требуют документирования, утверждения, плана миграции -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+[ПРАВИЛА_УПРАВЛЕНИЯ]
+<!-- Пример: Все pull request/ревью должны проверять соответствие; Сложность должна быть обоснована; Используйте [ФАЙЛ_РУКОВОДСТВА] для руководства разработкой во время выполнения -->
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Версия**: [ВЕРСИЯ_КОНСТИТУЦИИ] | **Утверждена**: [ДАТА_УТВЕРЖДЕНИЯ] | **Последнее изменение**: [ДАТА_ПОСЛЕДНЕГО_ИЗМЕНЕНИЯ]
+<!-- Пример: Версия: 2.1.1 | Утверждена: 2025-06-13 | Последнее изменение: 2025-07-16 -->

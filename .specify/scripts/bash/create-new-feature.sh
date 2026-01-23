@@ -10,8 +10,8 @@ i=1
 while [ $i -le $# ]; do
     arg="${!i}"
     case "$arg" in
-        --json) 
-            JSON_MODE=true 
+        --json)
+            JSON_MODE=true
             ;;
         --short-name)
             if [ $((i + 1)) -gt $# ]; then
@@ -20,7 +20,7 @@ while [ $i -le $# ]; do
             fi
             i=$((i + 1))
             next_arg="${!i}"
-            # Check if the next argument is another option (starts with --)
+            # Проверить, является ли следующий аргумент другой опцией (начинается с --)
             if [[ "$next_arg" == --* ]]; then
                 echo 'Error: --short-name requires a value' >&2
                 exit 1
@@ -40,22 +40,22 @@ while [ $i -le $# ]; do
             fi
             BRANCH_NUMBER="$next_arg"
             ;;
-        --help|-h) 
-            echo "Usage: $0 [--json] [--short-name <name>] [--number N] <feature_description>"
+        --help|-h)
+            echo "Использование: $0 [--json] [--short-name <name>] [--number N] <feature_description>"
             echo ""
-            echo "Options:"
-            echo "  --json              Output in JSON format"
-            echo "  --short-name <name> Provide a custom short name (2-4 words) for the branch"
-            echo "  --number N          Specify branch number manually (overrides auto-detection)"
-            echo "  --help, -h          Show this help message"
+            echo "Опции:"
+            echo "  --json              Вывод в формате JSON"
+            echo "  --short-name <name> Указать пользовательское короткое имя (2-4 слова) для ветки"
+            echo "  --number N          Указать номер ветки вручную (переопределяет автоопределение)"
+            echo "  --help, -h          Показать это справочное сообщение"
             echo ""
-            echo "Examples:"
+            echo "Примеры:"
             echo "  $0 'Add user authentication system' --short-name 'user-auth'"
             echo "  $0 'Implement OAuth2 integration for API' --number 5"
             exit 0
             ;;
-        *) 
-            ARGS+=("$arg") 
+        *)
+            ARGS+=("$arg")
             ;;
     esac
     i=$((i + 1))
@@ -126,26 +126,26 @@ get_highest_from_branches() {
     echo "$highest"
 }
 
-# Function to check existing branches (local and remote) and return next available number
+# Функция для проверки существующих веток (локальных и удаленных) и возврата следующего доступного номера
 check_existing_branches() {
     local specs_dir="$1"
 
-    # Fetch all remotes to get latest branch info (suppress errors if no remotes)
+    # Получить все удаленные репозитории, чтобы получить последние данные о ветках (подавить ошибки, если нет удаленных репозиториев)
     git fetch --all --prune 2>/dev/null || true
 
-    # Get highest number from ALL branches (not just matching short name)
+    # Получить самый высокий номер из ВСЕХ веток (не только совпадающих по короткому имени)
     local highest_branch=$(get_highest_from_branches)
 
-    # Get highest number from ALL specs (not just matching short name)
+    # Получить самый высокий номер из ВСЕХ спецификаций (не только совпадающих по короткому имени)
     local highest_spec=$(get_highest_from_specs "$specs_dir")
 
-    # Take the maximum of both
+    # Взять максимум из обоих
     local max_num=$highest_branch
     if [ "$highest_spec" -gt "$max_num" ]; then
         max_num=$highest_spec
     fi
 
-    # Return next number
+    # Вернуть следующий номер
     echo $((max_num + 1))
 }
 
@@ -155,9 +155,9 @@ clean_branch_name() {
     echo "$name" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/-\+/-/g' | sed 's/^-//' | sed 's/-$//'
 }
 
-# Resolve repository root. Prefer git information when available, but fall back
-# to searching for repository markers so the workflow still functions in repositories that
-# were initialised with --no-git.
+# Определить корень репозитория. Предпочтительно использовать информацию git, когда она доступна, но вернуться
+# к поиску маркеров репозитория, чтобы рабочий процесс продолжал работать в репозиториях,
+# которые были инициализированы с --no-git.
 SCRIPT_DIR="$(CDPATH="" cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if git rev-parse --show-toplevel >/dev/null 2>&1; then
@@ -177,38 +177,38 @@ cd "$REPO_ROOT"
 SPECS_DIR="$REPO_ROOT/specs"
 mkdir -p "$SPECS_DIR"
 
-# Function to generate branch name with stop word filtering and length filtering
+# Функция для генерации имени ветки с фильтрацией стоп-слов и фильтрацией по длине
 generate_branch_name() {
     local description="$1"
-    
-    # Common stop words to filter out
+
+    # Общие стоп-слова для фильтрации
     local stop_words="^(i|a|an|the|to|for|of|in|on|at|by|with|from|is|are|was|were|be|been|being|have|has|had|do|does|did|will|would|should|could|can|may|might|must|shall|this|that|these|those|my|your|our|their|want|need|add|get|set)$"
-    
-    # Convert to lowercase and split into words
+
+    # Преобразовать в нижний регистр и разделить на слова
     local clean_name=$(echo "$description" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/ /g')
-    
-    # Filter words: remove stop words and words shorter than 3 chars (unless they're uppercase acronyms in original)
+
+    # Фильтровать слова: удалить стоп-слова и слова короче 3 символов (если только они не являются заглавными аббревиатурами в оригинале)
     local meaningful_words=()
     for word in $clean_name; do
-        # Skip empty words
+        # Пропустить пустые слова
         [ -z "$word" ] && continue
-        
-        # Keep words that are NOT stop words AND (length >= 3 OR are potential acronyms)
+
+        # Сохранить слова, которые НЕ являются стоп-словами И (длина >= 3 ИЛИ потенциальные аббревиатуры)
         if ! echo "$word" | grep -qiE "$stop_words"; then
             if [ ${#word} -ge 3 ]; then
                 meaningful_words+=("$word")
             elif echo "$description" | grep -q "\b${word^^}\b"; then
-                # Keep short words if they appear as uppercase in original (likely acronyms)
+                # Сохранить короткие слова, если они встречаются как заглавные в оригинале (вероятно, аббревиатуры)
                 meaningful_words+=("$word")
             fi
         fi
     done
-    
-    # If we have meaningful words, use first 3-4 of them
+
+    # Если у нас есть осмысленные слова, использовать первые 3-4 из них
     if [ ${#meaningful_words[@]} -gt 0 ]; then
         local max_words=3
         if [ ${#meaningful_words[@]} -eq 4 ]; then max_words=4; fi
-        
+
         local result=""
         local count=0
         for word in "${meaningful_words[@]}"; do
@@ -219,7 +219,7 @@ generate_branch_name() {
         done
         echo "$result"
     else
-        # Fallback to original logic if no meaningful words found
+        # Вернуться к исходной логике, если не найдено осмысленных слов
         local cleaned=$(clean_branch_name "$description")
         echo "$cleaned" | tr '-' '\n' | grep -v '^$' | head -3 | tr '\n' '-' | sed 's/-$//'
     fi
@@ -250,22 +250,22 @@ fi
 FEATURE_NUM=$(printf "%03d" "$((10#$BRANCH_NUMBER))")
 BRANCH_NAME="${FEATURE_NUM}-${BRANCH_SUFFIX}"
 
-# GitHub enforces a 244-byte limit on branch names
-# Validate and truncate if necessary
+# GitHub применяет ограничение в 244 байта на имена веток
+# Проверить и усечь при необходимости
 MAX_BRANCH_LENGTH=244
 if [ ${#BRANCH_NAME} -gt $MAX_BRANCH_LENGTH ]; then
-    # Calculate how much we need to trim from suffix
-    # Account for: feature number (3) + hyphen (1) = 4 chars
+    # Рассчитать, сколько нужно убрать из суффикса
+    # Учесть: номер функции (3) + дефис (1) = 4 символа
     MAX_SUFFIX_LENGTH=$((MAX_BRANCH_LENGTH - 4))
-    
-    # Truncate suffix at word boundary if possible
+
+    # Усечь суффикс на границе слова, если возможно
     TRUNCATED_SUFFIX=$(echo "$BRANCH_SUFFIX" | cut -c1-$MAX_SUFFIX_LENGTH)
-    # Remove trailing hyphen if truncation created one
+    # Удалить завершающий дефис, если усечение создало его
     TRUNCATED_SUFFIX=$(echo "$TRUNCATED_SUFFIX" | sed 's/-$//')
-    
+
     ORIGINAL_BRANCH_NAME="$BRANCH_NAME"
     BRANCH_NAME="${FEATURE_NUM}-${TRUNCATED_SUFFIX}"
-    
+
     >&2 echo "[specify] Warning: Branch name exceeded GitHub's 244-byte limit"
     >&2 echo "[specify] Original: $ORIGINAL_BRANCH_NAME (${#ORIGINAL_BRANCH_NAME} bytes)"
     >&2 echo "[specify] Truncated to: $BRANCH_NAME (${#BRANCH_NAME} bytes)"

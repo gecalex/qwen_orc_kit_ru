@@ -1,27 +1,27 @@
 #!/usr/bin/env bash
 
-# Consolidated prerequisite checking script
+# Скрипт проверки зависимостей
 #
-# This script provides unified prerequisite checking for Spec-Driven Development workflow.
-# It replaces the functionality previously spread across multiple scripts.
+# Этот скрипт предоставляет унифицированную проверку зависимостей для рабочего процесса разработки по спецификациям.
+# Он заменяет функциональность, ранее распределенную по нескольким скриптам.
 #
-# Usage: ./check-prerequisites.sh [OPTIONS]
+# Использование: ./check-prerequisites.sh [ОПЦИИ]
 #
-# OPTIONS:
-#   --json              Output in JSON format
-#   --require-tasks     Require tasks.md to exist (for implementation phase)
-#   --include-tasks     Include tasks.md in AVAILABLE_DOCS list
-#   --paths-only        Only output path variables (no validation)
-#   --help, -h          Show help message
+# ОПЦИИ:
+#   --json              Вывод в формате JSON
+#   --require-tasks     Требовать существования tasks.md (для фазы реализации)
+#   --include-tasks     Включить tasks.md в список AVAILABLE_DOCS
+#   --paths-only        Выводить только переменные пути (без проверки зависимостей)
+#   --help, -h          Показать справочное сообщение
 #
-# OUTPUTS:
-#   JSON mode: {"FEATURE_DIR":"...", "AVAILABLE_DOCS":["..."]}
-#   Text mode: FEATURE_DIR:... \n AVAILABLE_DOCS: \n ✓/✗ file.md
-#   Paths only: REPO_ROOT: ... \n BRANCH: ... \n FEATURE_DIR: ... etc.
+# ВЫВОД:
+#   Режим JSON: {"FEATURE_DIR":"...", "AVAILABLE_DOCS":["..."]}
+#   Текстовый режим: FEATURE_DIR:... \n AVAILABLE_DOCS: \n ✓/✗ file.md
+#   Только пути: REPO_ROOT: ... \n BRANCH: ... \n FEATURE_DIR: ... и т.д.
 
 set -e
 
-# Parse command line arguments
+# Разбор аргументов командной строки
 JSON_MODE=false
 REQUIRE_TASKS=false
 INCLUDE_TASKS=false
@@ -43,27 +43,27 @@ for arg in "$@"; do
             ;;
         --help|-h)
             cat << 'EOF'
-Usage: check-prerequisites.sh [OPTIONS]
+Использование: check-prerequisites.sh [ОПЦИИ]
 
-Consolidated prerequisite checking for Spec-Driven Development workflow.
+Унифицированная проверка зависимостей для рабочего процесса разработки по спецификациям.
 
-OPTIONS:
-  --json              Output in JSON format
-  --require-tasks     Require tasks.md to exist (for implementation phase)
-  --include-tasks     Include tasks.md in AVAILABLE_DOCS list
-  --paths-only        Only output path variables (no prerequisite validation)
-  --help, -h          Show this help message
+ОПЦИИ:
+  --json              Вывод в формате JSON
+  --require-tasks     Требовать существования tasks.md (для фазы реализации)
+  --include-tasks     Включить tasks.md в список AVAILABLE_DOCS
+  --paths-only        Выводить только переменные пути (без проверки зависимостей)
+  --help, -h          Показать это справочное сообщение
 
-EXAMPLES:
-  # Check task prerequisites (plan.md required)
+ПРИМЕРЫ:
+  # Проверить зависимости задач (требуется plan.md)
   ./check-prerequisites.sh --json
-  
-  # Check implementation prerequisites (plan.md + tasks.md required)
+
+  # Проверить зависимости реализации (требуется plan.md + tasks.md)
   ./check-prerequisites.sh --json --require-tasks --include-tasks
-  
-  # Get feature paths only (no validation)
+
+  # Получить только пути функций (без проверки)
   ./check-prerequisites.sh --paths-only
-  
+
 EOF
             exit 0
             ;;
@@ -74,18 +74,18 @@ EOF
     esac
 done
 
-# Source common functions
+# Подключение общих функций
 SCRIPT_DIR="$(CDPATH="" cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/common.sh"
 
-# Get feature paths and validate branch
+# Получить пути функций и проверить ветку
 eval $(get_feature_paths)
 check_feature_branch "$CURRENT_BRANCH" "$HAS_GIT" || exit 1
 
-# If paths-only mode, output paths and exit (support JSON + paths-only combined)
+# Если режим только пути, вывести пути и выйти (поддержка JSON + только пути объединенные)
 if $PATHS_ONLY; then
     if $JSON_MODE; then
-        # Minimal JSON paths payload (no validation performed)
+        # Минимальный JSON пакет путей (проверка не выполняется)
         printf '{"REPO_ROOT":"%s","BRANCH":"%s","FEATURE_DIR":"%s","FEATURE_SPEC":"%s","IMPL_PLAN":"%s","TASKS":"%s"}\n' \
             "$REPO_ROOT" "$CURRENT_BRANCH" "$FEATURE_DIR" "$FEATURE_SPEC" "$IMPL_PLAN" "$TASKS"
     else
@@ -119,47 +119,47 @@ if $REQUIRE_TASKS && [[ ! -f "$TASKS" ]]; then
     exit 1
 fi
 
-# Build list of available documents
+# Создать список доступных документов
 docs=()
 
-# Always check these optional docs
+# Всегда проверять эти дополнительные документы
 [[ -f "$RESEARCH" ]] && docs+=("research.md")
 [[ -f "$DATA_MODEL" ]] && docs+=("data-model.md")
 
-# Check contracts directory (only if it exists and has files)
+# Проверить каталог контрактов (только если он существует и содержит файлы)
 if [[ -d "$CONTRACTS_DIR" ]] && [[ -n "$(ls -A "$CONTRACTS_DIR" 2>/dev/null)" ]]; then
     docs+=("contracts/")
 fi
 
 [[ -f "$QUICKSTART" ]] && docs+=("quickstart.md")
 
-# Include tasks.md if requested and it exists
+# Включить tasks.md если запрошено и файл существует
 if $INCLUDE_TASKS && [[ -f "$TASKS" ]]; then
     docs+=("tasks.md")
 fi
 
-# Output results
+# Вывести результаты
 if $JSON_MODE; then
-    # Build JSON array of documents
+    # Создать JSON массив документов
     if [[ ${#docs[@]} -eq 0 ]]; then
         json_docs="[]"
     else
         json_docs=$(printf '"%s",' "${docs[@]}")
         json_docs="[${json_docs%,}]"
     fi
-    
+
     printf '{"FEATURE_DIR":"%s","AVAILABLE_DOCS":%s}\n' "$FEATURE_DIR" "$json_docs"
 else
-    # Text output
+    # Текстовый вывод
     echo "FEATURE_DIR:$FEATURE_DIR"
     echo "AVAILABLE_DOCS:"
-    
-    # Show status of each potential document
+
+    # Показать статус каждого возможного документа
     check_file "$RESEARCH" "research.md"
     check_file "$DATA_MODEL" "data-model.md"
     check_dir "$CONTRACTS_DIR" "contracts/"
     check_file "$QUICKSTART" "quickstart.md"
-    
+
     if $INCLUDE_TASKS; then
         check_file "$TASKS" "tasks.md"
     fi

@@ -1,32 +1,32 @@
 #!/usr/bin/env bash
-# Common functions and variables for all scripts
+# Общие функции и переменные для всех скриптов
 
-# Get repository root, with fallback for non-git repositories
+# Получить корень репозитория, с резервным вариантом для негит-репозиториев
 get_repo_root() {
     if git rev-parse --show-toplevel >/dev/null 2>&1; then
         git rev-parse --show-toplevel
     else
-        # Fall back to script location for non-git repos
+        # Вернуться к местоположению скрипта для негит-репозиториев
         local script_dir="$(CDPATH="" cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
         (cd "$script_dir/../../.." && pwd)
     fi
 }
 
-# Get current branch, with fallback for non-git repositories
+# Получить текущую ветку, с резервным вариантом для негит-репозиториев
 get_current_branch() {
-    # First check if SPECIFY_FEATURE environment variable is set
+    # Сначала проверить, установлена ли переменная окружения SPECIFY_FEATURE
     if [[ -n "${SPECIFY_FEATURE:-}" ]]; then
         echo "$SPECIFY_FEATURE"
         return
     fi
 
-    # Then check git if available
+    # Затем проверить git, если доступен
     if git rev-parse --abbrev-ref HEAD >/dev/null 2>&1; then
         git rev-parse --abbrev-ref HEAD
         return
     fi
 
-    # For non-git repos, try to find the latest feature directory
+    # Для негит-репозиториев попробовать найти последний каталог функций
     local repo_root=$(get_repo_root)
     local specs_dir="$repo_root/specs"
 
@@ -54,10 +54,10 @@ get_current_branch() {
         fi
     fi
 
-    echo "main"  # Final fallback
+    echo "main"  # Финальный резервный вариант
 }
 
-# Check if we have git available
+# Проверить, доступен ли git
 has_git() {
     git rev-parse --show-toplevel >/dev/null 2>&1
 }
@@ -66,7 +66,7 @@ check_feature_branch() {
     local branch="$1"
     local has_git_repo="$2"
 
-    # For non-git repos, we can't enforce branch naming but still provide output
+    # Для негит-репозиториев мы не можем принудительно применять именование веток, но все равно обеспечиваем вывод
     if [[ "$has_git_repo" != "true" ]]; then
         echo "[specify] Warning: Git repository not detected; skipped branch validation" >&2
         return 0
@@ -83,23 +83,23 @@ check_feature_branch() {
 
 get_feature_dir() { echo "$1/specs/$2"; }
 
-# Find feature directory by numeric prefix instead of exact branch match
-# This allows multiple branches to work on the same spec (e.g., 004-fix-bug, 004-add-feature)
+# Найти каталог функций по числовому префиксу вместо точного совпадения ветки
+# Это позволяет нескольким веткам работать над одной спецификацией (например, 004-fix-bug, 004-add-feature)
 find_feature_dir_by_prefix() {
     local repo_root="$1"
     local branch_name="$2"
     local specs_dir="$repo_root/specs"
 
-    # Extract numeric prefix from branch (e.g., "004" from "004-whatever")
+    # Извлечь числовую часть из ветки (например, "004" из "004-whatever")
     if [[ ! "$branch_name" =~ ^([0-9]{3})- ]]; then
-        # If branch doesn't have numeric prefix, fall back to exact match
+        # Если ветка не имеет числовой префикс, вернуться к точному соответствию
         echo "$specs_dir/$branch_name"
         return
     fi
 
     local prefix="${BASH_REMATCH[1]}"
 
-    # Search for directories in specs/ that start with this prefix
+    # Поиск каталогов в specs/, которые начинаются с этого префикса
     local matches=()
     if [[ -d "$specs_dir" ]]; then
         for dir in "$specs_dir"/"$prefix"-*; do
@@ -109,18 +109,18 @@ find_feature_dir_by_prefix() {
         done
     fi
 
-    # Handle results
+    # Обработка результатов
     if [[ ${#matches[@]} -eq 0 ]]; then
-        # No match found - return the branch name path (will fail later with clear error)
+        # Совпадений не найдено - вернуть путь ветки (завершится ошибкой позже с понятным сообщением)
         echo "$specs_dir/$branch_name"
     elif [[ ${#matches[@]} -eq 1 ]]; then
-        # Exactly one match - perfect!
+        # Ровно одно совпадение - отлично!
         echo "$specs_dir/${matches[0]}"
     else
-        # Multiple matches - this shouldn't happen with proper naming convention
+        # Несколько совпадений - такого не должно происходить при правильном соглашении об именовании
         echo "ERROR: Multiple spec directories found with prefix '$prefix': ${matches[*]}" >&2
         echo "Please ensure only one spec directory exists per numeric prefix." >&2
-        echo "$specs_dir/$branch_name"  # Return something to avoid breaking the script
+        echo "$specs_dir/$branch_name"  # Вернуть что-то, чтобы не сломать скрипт
     fi
 }
 
@@ -133,7 +133,7 @@ get_feature_paths() {
         has_git_repo="true"
     fi
 
-    # Use prefix-based lookup to support multiple branches per spec
+    # Использовать поиск по префиксу для поддержки нескольких веток на одну спецификацию
     local feature_dir=$(find_feature_dir_by_prefix "$repo_root" "$current_branch")
 
     cat <<EOF

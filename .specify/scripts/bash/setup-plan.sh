@@ -2,23 +2,23 @@
 
 set -e
 
-# Parse command line arguments
+# Разбор аргументов командной строки
 JSON_MODE=false
 ARGS=()
 
 for arg in "$@"; do
     case "$arg" in
-        --json) 
-            JSON_MODE=true 
+        --json)
+            JSON_MODE=true
             ;;
-        --help|-h) 
-            echo "Usage: $0 [--json]"
-            echo "  --json    Output results in JSON format"
-            echo "  --help    Show this help message"
-            exit 0 
+        --help|-h)
+            echo "Использование: $0 [--json]"
+            echo "  --json    Вывод результатов в формате JSON"
+            echo "  --help    Показать это справочное сообщение"
+            exit 0
             ;;
-        *) 
-            ARGS+=("$arg") 
+        *)
+            ARGS+=("$arg")
             ;;
     esac
 done

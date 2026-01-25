@@ -1,5 +1,5 @@
 #!/bin/bash
-# Файл: scripts/run_quality_gate.sh
+# Файл: scripts/run_quality_gate.sh (дополненная версия с Gate 4)
 # Использование: ./scripts/run_quality_gate.sh <gate_number> [path]
 
 GATE=$1
@@ -95,9 +95,64 @@ except json.JSONDecodeError:
     echo "Gate 3 проверки инициированы"
     ;;
 
+  4)
+    echo "=== Gate 4: Pre-Merge Checks ==="
+
+    # Проверки перед мержем в develop
+    echo "1. Интеграционные тесты..."
+    if [ -d "${TARGET_PATH}tests/integration" ]; then
+      echo "Запуск интеграционных тестов: pytest ${TARGET_PATH}tests/integration/ -v"
+    else
+      echo "Директория интеграционных тестов не найдена"
+    fi
+
+    echo "2. Проверка безопасности..."
+    if command -v python3 &> /dev/null; then
+      python3 -c "
+import json
+import sys
+try:
+    if __import__('os').path.exists('state/security_scan.json'):
+        with open('state/security_scan.json') as f:
+            scan = json.load(f)
+        high_vulns = [v for v in scan.get('vulnerabilities', []) if v.get('severity') in ['HIGH', 'CRITICAL']]
+        if high_vulns:
+            print(f'ВНИМАНИЕ: Найдено {len(high_vulns)} высокоприоритетных уязвимостей')
+            sys.exit(1)
+        else:
+            print('Критических уязвимостей не найдено')
+    else:
+        print('Файл отчета безопасности не найден')
+except json.JSONDecodeError:
+    print('Файл отчета безопасности содержит невалидный JSON')
+"
+    else
+      echo "Python3 не установлен, пропускаем проверку безопасности"
+    fi
+
+    echo "3. Проверка покрытия тестами..."
+    if [ -d "${TARGET_PATH}tests" ]; then
+      echo "Проверка покрытия тестами: pytest ${TARGET_PATH}tests/ --cov=${TARGET_PATH}src/ --cov-fail-under=80"
+    fi
+
+    echo "4. Проверка статуса ревью..."
+    if [ -f "state/review_status.md" ]; then
+      if grep -q "APPROVED" "state/review_status.md"; then
+        echo "Статус ревью: APPROVED"
+      else
+        echo "ВНИМАНИЕ: Ревью не одобрено"
+        exit 1
+      fi
+    else
+      echo "Файл статуса ревью не найден"
+    fi
+
+    echo "Gate 4 проверки завершены"
+    ;;
+
   *)
     echo "Неизвестный номер gate: $GATE"
-    echo "Доступные gates: 1 (Pre-Execution), 2 (Post-Execution), 3 (Pre-Commit)"
+    echo "Доступные gates: 1 (Pre-Execution), 2 (Post-Execution), 3 (Pre-Commit), 4 (Pre-Merge)"
     exit 1
     ;;
 esac

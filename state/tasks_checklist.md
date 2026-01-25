@@ -37,7 +37,7 @@
 - [x] Реализовать Gate 1: Pre-Execution Checks
 - [x] Реализовать Gate 2: Post-Execution Checks
 - [x] Реализовать Gate 3: Pre-Commit Checks
-- [ ] Реализовать Gate 4: Pre-Merge Checks
+- [x] Реализовать Gate 4: Pre-Merge Checks
 
 ## Этап 4: Создание примеров использования
 

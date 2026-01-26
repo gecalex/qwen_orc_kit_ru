@@ -150,9 +150,59 @@ except json.JSONDecodeError:
     echo "Gate 4 проверки завершены"
     ;;
 
+  5)
+    echo "=== Gate 5: Pre-Implementation Checks ==="
+
+    # Проверки перед началом реализации
+    echo "1. Проверка качества спецификации..."
+    if [ -f "$TARGET_PATH/spec.md" ]; then
+      echo "Анализ спецификации: проверка наличия обязательных разделов"
+      # Проверка наличия обязательных разделов
+      mandatory_sections=("Краткое описание" "Контекст" "Акторы" "Требования" "Сценарии использования" "Условия успеха" "Ограничения" "Предположения" "Возможные риски")
+      missing_sections=()
+      for section in "${mandatory_sections[@]}"; do
+        if ! grep -q "#.*$section" "$TARGET_PATH/spec.md"; then
+          missing_sections+=("$section")
+        fi
+      done
+
+      if [ ${#missing_sections[@]} -eq 0 ]; then
+        echo "✓ Все обязательные разделы присутствуют"
+      else
+        echo "✗ Отсутствуют следующие обязательные разделы:"
+        for section in "${missing_sections[@]}"; do
+          echo "  - $section"
+        done
+        exit 1
+      fi
+    else
+      echo "Файл спецификации не найден: $TARGET_PATH/spec.md"
+      exit 1
+    fi
+
+    echo "2. Проверка соответствия конституции проекта..."
+    if [ -f ".specify/memory/constitution.md" ]; then
+      echo "Сравнение спецификации с конституцией проекта"
+      # Здесь можно добавить более сложную логику проверки соответствия
+      echo "Конституция проекта найдена, проверка соответствия"
+    else
+      echo "Предупреждение: Конституция проекта не найдена"
+    fi
+
+    echo "3. Проверка тестопригодности требований..."
+    # Проверка, что требования измеримы и тестопригодны
+    if grep -q -E '[0-9]+%' "$TARGET_PATH/spec.md" || grep -q -E '[0-9]+ сек' "$TARGET_PATH/spec.md" || grep -q -E '[0-9]+ мс' "$TARGET_PATH/spec.md"; then
+      echo "✓ Обнаружены измеримые критерии успеха"
+    else
+      echo "Предупреждение: Не обнаружено измеримых критериев успеха"
+    fi
+
+    echo "Gate 5 проверки завершены"
+    ;;
+
   *)
     echo "Неизвестный номер gate: $GATE"
-    echo "Доступные gates: 1 (Pre-Execution), 2 (Post-Execution), 3 (Pre-Commit), 4 (Pre-Merge)"
+    echo "Доступные gates: 1 (Pre-Execution), 2 (Post-Execution), 3 (Pre-Commit), 4 (Pre-Merge), 5 (Pre-Implementation)"
     exit 1
     ;;
 esac

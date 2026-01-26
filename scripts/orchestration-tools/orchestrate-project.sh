@@ -12,7 +12,8 @@ get_project_state() {
     fi
 
     # Запускаем скрипт и получаем код возврата
-    "$state_script"
+    # Вывод скрипта подавляем, чтобы не дублировался
+    "$state_script" >/dev/null 2>&1
     local exit_code=$?
 
     case $exit_code in

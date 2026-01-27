@@ -1,0 +1,97 @@
+# Конфигурация релиза Qwen Code Orchestrator Kit
+
+[release]
+version = "1.0.0"
+name = "Qwen Code Orchestrator Kit Template"
+description = "Шаблон для создания проектов с использованием ИИ-оркестратора задач разработки"
+license = "MIT"
+author = "Qwen Code Team"
+
+[template]
+# Файлы и директории, которые НЕ должны включаться в шаблон
+exclude_patterns = [
+    ".git/",
+    "specs/",
+    "state/",
+    "examples/specs/",
+    "FEATURE_DIR/",
+    "workspace/",
+    "dist/",
+    "build/",
+    "target/",
+    "node_modules/",
+    ".venv/",
+    "venv/",
+    "env/",
+    "__pycache__/",
+    "*.pyc",
+    "*.log",
+    "*.tmp",
+    "*.bak",
+    "*.backup",
+    ".DS_Store",
+    "Thumbs.db",
+    ".vscode/",
+    ".idea/",
+    "*.swp",
+    "*.swo",
+    "backup-*.tar.gz",
+    "template-*.tar.gz"
+]
+
+# Файлы и директории, которые ДОЛЖНЫ быть включены в шаблон
+include_patterns = [
+    ".specify/templates/",
+    ".specify/scripts/",
+    ".specify/memory/",
+    ".qwen/agents/",
+    ".qwen/commands/",
+    ".qwen/skills/",
+    "docs/architecture/",
+    "scripts/orchestration-tools/",
+    "scripts/specification-tools/",
+    "scripts/release-tools/",
+    "QWEN.md",
+    "README.md",
+    "CONTRIBUTING.md",
+    "INSTALLATION.md",
+    "LICENSE",
+    ".gitignore",
+    "pyproject.toml",
+    "package.json"
+]
+
+# Плейсхолдеры для замены в шаблоне
+placeholders = [
+    {"from": "qwen_orc_kit_ru", "to": "{{PROJECT_NAME}}"},
+    {"from": "Qwen Code Orchestrator Kit", "to": "{{PROJECT_TEMPLATE_NAME}}"},
+    {"from": "gecalex", "to": "{{ORGANIZATION_NAME}}"}
+]
+
+[validation]
+# Проверки, которые должны пройти перед созданием шаблона
+pre_release_checks = [
+    "no_sensitive_data",
+    "all_agents_have_minimal_privileges",
+    "specification_templates_present",
+    "quality_gates_configured",
+    "documentation_complete"
+]
+
+# Проверки, которые должны пройти после создания шаблона
+post_creation_checks = [
+    "can_create_new_project",
+    "new_project_has_basic_functionality",
+    "speckit_commands_work",
+    "quality_gates_pass"
+]
+
+[metadata]
+created_date = "2026-01-26"
+last_update = "2026-01-26"
+compatible_versions = ["Qwen Code CLI >= 1.0.0"]
+dependencies = [
+    "bash >= 4.0",
+    "python >= 3.8",
+    "git >= 2.0"
+]

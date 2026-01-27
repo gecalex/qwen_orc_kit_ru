@@ -3,7 +3,7 @@
 # Назначение: Определение состояния проекта и классификация для адаптации оркестратора
 
 # Функция для подсчета файлов определенного типа
-count_files_by_extension() {
+count_files() {
     local extension=$1
     local count=$(find . -name "*.$extension" -type f 2>/dev/null | wc -l)
     echo $count
@@ -64,7 +64,7 @@ total_code_files=0
 detected_languages=()
 
 for ext in "${code_extensions[@]}"; do
-    count=$(count_files_by_extension "$ext")
+    count=$(find . -name "*.$ext" -type f 2>/dev/null | wc -l)
     if [ "$count" -gt 0 ]; then
         detected_languages+=("$ext:$count")
         total_code_files=$((total_code_files + count))
@@ -72,12 +72,10 @@ for ext in "${code_extensions[@]}"; do
 done
 
 # Проверка директорий
-found_dirs_str=$(check_directories)
-found_dirs=($found_dirs_str)
+found_dirs=($(check_directories))
 
 # Проверка файлов конфигурации
-found_configs_str=$(check_config_files)
-found_configs=($found_configs_str)
+found_configs=($(check_config_files))
 
 # Проверка спецификаций
 specs_status=$(check_specifications)

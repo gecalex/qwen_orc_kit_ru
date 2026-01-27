@@ -4,6 +4,9 @@
 
 set -e
 
+# Сохраняем исходную директорию
+ORIGINAL_DIR=$(pwd)
+
 RELEASE_VERSION="$1"
 OUTPUT_DIR="${2:-releases}"
 
@@ -28,16 +31,16 @@ mkdir -p "$OUTPUT_DIR"
 TEMP_DIR=$(mktemp -d)
 echo "Временная директория: $TEMP_DIR"
 
-# Копирование всех файлов в временную директорию
+# Копирование всех файлов в временную директорию (исключая .git)
 echo "Копирование файлов в временную директорию..."
-cp -r . "$TEMP_DIR/source_project" --exclude='.git' 2>/dev/null || true
+rsync -av --exclude='.git' --exclude='releases/' --exclude='*.tar.gz' --exclude='*.zip' . "$TEMP_DIR/source_project/" --progress
 
 # Переход во временную директорию
 cd "$TEMP_DIR/source_project"
 
 # Запуск скрипта очистки
 echo "Запуск скрипта очистки..."
-bash ../scripts/release-tools/clean-for-template.sh
+CONTEXT="release" bash scripts/release-tools/clean-for-template.sh
 
 # Проверка, что очистка прошла успешно
 if [ $? -ne 0 ]; then
@@ -45,8 +48,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Возвращение в исходную директорию
-cd "$TEMP_DIR"
+# Возвращение в директорию с временной копией
+cd ..
 
 # Переименование директории в имя релиза
 mv source_project "qwen-orc-kit-template-$RELEASE_VERSION"
@@ -55,11 +58,11 @@ mv source_project "qwen-orc-kit-template-$RELEASE_VERSION"
 ARCHIVE_NAME="qwen-orc-kit-template-$RELEASE_VERSION.tar.gz"
 tar -czf "$ARCHIVE_NAME" "qwen-orc-kit-template-$RELEASE_VERSION/"
 
-# Перемещение архива в директорию выпусков
-mv "$ARCHIVE_NAME" "../../$OUTPUT_DIR/"
-
 # Возвращение в исходную директорию проекта
-cd "../../"
+cd "$ORIGINAL_DIR"
+
+# Перемещение архива в директорию выпусков в исходной директории проекта
+mv "$TEMP_DIR/$ARCHIVE_NAME" "$OUTPUT_DIR/"
 
 # Удаление временной директории
 rm -rf "$TEMP_DIR"

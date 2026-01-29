@@ -1,0 +1,93 @@
+# OpenAPI Contract: /health-deps command
+
+openapi: 3.0.0
+info:
+  title: Health Dependencies Command
+  version: 1.0.0
+  description: API contract for the /health-deps command that audits project dependencies
+
+paths:
+  /commands/health-deps:
+    post:
+      summary: Initiate dependencies audit
+      description: Starts an audit of project dependencies to identify outdated packages, security vulnerabilities, and unused dependencies
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DependenciesAuditRequest'
+      responses:
+        '200':
+          description: Dependencies audit initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DependenciesAuditResponse'
+        '400':
+          description: Invalid request parameters
+        '500':
+          description: Internal server error during audit
+
+components:
+  schemas:
+    DependenciesAuditRequest:
+      type: object
+      properties:
+        audit_type:
+          type: string
+          enum: [full, security, outdated, unused]
+          description: Type of dependencies audit to perform
+        update_strategy:
+          type: string
+          enum: [none, minor, major, all]
+          description: Strategy for updating dependencies
+        backup_required:
+          type: boolean
+          default: true
+          description: Whether to create backup before making changes
+      required:
+        - audit_type
+
+    DependenciesAuditResponse:
+      type: object
+      properties:
+        audit_id:
+          type: string
+          description: Unique identifier for the initiated audit
+        status:
+          type: string
+          enum: [initiated, in_progress, completed, failed]
+          description: Current status of the audit
+        estimated_completion:
+          type: string
+          format: date-time
+          description: Estimated time for audit completion
+        report_location:
+          type: string
+          description: Path to the dependencies report once completed
+        changes_proposed:
+          type: array
+          items:
+            $ref: '#/components/schemas/DependencyChange'
+    
+    DependencyChange:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the dependency
+        current_version:
+          type: string
+          description: Current version of the dependency
+        new_version:
+          type: string
+          description: New version to update to (if applicable)
+        change_type:
+          type: string
+          enum: [update, remove, add]
+          description: Type of change proposed
+        risk_level:
+          type: string
+          enum: [low, medium, high]
+          description: Risk level associated with the change

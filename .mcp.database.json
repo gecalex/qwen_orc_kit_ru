@@ -1,0 +1,30 @@
+{
+  "mcpServers": {
+    "context7": {
+      "enabled": true,
+      "description": "Documentation for libraries",
+      "config": {
+        "token_usage": 200
+      }
+    },
+    "server-sequential-thinking": {
+      "enabled": true,
+      "description": "Enhanced reasoning",
+      "config": {
+        "token_usage": 400
+      }
+    },
+    "supabase": {
+      "enabled": true,
+      "description": "Supabase integration for database operations",
+      "config": {
+        "token_usage": 1900
+      }
+    }
+  },
+  "metadata": {
+    "name": "DATABASE",
+    "description": "Конфигурация MCP для работы с базой данных (~2500 токенов)",
+    "token_usage_estimate": 2500
+  }
+}

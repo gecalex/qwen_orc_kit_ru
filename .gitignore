@@ -23,6 +23,44 @@ build/
 # Инструменты TypeScript
 *.tsbuildinfo
 
+# Bash/Shell
+*.tmp
+*.bak
+*.cache
+*.out
+*.pid
+
+# Environment variables
+.env*
+.env.production
+.env.development
+
+# OS generated files
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE specific
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python additional
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Backup files
+*~
+*.bak
+*.swp
+
 # Исключения для проекта
 !.gitignore
 !QWEN.md

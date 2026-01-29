@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "type": "command",
+        "command": "notify-send 'Qwen Code CLI' 'Task completed!'",
+        "description": "Desktop notification on task completion (Linux)"
+        }
+    ],
+    "Start": [],
+    "Error": []
+  },
+  "settings": {
+    "timeout": 10000,
+    "retry_attempts": 3,
+    "retry_delay_ms": 1000
+  }
+}

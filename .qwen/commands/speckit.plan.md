@@ -1,94 +1,93 @@
 ---
-description: Execute the implementation planning workflow using the plan template to generate design artifacts.
+description: Выполнить рабочий процесс планирования реализации с использованием шаблона плана для генерации артефактов дизайна.
 ---
 
 ---
-description: Execute the implementation planning workflow using the plan template to generate design artifacts.
-handoffs: 
-  - label: Create Tasks
+description: Выполнить рабочий процесс планирования реализации с использованием шаблона плана для генерации артефактов дизайна.
+handoffs:
+  - label: Создать задачи
     agent: speckit.tasks
-    prompt: Break the plan into tasks
+    prompt: Разбить план на задачи
     send: true
-  - label: Create Checklist
+  - label: Создать контрольный список
     agent: speckit.checklist
-    prompt: Create a checklist for the following domain...
+    prompt: Создать контрольный список для следующего домена...
 ---
 
-## User Input
+## Ввод пользователя
 
 ```text
 $ARGUMENTS
 ```
 
-You **MUST** consider the user input before proceeding (if not empty).
+Вы **ДОЛЖНЫ** учитывать ввод пользователя перед продолжением (если не пустой).
 
-## Outline
+## Структура
 
-1. **Setup**: Run `.specify/scripts/bash/setup-plan.sh --json` from repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
+1. **Настройка**: Запустить `.specify/scripts/bash/setup-plan.sh --json` из корня репозитория и разобрать JSON для FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH. Для одинарных кавычек в аргументах типа "I'm Groot", использовать синтаксис экранирования: например 'I'\''m Groot' (или двойные кавычки, если возможно: "I'm Groot").
 
-2. **Load context**: Read FEATURE_SPEC and `.specify/memory/constitution.md`. Load IMPL_PLAN template (already copied).
+2. **Загрузить контекст**: Прочитать FEATURE_SPEC и `.specify/memory/constitution.md`. Загрузить шаблон IMPL_PLAN (уже скопирован).
 
-3. **Execute plan workflow**: Follow the structure in IMPL_PLAN template to:
-   - Fill Technical Context (mark unknowns as "NEEDS CLARIFICATION")
-   - Fill Constitution Check section from constitution
-   - Evaluate gates (ERROR if violations unjustified)
-   - Phase 0: Generate research.md (resolve all NEEDS CLARIFICATION)
-   - Phase 1: Generate data-model.md, contracts/, quickstart.md
-   - Phase 1: Update agent context by running the agent script
-   - Re-evaluate Constitution Check post-design
+3. **Выполнить рабочий процесс плана**: Следовать структуре в шаблоне IMPL_PLAN чтобы:
+   - Заполнить Технический контекст (отметить неизвестности как "НЕОБХОДИМО УТОЧНИТЬ")
+   - Заполнить раздел Проверка конституции из конституции
+   - Оценить ворота (ОШИБКА при необоснованных нарушениях)
+   - Этап 0: Генерировать research.md (разрешить все НЕОБХОДИМО УТОЧНИТЬ)
+   - Этап 1: Генерировать data-model.md, contracts/, quickstart.md
+   - Этап 1: Обновить контекст агента запуском скрипта агента
+   - Повторно оценить Проверку Конституции после дизайна
 
-4. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts.
+4. **Остановиться и сообщить**: Команда завершается после планирования Этапа 2. Сообщить ветку, путь IMPL_PLAN и сгенерированные артефакты.
 
-## Phases
+## Этапы
 
-### Phase 0: Outline & Research
+### Этап 0: Структура и Исследование
 
-1. **Extract unknowns from Technical Context** above:
-   - For each NEEDS CLARIFICATION → research task
-   - For each dependency → best practices task
-   - For each integration → patterns task
+1. **Извлечь неизвестности из Технического контекста** выше:
+   - Для каждого НЕОБХОДИМО УТОЧНИТЬ → задача исследования
+   - Для каждой зависимости → задача лучших практик
+   - Для каждой интеграции → задача шаблонов
 
-2. **Generate and dispatch research agents**:
+2. **Сгенерировать и отправить исследовательские агенты**:
 
    ```text
-   For each unknown in Technical Context:
-     Task: "Research {unknown} for {feature context}"
-   For each technology choice:
-     Task: "Find best practices for {tech} in {domain}"
+   Для каждого неизвестного в Техническом контексте:
+     Задача: "Исследовать {неизвестное} для {контекста функции}"
+   Для каждой технологии выбора:
+     Задача: "Найти лучшие практики для {технологии} в {домене}"
    ```
 
-3. **Consolidate findings** in `research.md` using format:
-   - Decision: [what was chosen]
-   - Rationale: [why chosen]
-   - Alternatives considered: [what else evaluated]
+3. **Обобщить результаты** в `research.md` используя формат:
+   - Решение: [что было выбрано]
+   - Обоснование: [почему выбрано]
+   - Рассмотренные альтернативы: [что еще оценивалось]
 
-**Output**: research.md with all NEEDS CLARIFICATION resolved
+**Вывод**: research.md со всеми НЕОБХОДИМО УТОЧНИТЬ разрешенными
 
-### Phase 1: Design & Contracts
+### Этап 1: Дизайн и Контракты
 
-**Prerequisites:** `research.md` complete
+**Предварительные условия:** `research.md` завершен
 
-1. **Extract entities from feature spec** → `data-model.md`:
-   - Entity name, fields, relationships
-   - Validation rules from requirements
-   - State transitions if applicable
+1. **Извлечь сущности из спецификации функций** → `data-model.md`:
+   - Имя сущности, поля, отношения
+   - Правила проверки из требований
+   - Переходы состояний, если применимо
 
-2. **Generate API contracts** from functional requirements:
-   - For each user action → endpoint
-   - Use standard REST/GraphQL patterns
-   - Output OpenAPI/GraphQL schema to `/contracts/`
+2. **Сгенерировать контракты API** из функциональных требований:
+   - Для каждого действия пользователя → конечная точка
+   - Использовать стандартные шаблоны REST/GraphQL
+   - Вывести схему OpenAPI/GraphQL в `/contracts/`
 
-3. **Agent context update**:
-   - Run `.specify/scripts/bash/update-agent-context.sh qwen`
-   - These scripts detect which AI agent is in use
-   - Update the appropriate agent-specific context file
-   - Add only new technology from current plan
-   - Preserve manual additions between markers
+3. **Обновление контекста агента**:
+   - Запустить `.specify/scripts/bash/update-agent-context.sh qwen`
+   - Эти скрипты определяют какой агент ИИ используется
+   - Обновить соответствующий файл контекста агента
+   - Добавить только новые технологии из текущего плана
+   - Сохранить ручные дополнения между маркерами
 
-**Output**: data-model.md, /contracts/*, quickstart.md, agent-specific file
+**Вывод**: data-model.md, /contracts/*, quickstart.md, специфический файл агента
 
-## Key rules
+## Основные правила
 
-- Use absolute paths
-- ERROR on gate failures or unresolved clarifications
-
+- Использовать абсолютные пути
+- ОШИБКА при сбоях ворот или неразрешенных уточнениях

@@ -3,5 +3,6 @@
     "experimental": {
       "skills": true
     }
-  }
+  },
+  "$version": 2
 }

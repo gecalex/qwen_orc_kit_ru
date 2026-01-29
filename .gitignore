@@ -1,41 +1,17 @@
-# Секреты и конфиги
-.env
-.env.local
-*.pem
-*.key
-
-# Системные файлы
-__pycache__/
-node_modules/
-.DS_Store
-
-# Артефакты сборки и логи
-dist/
-build/
+# Logs
 *.log
-
-# Инструменты Python
-.venv/
-.mypy_cache/
-.ruff_cache/
-.pytest_cache/
-
-# Инструменты TypeScript
-*.tsbuildinfo
-
-# Bash/Shell
-*.tmp
-*.bak
-*.cache
 *.out
-*.pid
+*.tmp
 
 # Environment variables
 .env*
-.env.production
-.env.development
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # OS generated files
+.DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
@@ -43,26 +19,14 @@ build/
 ehthumbs.db
 Thumbs.db
 
-# IDE specific
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# Python additional
-*.pyc
-*.pyo
-*.pyd
-.Python
-*.so
-
 # Backup files
 *~
 *.bak
-*.swp
-
-# Исключения для проекта
-!.gitignore
-!QWEN.md
-!docs/
-!specs/
+*.orig
+*.backup

@@ -1,0 +1,25 @@
+# Configuration for markdownlint
+# This is based on recommendations for documentation projects
+
+# Default state for all rules
+default: true
+
+# Line length - allow longer lines for documentation
+MD013: false
+
+# Allow duplicated heading for different sections
+MD024:
+  siblings_only: true
+
+# Allow multiple top-level headings
+MD025: false
+
+# Inline HTML - allow when necessary
+MD033: false
+
+# Raw HTML - allow when necessary  
+MD034: false
+
+# Allow heading end punctuation
+MD026:
+  punctuation: ".,;:!"

@@ -1,0 +1,166 @@
+# Контракт API для мета-агента
+
+## Описание
+Контракт определяет API для мета-агента, который автоматически создает новых агентов на основе спецификаций.
+
+## Версия
+1.0.0
+
+## Базовый URL
+`/api/v1/agents`
+
+## Методы
+
+### POST /create
+Создание нового агента на основе спецификации
+
+#### Заголовки
+- `Content-Type: application/json`
+- `Authorization: Bearer {token}`
+
+#### Тело запроса
+```json
+{
+  "agent_type": "orc|work",
+  "domain": "dev|frontend|backend|testing|research|security",
+  "name": "string (kebab-case)",
+  "description": "string",
+  "features": [
+    {
+      "feature_name": "string",
+      "functionality": "string"
+    }
+  ]
+}
+```
+
+#### Пример запроса
+```json
+{
+  "agent_type": "work",
+  "domain": "dev",
+  "name": "code-analyzer",
+  "description": "Агент для анализа кода",
+  "features": [
+    {
+      "feature_name": "code-analysis",
+      "functionality": "Анализирует код на наличие ошибок и улучшений"
+    }
+  ]
+}
+```
+
+#### Ответы
+- `201 Created`: Агент успешно создан
+```json
+{
+  "status": "success",
+  "agent_id": "string",
+  "file_path": "string",
+  "message": "Агент успешно создан"
+}
+```
+
+- `400 Bad Request`: Неверные параметры запроса
+```json
+{
+  "status": "error",
+  "message": "Описание ошибки"
+}
+```
+
+- `500 Internal Server Error`: Внутренняя ошибка сервера
+```json
+{
+  "status": "error",
+  "message": "Внутренняя ошибка сервера"
+}
+```
+
+### GET /types
+Получение доступных типов агентов
+
+#### Ответ
+```json
+{
+  "agent_types": [
+    {
+      "type": "orc",
+      "description": "Оркестратор - координирует выполнение задач между другими агентами"
+    },
+    {
+      "type": "work",
+      "description": "Воркер - выполняет конкретные задачи"
+    }
+  ]
+}
+```
+
+### GET /domains
+Получение доступных доменов агентов
+
+#### Ответ
+```json
+{
+  "domains": [
+    {
+      "name": "dev",
+      "description": "Общие задачи разработки"
+    },
+    {
+      "name": "frontend",
+      "description": "Задачи, связанные с фронтендом"
+    },
+    {
+      "name": "backend",
+      "description": "Задачи, связанные с бэкендом"
+    },
+    {
+      "name": "testing",
+      "description": "Задачи тестирования"
+    },
+    {
+      "name": "research",
+      "description": "Исследовательские задачи"
+    },
+    {
+      "name": "security",
+      "description": "Задачи безопасности"
+    }
+  ]
+}
+```
+
+## Ошибки
+- `400 Bad Request`: Неверный формат запроса или неверные параметры
+- `401 Unauthorized`: Отсутствует или неверный токен авторизации
+- `403 Forbidden`: Недостаточно прав для выполнения операции
+- `404 Not Found`: Запрашиваемый ресурс не найден
+- `500 Internal Server Error`: Внутренняя ошибка сервера
+
+## Пример использования
+```javascript
+// Создание нового агента
+const response = await fetch('/api/v1/agents/create', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer your-token'
+  },
+  body: JSON.stringify({
+    agent_type: 'work',
+    domain: 'dev',
+    name: 'code-analyzer',
+    description: 'Агент для анализа кода',
+    features: [
+      {
+        feature_name: 'code-analysis',
+        functionality: 'Анализирует код на наличие ошибок и улучшений'
+      }
+    ]
+  })
+});
+
+const result = await response.json();
+console.log(result);
+```

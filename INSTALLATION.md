@@ -7,7 +7,7 @@
 - Git
 - Python 3.11 или выше
 - Node.js (по желанию, для JavaScript/TypeScript проектов)
-- Установленный Qwen Code CLI
+- Установленный Qwen Orchestrator Kit
 
 ## Установка
 
@@ -41,7 +41,7 @@ pnpm install
 
 ### 3. Настройка Qwen CLI
 
-1. Убедитесь, что Qwen Code CLI установлен в вашей системе
+1. Убедитесь, что Qwen Orchestrator Kit установлен в вашей системе
 2. Установите MCP-сервера, если они требуются для вашего проекта
 3. Настройте `.qwen/settings.json` с необходимыми параметрами
 

@@ -89,7 +89,7 @@ post_creation_checks = [
 [metadata]
 created_date = "2026-01-26"
 last_update = "2026-01-26"
-compatible_versions = ["Qwen Code CLI >= 1.0.0"]
+compatible_versions = ["Qwen Orchestrator Kit >= 1.0.0"]
 dependencies = [
     "bash >= 4.0",
     "python >= 3.8",

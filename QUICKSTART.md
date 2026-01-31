@@ -10,7 +10,7 @@
 
 - Git
 - Python 3.11+
-- Qwen Code CLI
+- Qwen Orchestrator Kit
 
 ### 2. Клонирование репозитория
 

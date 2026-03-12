@@ -1,8 +1,121 @@
 {
-  "tools": {
-    "experimental": {
-      "skills": true
+  "security": {
+    "auth": {
+      "apiKey": "${OPENROUTER_API_KEY}",
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "selectedType": "qwen-oauth"
+    },
+    "folderTrust": {
+      "enabled": true
     }
   },
-  "$version": 2
+  "model": {
+    "name": "qwen3-coder-plus",
+    "maxSessionTurns": -1,
+    "summarizeToolOutput": {
+      "run_shell_command": {
+        "tokenBudget": 2000
+      }
+    },
+    "chatCompression": {
+      "contextPercentageThreshold": 0.7
+    }
+  },
+  "$version": 3,
+  "ui": {
+    "theme": "ANSI",
+    "showLineNumbers": true,
+    "customWittyPhrases": [
+      "Анализирую код как профессионал...",
+      "Ищу лучшее решение...",
+      "Оптимизирую для производительности...",
+      "Проверяю best practices...",
+      "Готовлю production-ready код..."
+    ]
+  },
+  "general": {
+    "outputLanguage": "Russian",
+    "language": "ru",
+    "vimMode": true,
+    "preferredEditor": "neovim",
+    "gitCoAuthor": true,
+    "enableAutoUpdate": false,
+    "checkpointing": {
+      "enabled": true
+    }
+  },
+  "tools": {
+    "shell": {
+      "enableInteractiveShell": true
+    },
+    "approvalMode": "default",
+    "allowed": [
+      "run_shell_command(git status)",
+      "run_shell_command(git diff)",
+      "run_shell_command(npm test)",
+      "run_shell_command(npm run build)"
+    ]
+  },
+  "ide": {
+    "enabled": true
+  },
+  "experimental": {
+    "skills": true,
+    "vlmSwitchMode": "once"
+  },
+  "context": {
+    "fileName": ["QWEN.md", "README.md", "CONTEXT.md", "constitution.md"],
+    "fileFiltering": {
+      "respectGitIgnore": true,
+      "respectQwenIgnore": true,
+      "enableRecursiveFileSearch": true
+    }
+  },
+  "sessionTokenLimit": 32000,
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--executable-path=/usr/bin/chromium",
+        "--isolated"
+      ]
+    },
+    "searxng": {
+      "command": "npx",
+      "args": ["-y", "mcp-searxng"],
+      "env": {
+        "SEARXNG_URL": "http://localhost:8080"
+      }
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/alex/MyProjects/qwen_orc_kit_ru"
+      ]
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git"],
+      "cwd": "/home/alex/MyProjects/qwen_orc_kit_ru"
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-playwright"]
+    }
+  }
 }

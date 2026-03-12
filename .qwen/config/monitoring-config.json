@@ -1,0 +1,16 @@
+{
+  "monitoring": {
+    "enabled": true,
+    "frequency": "daily",
+    "checks": {
+      "yaml_headers": true,
+      "agent_structure": true,
+      "skill_structure": true,
+      "naming_convention": true
+    },
+    "notifications": {
+      "enabled": true,
+      "threshold_error_count": 5
+    }
+  }
+}

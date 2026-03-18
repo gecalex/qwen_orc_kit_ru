@@ -7,6 +7,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-03-19
+
+### Added
+- **Фаза 0 (Phase 0) планирования:**
+  - `.qwen/specify/scripts/phase0-analyzer.sh` — анализ задач
+  - `.qwen/specify/specs/{ID}/plans/phase0-plan.json` — план Фазы 0
+  - `.qwen/specify/specs/{ID}/plans/phase0-agents.json` — требуемые агенты
+  - `.qwen/specify/specs/{ID}/plans/phase0-assignments.json` — назначения
+
+- **Quality Gate 1 (Planning Quality Gate):**
+  - `.qwen/scripts/quality-gates/check-planning.sh` — проверка планирования
+  - Проверки: план Фазы 0, назначения, tasks.md, plan.md, spec.md
+  - Блокирующая: true
+
+- **Quality Gate 5 (Pre-Implementation Gate):**
+  - `.qwen/scripts/quality-gates/check-specifications.sh` — проверка спецификаций
+  - Проверки: разделы spec.md, тестируемость, отсутствие деталей реализации
+  - Блокирующая: true
+
+- **Конституция проекта:**
+  - `.qwen/specify/memory/constitution.md` — принципы и стандарты
+  - 5 принципов разработки (SDD, LFA, QG, GWF, MLP)
+  - Архитектурные ограничения
+  - Стандарты кода
+  - Требования к безопасности
+
+- **Интеграция Speckit команд:**
+  - Все 9 команд speckit.*.md обновлены
+  - Интеграция с Фазой 0
+  - Интеграция с Quality Gates
+  - Пути обновлены: `.specify/` → `.qwen/specify/`
+
+- **Интеграция оркестраторов:**
+  - Все 7 оркестраторов обновлены
+  - Quality Gates интегрированы
+  - Интеграция с Фазой 0
+
+- **Документация:**
+  - `.qwen/docs/architecture/planning-phase.md` — полностью обновлен
+  - `.qwen/docs/architecture/specification-driven-development.md` — обновлен
+  - `state/QWEN_MD_INTEGRATION_REPORT.md` — анализ интеграции
+  - `state/ORCHESTRATION_DEVELOPMENT_REPORT.md` — полный отчет
+
+### Changed
+- **Оптимизация команд Speckit:**
+  - speckit.checklist.md: 297 → 199 строк (-33%)
+  - speckit.specify.md: 261 → 158 строк (-39%)
+  - Все команды < 200 строк
+  - Общий размер: 1476 → 1275 строк (-14%)
+
+- **Стандартизация разделов:**
+  - "Входные данные пользователя" → "Ввод пользователя"
+  - "Шаги выполнения" → "Процесс выполнения"
+  - "Цель" → "Описание команды"
+  - "План/Этапы" → "Процесс выполнения"
+
+### Improved
+- **Интеграция с QWEN.md:**
+  - Соответствие: 95% → 100%
+  - Все Quality Gates реализованы
+  - Фаза 0 интегрирована
+  - Speckit команды обновлены
+
 ## [0.3.0] - 2026-03-18
 
 ### Added

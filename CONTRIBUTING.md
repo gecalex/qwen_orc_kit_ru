@@ -157,17 +157,17 @@ task '{
 3. **Pre-Commit Gate**: Проверка кода перед коммитом
 4. **Pre-Merge Gate**: Проверка перед мержем в develop
 
-Для ручной проверки используйте скрипты из `scripts/`:
+Для ручной проверки используйте скрипты из `.qwen/scripts/`:
 
 ```bash
 # Проверка перед выполнением задачи
-./scripts/run_quality_gate.sh 1
+./.qwen/scripts/run_quality_gate.sh 1
 
 # Проверка после выполнения задачи
-./scripts/run_quality_gate.sh 2
+./.qwen/scripts/run_quality_gate.sh 2
 
 # Проверка перед коммитом
-./scripts/run_quality_gate.sh 3
+./.qwen/scripts/run_quality_gate.sh 3
 ```
 
 ## Процесс разработки на основе спецификаций
@@ -188,7 +188,7 @@ task '{
 
 1. **Назначение агентов**: Используйте скрипт для автоматического назначения агентов:
    ```bash
-   scripts/specification-tools/assign-agents-to-tasks.sh specs/номер-название-функции/
+   .qwen/scripts/specification-tools/assign-agents-to-tasks.sh specs/номер-название-функции/
    ```
 
 2. **Метки агентов**: Задачи могут содержать метки:
@@ -210,7 +210,7 @@ task '{
 
 1. **Генерация тестов**: Используйте скрипт для генерации тестов на основе спецификаций:
    ```bash
-   scripts/specification-tools/generate-tests-from-spec.sh specs/номер-название/spec.md
+   .qwen/scripts/specification-tools/generate-tests-from-spec.sh specs/номер-название/spec.md
    ```
 
 2. **Следование циклу TDD**: Убедитесь, что тесты написаны до реализации и сначала падают (красный), затем проходят после реализации (зеленый).
@@ -219,7 +219,7 @@ task '{
 
 Перед реализацией обязательно пройдите проверку качества спецификации:
 ```bash
-./scripts/run_quality_gate.sh 5 specs/номер-название-функции/
+./.qwen/scripts/run_quality_gate.sh 5 specs/номер-название-функции/
 ```
 
 ## Адаптивное поведение оркестратора

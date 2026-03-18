@@ -1,0 +1,70 @@
+{
+  "name": "qwen-orchestrator-kit-ru",
+  "version": "0.2.0",
+  "description": "Qwen Code Orchestrator Kit - набор инструментов с ИИ-агентами, скиллами, слэш-командами, MCP конфигурациями и Quality Gates для создания production-ready проектов",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .qwen/agents/ .qwen/skills/ --ext .md",
+    "validate": "node scripts/validate-agents.js",
+    "update-agents-index": "bash scripts/monitoring/update-agents-index.sh",
+    "health-bugs": "bash scripts/orchestration-tools/health-bugs.sh",
+    "health-security": "bash scripts/orchestration-tools/health-security.sh",
+    "health-cleanup": "bash scripts/orchestration-tools/health-cleanup.sh",
+    "health-deps": "bash scripts/orchestration-tools/health-deps.sh",
+    "quality-gate": "bash scripts/quality-gates/run-all-gates.sh"
+  },
+  "keywords": [
+    "qwen",
+    "qwen-code",
+    "ai-agents",
+    "orchestrator",
+    "mcp",
+    "llm",
+    "coding-assistant",
+    "agent-system",
+    "russian"
+  ],
+  "author": "Qwen Community",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/QwenLM/qwen-code-orchestrator-kit-ru.git"
+  },
+  "bugs": {
+    "url": "https://github.com/QwenLM/qwen-code-orchestrator-kit-ru/issues"
+  },
+  "homepage": "https://github.com/QwenLM/qwen-code-orchestrator-kit-ru#readme",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "os": [
+    "linux",
+    "darwin",
+    "win32"
+  ],
+  "files": [
+    ".qwen/agents/",
+    ".qwen/skills/",
+    ".qwen/commands/",
+    ".qwen/templates/",
+    "scripts/",
+    "docs/",
+    "specs/",
+    "QWEN.md",
+    "README.md",
+    "CONTRIBUTING.md",
+    "CHANGELOG.md"
+  ],
+  "peerDependencies": {
+    "@qwen-code/qwen-code": ">=0.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-plugin-markdown": "^3.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

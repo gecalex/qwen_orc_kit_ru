@@ -34,7 +34,7 @@ log_error() {
 
 # Проверка текущего режима
 check_current_mode() {
-    local agents_count=$(ls -1 "$PROJECT_ROOT/.qwen/agents/" 2>/dev/null | wc -l)
+    local agents_count=$(find "$PROJECT_ROOT/.qwen/agents/" -name "*.md" 2>/dev/null | wc -l)
     
     if [ "$agents_count" -le 10 ]; then
         echo "quickstart"
@@ -231,7 +231,7 @@ show_stats() {
     log_info "📊 СТАТИСТИКА ПРОЕКТА"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     
-    local agents=$(ls -1 "$PROJECT_ROOT/.qwen/agents/" 2>/dev/null | wc -l)
+    local agents=$(find "$PROJECT_ROOT/.qwen/agents/" -name "*.md" 2>/dev/null | wc -l)
     local skills=$(ls -1 "$PROJECT_ROOT/.qwen/skills/" 2>/dev/null | wc -l)
     local commands=$(ls -1 "$PROJECT_ROOT/.qwen/commands/" 2>/dev/null | wc -l)
     local scripts=$(find "$PROJECT_ROOT/.qwen/scripts/" -name "*.sh" 2>/dev/null | wc -l)

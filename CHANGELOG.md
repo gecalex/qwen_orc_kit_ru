@@ -8,20 +8,128 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Specification-driven development tools and agents
-- New agents: specification-analyst, specification-compliance-checker
-- Integration tests for specification compliance checking
-- Documentation for specification-driven development workflow
+- Миграция внутренней документации и скриптов в `.qwen/`
+- Скрипты обслуживания: fix_agents_report_format.sh, fix_workers_report_format.sh, update_agents_format.sh
+- Конфигурация релиза в `.qwen/config/release-config.toml`
+- Библиотека промптов в `.qwen/prompts/`
+- Тесты системы в `.qwen/tests/`
 
 ### Changed
-- Updated orchestration workflows to include specification analysis
-- Enhanced quality gates with specification compliance checks
-- Improved documentation for agent creation and management
+- Перемещены файлы внутренней разработки в `.qwen/` для чистоты шаблона
+- Обновлен .gitignore с учетом новой структуры
+
+## [0.2.0] - 2026-03-18
+
+### Added
+- **Система агентов безопасности:**
+  - `security-analyzer` — анализ безопасности кода
+  - `security-orchestrator` — координация рабочих процессов безопасности
+  - Скрипт `generate-security-report.sh` для генерации отчетов
+
+- **Система анализа зависимостей:**
+  - `dependency-analyzer` — аудит зависимостей на уязвимости и устаревание
+  - Скрипт `update-dependencies.sh` для обновления зависимостей
+
+- **Система обнаружения мертвого кода:**
+  - `dead-code-detector` — поиск неиспользуемых компонентов
+  - Скрипт `remove-dead-code.sh` для очистки
+
+- **Контрольные точки качества (Quality Gates):**
+  - Gate 1: Pre-Execution Gate
+  - Gate 2: Post-Execution Gate
+  - Gate 3: Pre-Commit Gate (линтеры, тесты, типы)
+  - Gate 4: Pre-Merge Gate (интеграционные проверки)
+  - Gate 5: Pre-Implementation Gate (проверка спецификаций)
+  - Скрипты: `check-security.sh`, `check-coverage.sh`, `check-bundle-size.sh`
+
+- **MCP конфигурации:**
+  - BASE, DATABASE, FRONTEND, FULL конфигурации
+  - Скрипт `switch-mcp.sh` для переключения
+  - Интеграция: chrome-devtools, searxng, context7, filesystem, git, github, playwright
+
+- **Git worktree система:**
+  - Команды: `/worktree-create`, `/worktree-list`, `/worktree-remove`
+  - Скрипт `manage-worktree.sh` для управления
+
+- **Система вебхуков:**
+  - Навык `webhook-sender` для уведомлений
+  - Команда `/configure-webhooks`
+  - Скрипт `handle-webhooks.sh`
+
+- **Паттерн health-workflow:**
+  - `/health-bugs` — проверка ошибок
+  - `/health-security` — проверка безопасности
+  - `/health-cleanup` — проверка чистоты кода
+  - `/health-deps` — проверка зависимостей
+
+- **Автоматизированная фаза планирования (Phase 0):**
+  - Оркестратор `orc_planning_task_analyzer`
+  - Воркеры: `work_planning_task_classifier`, `work_planning_agent_requirer`, `work_planning_executor_assigner`
+  - Скрипт `phase0-analyzer.sh`
+
+- **Система навыков (Skills):**
+  - 30 навыков для различных операций
+  - Навыки: `generate-report-header`, `run-quality-gate`, `validate-plan-file`, `validate-report-file`
+  - `task-analyzer`, `select-mcp-server`, `calculate-priority-score`
+
+- **Система именования агентов:**
+  - Оркестраторы: `orc_{domain}_{name}.md`
+  - Воркеры: `work_{domain}_{name}.md`
+  - Домены: dev, frontend, backend, doc, testing, research, security, planning, health
+
+- **Агенты:**
+  - `orc_dev_task_coordinator` — координация задач разработки
+  - `orc_frontend_ui_coordinator` — координация UI/UX
+  - `orc_backend_api_coordinator` — координация API
+  - `orc_testing_quality_assurer` — обеспечение качества тестирования
+  - `orc_research_data_analyzer` — анализ данных исследований
+  - `work_dev_code_analyzer` — анализ кода
+  - `work_dev_meta_agent` — создание новых агентов
+  - `work_dev_qwen_code_cli_specialist` — специалист по Qwen Code CLI
+  - `work_backend_api_validator` — валидация API
+  - `work_frontend_component_generator` — генерация компонентов
+  - `work_testing_test_generator` — генерация тестов
+  - `work_health_bug_fixer`, `work_health_bug_hunter`, `work_health_dead_code_detector`
+  - `work_doc_tech_translator_ru` — перевод документации
+
+- **Документация:**
+  - `docs/architecture/` — архитектурная документация (22 файла)
+  - `docs/help/` — справочная документация
+  - `docs/agents-index.md` — индекс всех агентов
+  - `GIT_WORKFLOW.md` — руководство по Git workflow
+
+- **npm-пакет:**
+  - `package.json` для публикации
+  - Конфигурация для npm-распространения
+
+### Changed
+- **Рефакторинг структуры проекта:**
+  - Перемещены `docs/` → `.qwen/docs/`
+  - Перемещены `scripts/` → `.qwen/scripts/`
+  - Интегрирован `.qwen/QWEN.md` в основной `QWEN.md`
+  - Соответствие официальным стандартам Qwen Code CLI
+
+- **Обновлены стандарты:**
+  - Все агенты с YAML заголовками
+  - Удалены дубликаты агентов
+  - Зафиксированы версии MCP серверов
+  - Обновлены SKILL.md файлы с полной документацией
+
+- **Улучшена документация:**
+  - Интеграция MCP серверов с примерами
+  - Правила использования для каждого MCP сервера
+  - Таблицы конфигураций MCP
 
 ### Fixed
-- Various bugs in integration tests
-- Agent template formatting issues
-- Dependency resolution problems
+- Исправлены проблемы с дубликатами агентов (7 файлов)
+- Удалены тестовые агенты
+- Исправлены SKILL.md файлы с шаблонными заполнителями
+- Обновлены ссылки в документации после миграции
+
+### Removed
+- Удалены дубликаты агентов: `bug-fixer`, `bug-hunter`, `code-quality-checker`, `security-orchestrator`, `specification-analyst`, `specification-compliance-checker`, `tech-translator-ru`
+- Удалены тестовые агенты: `work_dev_test-agent`, `work_dev_template_agent`
+- Удалена устаревшая релизная копия: `releases/v0.2.0-physical/`
 
 ## [0.1.0] - 2026-01-31
 

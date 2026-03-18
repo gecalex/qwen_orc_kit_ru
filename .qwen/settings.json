@@ -77,45 +77,45 @@
       "command": "npx",
       "args": [
         "-y",
-        "chrome-devtools-mcp@latest",
+        "chrome-devtools-mcp@0.20.1",
         "--executable-path=/usr/bin/chromium",
         "--isolated"
       ]
     },
     "searxng": {
       "command": "npx",
-      "args": ["-y", "mcp-searxng"],
+      "args": ["-y", "mcp-searxng@1.0.0"],
       "env": {
         "SEARXNG_URL": "http://localhost:8080"
       }
     },
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": ["-y", "@upstash/context7-mcp@2.1.4"]
     },
     "filesystem": {
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-filesystem",
+        "@modelcontextprotocol/server-filesystem@2026.1.14",
         "/home/alex/MyProjects/qwen_orc_kit_ru"
       ]
     },
     "git": {
       "command": "uvx",
-      "args": ["mcp-server-git"],
+      "args": ["mcp-server-git@0.0.12"],
       "cwd": "/home/alex/MyProjects/qwen_orc_kit_ru"
     },
     "github": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "args": ["-y", "@modelcontextprotocol/server-github@0.2.0"],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
       }
     },
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-playwright"]
+      "args": ["-y", "@modelcontextprotocol/server-playwright@0.1.2"]
     }
   }
 }

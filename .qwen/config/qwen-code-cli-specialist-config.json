@@ -1,0 +1,30 @@
+{
+  "qwenCodeCliSpecialist": {
+    "enabled": true,
+    "monitoring": {
+      "frequency": "daily",
+      "checks": {
+        "yamlHeaders": true,
+        "agentStructure": true,
+        "documentation": true,
+        "namingConvention": true
+      },
+      "autoFix": {
+        "enabled": true,
+        "criticalOnly": false
+      }
+    },
+    "reporting": {
+      "format": "markdown",
+      "outputDir": "./reports",
+      "retentionDays": 30
+    },
+    "integration": {
+      "ciCdHooks": [
+        "pre-commit",
+        "pull-request"
+      ],
+      "notificationThreshold": 5
+    }
+  }
+}

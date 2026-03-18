@@ -1,0 +1,66 @@
+{
+  "phase": 0,
+  "config": {
+    "priority": "high",
+    "scope": [
+      "specs/003-specifications-improvement/spec.md",
+      "specs/003-specifications-improvement/tasks.md",
+      "specs/003-specifications-improvement/plan.md",
+      "specs/003-specifications-improvement/research.md",
+      "specs/003-specifications-improvement/data-model.md",
+      "specs/003-specifications-improvement/quickstart.md",
+      "specs/003-specifications-improvement/contracts/",
+      "state/planning-phase.schema.json",
+      ".qwen/agents/orc_planning_task_analyzer.md",
+      ".qwen/agents/work_planning_task_classifier.md",
+      ".qwen/agents/work_planning_agent_requirer.md",
+      ".qwen/agents/work_planning_executor_assigner.md"
+    ]
+  },
+  "validation": {
+    "required": [
+      "specification-valid",
+      "task-breakdown-complete",
+      "agent-requirements-defined",
+      "executor-assignments-made"
+    ],
+    "optional": [
+      "performance-requirements-checked",
+      "security-requirements-reviewed"
+    ]
+  },
+  "mcpGuidance": {
+    "recommended": [
+      "mcp__context7__*"
+    ],
+    "library": "qwen-orchestrator-kit",
+    "reason": "Check current patterns and API before implementing planning tasks"
+  },
+  "nextAgent": "orc_planning_task_analyzer",
+  "planningTasks": [
+    {
+      "taskType": "taskAnalysis",
+      "description": "Analyze requirements from spec.md and break down into actionable tasks",
+      "requiredAgent": "orc_planning_task_analyzer",
+      "priority": "high"
+    },
+    {
+      "taskType": "agentTypeDetermination",
+      "description": "Identify required agent types based on task breakdown in tasks.md",
+      "requiredAgent": "work_planning_agent_requirer",
+      "priority": "high"
+    },
+    {
+      "taskType": "executorAssignment",
+      "description": "Assign executors to tasks based on agent capabilities",
+      "requiredAgent": "work_planning_executor_assigner",
+      "priority": "high"
+    },
+    {
+      "taskType": "dependencyMapping",
+      "description": "Map dependencies between tasks and identify parallel execution opportunities",
+      "requiredAgent": "work_planning_task_classifier",
+      "priority": "medium"
+    }
+  ]
+}

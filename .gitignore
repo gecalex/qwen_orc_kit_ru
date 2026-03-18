@@ -50,14 +50,14 @@ template-*.tar.gz
 # Временные файлы и директории
 .tmp/
 .temp/
-state/
-specs/
+#state/ (игнорируется в .qwen/state/)
+#specs/ (игнорируется в .qwen/specs/)
 .releases/
-.reports/
+#.reports/ (теперь в .qwen/docs/reports/)
 .logs/
-backups/
+#backups/ (пустая)
 workspace/
-FEATURE_DIR/
+#FEATURE_DIR/ (пустая)
 
 # Временные файлы оркестратора
 .qwen/commands/*
@@ -84,8 +84,8 @@ FEATURE_DIR/
 .tasks/**
 .task-lists/
 .task-lists/**
-.reports/
-.reports/**
+#.reports/ (теперь в .qwen/docs/reports/)
+#.reports/ (теперь в .qwen/docs/reports/)**
 .checklists/
 .checklists/**
 .contracts/
@@ -96,8 +96,8 @@ FEATURE_DIR/
 .quickstart/**
 .research/
 .research/**
-.tests/
-.tests/**
+#.tests/ (теперь в .qwen/tests/)
+#.tests/ (теперь в .qwen/tests/)**
 .testing/
 .testing/**
 .test/
@@ -167,8 +167,8 @@ FEATURE_DIR/
 .executed/**
 .report/
 .report/**
-.reports/
-.reports/**
+#.reports/ (теперь в .qwen/docs/reports/)
+#.reports/ (теперь в .qwen/docs/reports/)**
 .artifacts/
 .artifacts/**
 .artifact/
@@ -895,7 +895,7 @@ scripts/.tmp/
 
 # Временные файлы отчетов
 .report/
-.reports/
+#.reports/ (теперь в .qwen/docs/reports/)
 
 # Временные файлы артефактов
 .artifacts/

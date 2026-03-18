@@ -7,16 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-03-18
+
 ### Added
-- Миграция внутренней документации и скриптов в `.qwen/`
-- Скрипты обслуживания: fix_agents_report_format.sh, fix_workers_report_format.sh, update_agents_format.sh
-- Конфигурация релиза в `.qwen/config/release-config.toml`
-- Библиотека промптов в `.qwen/prompts/`
-- Тесты системы в `.qwen/tests/`
+- **Система шаблонов для нового проекта:**
+  - Полный список файлов для релиза (172 файла, ~2.2 MB)
+  - Быстрый старт (42 файла, ~500 KB)
+  - Система переключения режимов (template-switcher)
+  - Автоматическое резервное копирование
+  - Кэширование полного шаблона
+
+- **Анализ и документация:**
+  - state/TEMPLATE_FILES_LIST.md — список файлов для копирования
+  - state/RELEASE_TEMPLATE_FILES.md — список для релиза в main
+  - state/release-vs-develop-analysis.md — разделение release/develop
+  - state/template-*.md — документация по шаблонам
+
+- **Система переключения (template-switcher):**
+  - Команда `.qwen/commands/template-switcher.md`
+  - Скрипт `.qwen/scripts/template-switcher.sh`
+  - Режимы: quickstart (7 агентов) ↔ full (25 агентов)
+  - Автоматическое создание резервных копий
+  - Статистика и проверка режима
 
 ### Changed
-- Перемещены файлы внутренней разработки в `.qwen/` для чистоты шаблона
-- Обновлен .gitignore с учетом новой структуры
+- **GIT_WORKFLOW.md перемещен:**
+  - Из корня → в `.qwen/docs/architecture/GIT_WORKFLOW.md`
+  - Обновлены ссылки в документации
+
+- **Оптимизация для релиза:**
+  - .gitignore не включается в main
+  - state/, specs/, reports/ — только в develop
+  - Разделение файлов для release/main и develop
+
+### Improved
+- **Структура проекта:**
+  - Четкое разделение на релизную и разработческую версии
+  - Пользователь клонирует и сразу начинает разработку
+  - Автоматизация процесса релиза
 
 ## [0.2.0] - 2026-03-18
 

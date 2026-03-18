@@ -65,10 +65,10 @@ task '{
 
 ```bash
 # Проверка после выполнения задачи
-./scripts/run_quality_gate.sh 2
+./.qwen/scripts/run_quality_gate.sh 2
 
 # Проверка перед коммитом
-./scripts/run_quality_gate.sh 3
+./.qwen/scripts/run_quality_gate.sh 3
 ```
 
 ## Шаг 6: Коммит изменений

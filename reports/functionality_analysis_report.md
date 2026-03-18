@@ -12,12 +12,12 @@
 
 ## 3. Улучшенная навигация по агентам
 - **Статус**: ✅ Реализована и работает
-- **Местоположение**: `scripts/search/agent-search.sh`, `docs/agents-index.md`, `docs/agent-categories.md`
+- **Местоположение**: `.qwen/scripts/search/agent-search.sh`, `.qwen/docs/agents-index.md`, `.qwen/docs/agent-categories.md`
 - **Функциональность**: Позволяет эффективно находить агенты по функциональности через альтернативные механизмы вне YAML-заголовков
 
 ## 4. Система индексации проекта и ленивой загрузки знаний
 - **Статус**: ✅ Реализована и работает
-- **Местоположение**: `docs/project-index.md`, `scripts/monitoring/update-project-index.sh`
+- **Местоположение**: `.qwen/docs/project-index.md`, `.qwen/scripts/monitoring/update-project-index.sh`
 - **Функциональность**: Включает файл индекса проекта для ленивой загрузки знаний с автоматическим обновлением
 
 ## 5. Система MCP-конфигураций (7 различных конфигураций)
@@ -39,7 +39,7 @@
 
 ## 7. Система уведомлений о завершении задач через вебхуки
 - **Статус**: ✅ Реализована и работает
-- **Местоположение**: `.qwen/skills/webhook-sender/SKILL.md`, `scripts/orchestration-tools/handle-webhooks.sh`
+- **Местоположение**: `.qwen/skills/webhook-sender/SKILL.md`, `.qwen/scripts/orchestration-tools/handle-webhooks.sh`
 - **Функциональность**: Отправляет уведомления о завершении задач через вебхуки с обработкой различных типов событий
 
 ## 8. Система автоматизированных тестов
@@ -49,7 +49,7 @@
 
 ## 9. Интеграция фазы 0 планирования
 - **Статус**: ✅ Реализована и работает
-- **Местоположение**: `state/planning-phase.schema.json`, `.qwen/agents/orc_planning_task_analyzer.md`, `scripts/orchestration-tools/phase0-analyzer.sh`
+- **Местоположение**: `state/planning-phase.schema.json`, `.qwen/agents/orc_planning_task_analyzer.md`, `.qwen/scripts/orchestration-tools/phase0-analyzer.sh`
 - **Функциональность**: Обеспечивает автоматический запуск фазы 0 планирования при создании новых спецификаций и интеграцию с процессами speckit.plan и speckit.tasks
 
 ## 10. Стандартизированные отчеты

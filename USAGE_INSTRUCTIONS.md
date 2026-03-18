@@ -8,14 +8,14 @@
 {{PROJECT_TEMPLATE_NAME}}/
 ├── .specify/                 # Шаблоны и скрипты для спецификаций
 │   ├── memory/              # Постоянная память для агентов
-│   ├── scripts/             # Bash-скрипты для автоматизации
+│   ├── .qwen/scripts/             # Bash-скрипты для автоматизации
 │   └── templates/           # Шаблоны для различных документов
 ├── .qwen/                   # Конфигурация Qwen CLI
 │   ├── agents/              # Агенты с ограниченными привилегиями
 │   └── commands/            # Команды
-├── docs/                    # Документация проекта
+├── .qwen/docs/                    # Документация проекта
 ├── specs/                   # Спецификации функциональности
-├── scripts/                 # Скрипты для контрольных точек качества
+├── .qwen/scripts/                 # Скрипты для контрольных точек качества
 ├── state/                   # Состояние системы и артефакты выполнения задач
 ├── src/                     # Исходный код проекта (пустая директория)
 ├── tests/                   # Тесты проекта (шаблоны)
@@ -100,8 +100,8 @@ git commit -m "feat: initial commit from Qwen Code Orchestrator Kit template"
 ## Поддержка TDD
 
 Шаблон включает инструменты для поддержки разработки через тестирование:
-- `scripts/specification-tools/generate-tests-from-spec.sh` - генерация тестов из спецификаций
-- `scripts/specification-tools/assign-agents-to-tasks.sh` - автоматическое назначение агентов задачам
+- `.qwen/scripts/specification-tools/generate-tests-from-spec.sh` - генерация тестов из спецификаций
+- `.qwen/scripts/specification-tools/assign-agents-to-tasks.sh` - автоматическое назначение агентов задачам
 
 ## Интеграция с системой агентов
 

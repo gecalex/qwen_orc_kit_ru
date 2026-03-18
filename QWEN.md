@@ -10,7 +10,7 @@
 **Ключевая особенность**: Адаптируйте свое поведение в зависимости от состояния проекта, определяемого автоматически.
 
 ### 1.2. Адаптивное поведение на основе состояния проекта
-**ОБЯЗАТЕЛЬНО** определите состояние проекта перед началом работы с помощью `scripts/orchestration-tools/analyze-project-state.sh`:
+**ОБЯЗАТЕЛЬНО** определите состояние проекта перед началом работы с помощью `.qwen/scripts/orchestration-tools/analyze-project-state.sh`:
 
 - **Пустой проект (код 10)**:
   - Предложите создание конституции проекта через `speckit.constitution`
@@ -34,7 +34,7 @@
 
 ### 1.3. Сбор полного контекста (ОБЯЗАТЕЛЬНО)
 Перед любым действием:
-- **Определите состояние проекта** с помощью `scripts/orchestration-tools/analyze-project-state.sh`
+- **Определите состояние проекта** с помощью `.qwen/scripts/orchestration-tools/analyze-project-state.sh`
 - Прочтите связанные файлы кода
 - Изучите документацию в `specs/` и `docs/`
 - Поймите архитектурные зависимости
@@ -75,7 +75,7 @@ task '{
 
 ```
 ДЛЯ КАЖДОЙ ЗАДАЧИ:
-1. ОПРЕДЕЛИТЕ состояние проекта с помощью scripts/orchestration-tools/analyze-project-state.sh
+1. ОПРЕДЕЛИТЕ состояние проекта с помощью .qwen/scripts/orchestration-tools/analyze-project-state.sh
 2. Прочтите описание задачи
 3. СОБЕРИТЕ ПОЛНЫЙ КОНТЕКСТ (код + документация + зависимости)
 4. ОЦЕНИТЕ СЛОЖНОСТЬ:
@@ -97,7 +97,7 @@ task '{
 - Изоляция функциональности в ветках: `feature/`, `bugfix/`, `hotfix/`
 - Влитие в `develop` только через Pull Request после проверок
 
-**Полное руководство**: `docs/architecture/GIT_WORKFLOW.md`
+**Полное руководство**: `.qwen/docs/architecture/GIT_WORKFLOW.md`
 
 > **ВАЖНО**: Отклонение от этого workflow недопустимо. Это основа поддерживаемой кодовой базы.
 
@@ -110,7 +110,7 @@ task '{
 4. **Pre-Merge Gate**: Интеграционные проверки перед вливанием
 5. **Pre-Implementation Gate**: Проверка качества спецификаций перед реализацией (Gate 5)
 
-**Детали и скрипты**: `docs/architecture/quality-gates.md`
+**Детали и скрипты**: `.qwen/docs/architecture/quality-gates.md`
 
 ## 4. Новые архитектурные компоненты
 
@@ -183,7 +183,7 @@ task '{
 - Все проверки генерируют отчеты в директорию `reports/`
 
 ### 4.5. Система MCP-конфигураций
-- Используйте скрипт `scripts/orchestration-tools/switch-mcp.sh` для переключения конфигураций
+- Используйте скрипт `.qwen/scripts/orchestration-tools/switch-mcp.sh` для переключения конфигураций
 - Доступны конфигурации: BASE, DATABASE, FRONTEND, FULL
 - Конфигурации оптимизированы для разных типов задач и экономят токены
 
@@ -249,7 +249,7 @@ task '{
 - **Воркер классификации задач** (`work_planning_task_classifier`): анализирует и классифицирует задачи
 - **Воркер определения типов агентов** (`work_planning_agent_requirer`): определяет необходимые типы агентов
 - **Воркер назначения исполнителей** (`work_planning_executor_assigner`): назначает исполнителей для задач
-- **Скрипт анализа** (`scripts/orchestration-tools/phase0-analyzer.sh`): автоматизирует анализ задач
+- **Скрипт анализа** (`.qwen/scripts/orchestration-tools/phase0-analyzer.sh`): автоматизирует анализ задач
 - **Схема плана фазы 0** (`state/planning-phase.schema.json`): определяет структуру плана фазы планирования
 
 ## 7. Стандартизация отчетов
@@ -287,11 +287,11 @@ task '{
 
 ### 8.2. Категории контрольных точек
 
-1. **Проверки безопасности** (`scripts/quality-gates/check-security.sh`) - блокирующие
-2. **Проверки покрытия тестами** (`scripts/quality-gates/check-coverage.sh`) - неблокирующие
-3. **Проверки размера бандла** (`scripts/quality-gates/check-bundle-size.sh`) - неблокирующие
-4. **Проверки типизации** (`scripts/quality-gates/check-typing.sh`) - блокирующие
-5. **Проверки линтинга** (`scripts/quality-gates/check-linting.sh`) - неблокирующие
+1. **Проверки безопасности** (`.qwen/scripts/quality-gates/check-security.sh`) - блокирующие
+2. **Проверки покрытия тестами** (`.qwen/scripts/quality-gates/check-coverage.sh`) - неблокирующие
+3. **Проверки размера бандла** (`.qwen/scripts/quality-gates/check-bundle-size.sh`) - неблокирующие
+4. **Проверки типизации** (`.qwen/scripts/quality-gates/check-typing.sh`) - блокирующие
+5. **Проверки линтинга** (`.qwen/scripts/quality-gates/check-linting.sh`) - неблокирующие
 
 ### 8.3. Навык выполнения контрольных точек
 
@@ -299,7 +299,7 @@ task '{
 
 ```json
 {
-  "command": "scripts/quality-gates/check-security.sh",
+  "command": ".qwen/scripts/quality-gates/check-security.sh",
   "isBlocking": true,
   "expectedResult": "No critical vulnerabilities found",
   "timeout": 300
@@ -521,7 +521,7 @@ mcp__context7__query-docs(
 
 ### 10.2. Переключение MCP конфигураций
 
-**Скрипт:** `scripts/orchestration-tools/switch-mcp.sh`
+**Скрипт:** `.qwen/scripts/orchestration-tools/switch-mcp.sh`
 
 **Доступные конфигурации:**
 
@@ -554,12 +554,12 @@ mcp__context7__query-docs(
 
 **1. Проверка MCP серверов:**
 ```bash
-./scripts/orchestration-tools/analyze-project-state.sh
+./.qwen/scripts/orchestration-tools/analyze-project-state.sh
 ```
 
 **2. Переключение конфигурации:**
 ```bash
-./scripts/orchestration-tools/switch-mcp.sh
+./.qwen/scripts/orchestration-tools/switch-mcp.sh
 ```
 
 **3. Перезапуск Qwen Code:**
@@ -642,7 +642,7 @@ qwen
 - Блокирующие и неблокирующие проверки
 - Интеграцию с оркестраторами
 - Навык `run-quality-gate` для выполнения проверок
-- Скрипты проверок в `scripts/quality-gates/`
+- Скрипты проверок в `.qwen/scripts/quality-gates/`
 
 ## 15. Навыки (Skills)
 
@@ -708,15 +708,15 @@ qwen
 #### 1. Мета-агент для автоматического создания агентов
 - **Файл**: `.qwen/agents/work_dev_meta_agent.md`
 - **Назначение**: Автоматическое создание новых агентов (оркестраторов и воркеров) на основе заданных параметров
-- **Использование**: Запускается через скрипт `scripts/agent-creation/create-agent.sh`
+- **Использование**: Запускается через скрипт `.qwen/scripts/agent-creation/create-agent.sh`
 
 #### 2. Система автоматического создания агентов
-- **Скрипт**: `scripts/agent-creation/create-agent.sh`
+- **Скрипт**: `.qwen/scripts/agent-creation/create-agent.sh`
 - **Назначение**: Создание новых агентов с правильной структурой и документацией
-- **Использование**: `./scripts/agent-creation/create-agent.sh <agent_type> <domain> <name> [description]`
+- **Использование**: `./.qwen/scripts/agent-creation/create-agent.sh <agent_type> <domain> <name> [description]`
 
 #### 3. Система индексации проекта
-- **Файл**: `docs/project-index.md`
+- **Файл**: `.qwen/docs/project-index.md`
 - **Назначение**: Централизованный индекс проекта для быстрого понимания структуры
 - **Использование**: Читается агентами для понимания архитектуры проекта
 
@@ -736,10 +736,10 @@ qwen
 - **Использование**: Автоматическое сопоставление задач и агентов
 
 #### 7. Директории скриптов
-- `scripts/agent-creation/` - Скрипты для автоматического создания агентов
-- `scripts/monitoring/` - Скрипты мониторинга и проверки соответствия
-- `scripts/validation/` - Скрипты проверки стандартов
-- `scripts/quality-gates/` - Скрипты контрольных точек качества
+- `.qwen/scripts/agent-creation/` - Скрипты для автоматического создания агентов
+- `.qwen/scripts/monitoring/` - Скрипты мониторинга и проверки соответствия
+- `.qwen/scripts/validation/` - Скрипты проверки стандартов
+- `.qwen/scripts/quality-gates/` - Скрипты контрольных точек качества
 
 ### 17.2. Обновленная структура проекта
 
@@ -821,11 +821,11 @@ specs/                  # Спецификации функций
 3. **Следуйте принципу минимальных привилегий**: предоставьте только необходимые инструменты
 4. **ВАЖНО**: После создания/изменения агентов **требуется перезапуск Qwen Orchestrator Kit**
 
-**Полное руководство**: `docs/architecture/agent-orchestration.md#9`
+**Полное руководство**: `.qwen/docs/architecture/agent-orchestration.md#9`
 
 ### 8.3. Агент-специалист по Qwen Code CLI
 Агент-специалист по Qwen Orchestrator Kit (`work_dev_qwen_code_cli_specialist.md`) отвечает за:
-- Создание и поддержание документации в директории `docs/help/qwen_orchestrator_kit/`
+- Создание и поддержание документации в директории `.qwen/docs/help/qwen_orchestrator_kit/`
 - Разработку шаблонов для агентов, навыков и других компонентов
 - Создание спецификаций для различных аспектов системы
 - Автоматизацию контроля соответствия официальному руководству Qwen Orchestrator Kit
@@ -870,18 +870,18 @@ security-orchestrator → code-quality-checker → bug-hunter → specification-
 
 ## 8. Справочная документация
 
-- **Git Workflow**: `docs/architecture/GIT_WORKFLOW.md` (обязательно к изучению)
-- **Оркестрация агентов**: `docs/architecture/agent-orchestration.md`
-- **Контрольные точки качества**: `docs/architecture/quality-gates.md` (обязательно к изучению)
-- **Адаптивная оркестрация**: `docs/architecture/adaptative-orchestration.md`
-- **Руководство по безопасности**: `docs/architecture/security-guidelines.md`
-- **Руководство по управлению зависимостями**: `docs/architecture/dependency-management.md`
-- **Руководство по поддержке кода**: `docs/architecture/code-maintenance.md`
-- **Стандарты качества кода**: `docs/architecture/quality-standards.md`
-- **Руководство по MCP-конфигурациям**: `docs/architecture/mcp-configurations.md`
-- **Руководство по работе с worktree**: `docs/architecture/worktree-guidelines.md`
-- **Система уведомлений через вебхуки**: `docs/architecture/notification-system.md`
-- **Архитектурные стандарты**: `docs/architecture/standards.md`
+- **Git Workflow**: `.qwen/docs/architecture/GIT_WORKFLOW.md` (обязательно к изучению)
+- **Оркестрация агентов**: `.qwen/docs/architecture/agent-orchestration.md`
+- **Контрольные точки качества**: `.qwen/docs/architecture/quality-gates.md` (обязательно к изучению)
+- **Адаптивная оркестрация**: `.qwen/docs/architecture/adaptative-orchestration.md`
+- **Руководство по безопасности**: `.qwen/docs/architecture/security-guidelines.md`
+- **Руководство по управлению зависимостями**: `.qwen/docs/architecture/dependency-management.md`
+- **Руководство по поддержке кода**: `.qwen/docs/architecture/code-maintenance.md`
+- **Стандарты качества кода**: `.qwen/docs/architecture/quality-standards.md`
+- **Руководство по MCP-конфигурациям**: `.qwen/docs/architecture/mcp-configurations.md`
+- **Руководство по работе с worktree**: `.qwen/docs/architecture/worktree-guidelines.md`
+- **Система уведомлений через вебхуки**: `.qwen/docs/architecture/notification-system.md`
+- **Архитектурные стандарты**: `.qwen/docs/architecture/standards.md`
 - **Официальная документация Qwen Orchestrator Kit**: [https://github.com/QwenLM/Qwen-Code-CLI](https://github.com/QwenLM/Qwen-Code-CLI)
 
 ---

@@ -26,7 +26,7 @@
 - Создан оркестратор фазы планирования: `orc_planning_task_analyzer.md`
 - Созданы воркеры для анализа задач: `work_planning_task_classifier.md`, `work_planning_agent_requirer.md`, `work_planning_executor_assigner.md`
 - Реализован формат файла плана фазы 0 в `state/planning-phase.schema.json`
-- Создан скрипт анализа задач: `scripts/orchestration-tools/phase0-analyzer.sh`
+- Создан скрипт анализа задач: `.qwen/scripts/orchestration-tools/phase0-analyzer.sh`
 - Обновлена документация по фазе планирования
 
 **Результат**: Система теперь может автоматически анализировать задачи, определять требуемые типы агентов и назначать исполнителей.
@@ -37,7 +37,7 @@
 
 **Реализация**:
 - Создан meta-agent-v3: `work_meta_agent_creator.md`
-- Создан скрипт создания агентов: `scripts/agent-creation/create-agent.sh`
+- Создан скрипт создания агентов: `.qwen/scripts/agent-creation/create-agent.sh`
 - Созданы шаблоны для генерации агентов в `.qwen/templates/agent-generation/`
 - Реализован навык проверки уникальности имени агента
 - Создана документация по процессу создания агентов
@@ -55,7 +55,7 @@
 - Создан навык для валидации отчетов
 - Создана документация по формату отчетов
 - Обновлен QWEN.md с описанием формата отчетов
-- Создан скрипт валидации отчетов: `scripts/orchestration-tools/report-validator.sh`
+- Создан скрипт валидации отчетов: `.qwen/scripts/orchestration-tools/report-validator.sh`
 
 **Результат**: Все агенты теперь генерируют отчеты в едином формате, что упрощает их обработку и анализ.
 
@@ -138,12 +138,12 @@
 - `.qwen/agents/orc_*` и `.qwen/agents/work_*` - новые агенты с новой системой именования
 - `.qwen/skills/*` - новые навыки для часто используемых операций
 - `.qwen/templates/*` - шаблоны для агентов и отчетов
-- `scripts/orchestration-tools/*` - скрипты для оркестрации
-- `scripts/quality-gates/*` - скрипты контрольных точек качества
-- `scripts/agent-creation/*` - скрипты создания агентов
-- `docs/architecture/*` - документация по новым компонентам
+- `.qwen/scripts/orchestration-tools/*` - скрипты для оркестрации
+- `.qwen/scripts/quality-gates/*` - скрипты контрольных точек качества
+- `.qwen/scripts/agent-creation/*` - скрипты создания агентов
+- `.qwen/docs/architecture/*` - документация по новым компонентам
 - `tests/integration-test-plan.md` - комплексный тестовый план
-- `docs/migration-guide.md` - руководство по миграции
+- `.qwen/docs/migration-guide.md` - руководство по миграции
 
 ### Обновленные файлы
 - `QWEN.md` - обновлена документация по новым возможностям

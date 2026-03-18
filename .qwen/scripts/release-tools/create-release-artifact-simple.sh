@@ -1,0 +1,91 @@
+#!/bin/bash
+# Скрипт: .qwen/scripts/release-tools/create-release-artifact.sh
+# Назначение: Создание релизного артефакта из шаблона
+
+set -e
+
+RELEASE_VERSION="$1"
+OUTPUT_DIR="${2:-releases}"
+
+if [ -z "$RELEASE_VERSION" ]; then
+    echo "Использование: $0 <версия-релиза> [директория-вывода]"
+    echo "Пример: $0 1.0.0 releases/"
+    exit 1
+fi
+
+echo "=== Создание релизного артефакта версии $RELEASE_VERSION ==="
+
+# Проверка наличия конфигурации релиза
+if [ ! -f "release-config.toml" ]; then
+    echo "Ошибка: Файл конфигурации релиза release-config.toml не найден"
+    exit 1
+fi
+
+# Создание директории выпусков
+mkdir -p "$OUTPUT_DIR"
+
+# Создание временной директории для подготовки релиза
+TEMP_DIR=$(mktemp -d)
+echo "Временная директория: $TEMP_DIR"
+
+# Копирование всех файлов в временную директорию (исключая .git)
+echo "Копирование файлов в временную директорию..."
+rsync -av --exclude='.git' --exclude='releases/' --exclude='*.tar.gz' --exclude='*.zip' . "$TEMP_DIR/source_project/"
+
+# Переход во временную директорию
+cd "$TEMP_DIR/source_project"
+
+# Запуск скрипта очистки
+echo "Запуск скрипта очистки..."
+CONTEXT="release" bash .qwen/scripts/release-tools/clean-for-template.sh
+
+# Проверка, что очистка прошла успешно
+if [ $? -ne 0 ]; then
+    echo "Ошибка: Скрипт очистки завершился с ошибкой"
+    exit 1
+fi
+
+# Возвращение в директорию с временной копией
+cd ..
+
+# Переименование директории в имя релиза
+mv source_project "qwen-orc-kit-template-$RELEASE_VERSION"
+
+# Создание архива
+ARCHIVE_NAME="qwen-orc-kit-template-$RELEASE_VERSION.tar.gz"
+tar -czf "$ARCHIVE_NAME" "qwen-orc-kit-template-$RELEASE_VERSION/"
+
+# Перемещение в родительскую директорию временной директории (исходную директорию проекта)
+cd ..
+
+# Отладочный вывод
+echo "Текущая директория: $(pwd)"
+echo "TEMP_DIR: $TEMP_DIR"
+echo "ARCHIVE_NAME: $ARCHIVE_NAME"
+echo "OUTPUT_DIR: $OUTPUT_DIR"
+echo "Полный путь к архиву: $TEMP_DIR/$ARCHIVE_NAME"
+echo "Полный путь к выходной директории: $(pwd)/$OUTPUT_DIR/"
+
+# Перемещение архива в директорию выпусков в исходной директории проекта
+mv "$TEMP_DIR/$ARCHIVE_NAME" "$(pwd)/$OUTPUT_DIR/"
+
+# Удаление временной директории
+rm -rf "$TEMP_DIR"
+
+echo "=== Релизный артефакт создан ==="
+echo "Файл: $OUTPUT_DIR/$ARCHIVE_NAME"
+echo "Размер: $(du -h $OUTPUT_DIR/$ARCHIVE_NAME | cut -f1)"
+
+# Проверка целостности архива
+echo "Проверка целостности архива..."
+if tar -tzf "$OUTPUT_DIR/$ARCHIVE_NAME" > /dev/null; then
+    echo "✓ Архив действителен"
+else
+    echo "✗ Архив поврежден"
+    exit 1
+fi
+
+echo ""
+echo "Релизный артефакт $RELEASE_VERSION успешно создан!"
+echo "Для тестирования можно распаковать архив и проверить его содержимое:"
+echo "  tar -xzf $OUTPUT_DIR/$ARCHIVE_NAME"

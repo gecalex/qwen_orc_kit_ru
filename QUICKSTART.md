@@ -78,7 +78,7 @@ task '{
 task '{
   "subagent_type": "code-quality-checker",
   "description": "Проверка качества кода",
-  "prompt": "Проверь файлы в директории docs/architecture/ на соответствие стилю документации и лучшим практикам."
+  "prompt": "Проверь файлы в директории .qwen/.qwen/docs/architecture/ на соответствие стилю документации и лучшим практикам."
 }'
 ```
 
@@ -103,7 +103,7 @@ task '{
 Проверяет корректность задачи перед выполнением:
 
 ```bash
-./scripts/run_quality_gate.sh 1
+./.qwen/scripts/run_quality_gate.sh 1
 ```
 
 ### 2. Post-Execution Gate
@@ -111,7 +111,7 @@ task '{
 Проверяет результат выполнения задачи:
 
 ```bash
-./scripts/run_quality_gate.sh 2
+./.qwen/scripts/run_quality_gate.sh 2
 ```
 
 ### 3. Pre-Commit Gate
@@ -119,7 +119,7 @@ task '{
 Проверяет код перед коммитом:
 
 ```bash
-./scripts/run_quality_gate.sh 3
+./.qwen/scripts/run_quality_gate.sh 3
 ```
 
 ## Создание спецификации
@@ -164,12 +164,12 @@ cp .specify/templates/spec-template.md specs/new_feature_spec.md
 
 5. **Проверка после реализации**:
    ```bash
-   ./scripts/run_quality_gate.sh 2
+   ./.qwen/scripts/run_quality_gate.sh 2
    ```
 
 6. **Коммит изменений**:
    ```bash
-   ./scripts/run_quality_gate.sh 3
+   ./.qwen/scripts/run_quality_gate.sh 3
    git add .
    git commit -m "feat: добавить новую функциональность согласно specs/my_new_feature.md"
    ```
@@ -178,14 +178,14 @@ cp .specify/templates/spec-template.md specs/new_feature_spec.md
 
 - `ls .qwen/agents/` - просмотр доступных агентов
 - `ls .qwen/commands/` - просмотр доступных команд
-- `./scripts/run_quality_gate.sh [1|2|3]` - запуск контрольной точки качества
+- `./.qwen/scripts/run_quality_gate.sh [1|2|3]` - запуск контрольной точки качества
 - `tree specs/` - просмотр структуры спецификаций (если установлена утилита tree)
 
 ## Следующие шаги
 
 После освоения базового функционала ознакомьтесь с:
 
-- Подробной документацией в `docs/architecture/`
+- Подробной документацией в `.qwen/.qwen/docs/architecture/`
 - Примерами использования в директории `examples/` (если существует)
 - Руководством по созданию собственных агентов
 

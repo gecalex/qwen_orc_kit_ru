@@ -68,15 +68,15 @@
 - `.qwen/config/` - конфигурации для MCP и других сервисов
 
 #### Документация:
-- `docs/architecture/` - архитектурная документация
+- `.qwen/docs/architecture/` - архитектурная документация
 - `docs/help/` - справочная документация
 - `docs/next_step/` - документация для следующих шагов
 
 #### Скрипты:
-- `scripts/orchestration-tools/` - скрипты оркестрации
-- `scripts/specification-tools/` - скрипты для работы со спецификациями
-- `scripts/release-tools/` - скрипты для подготовки релиза
-- `scripts/quality-gates/` - скрипты контрольных точек качества
+- `.qwen/scripts/orchestration-tools/` - скрипты оркестрации
+- `.qwen/scripts/specification-tools/` - скрипты для работы со спецификациями
+- `.qwen/scripts/release-tools/` - скрипты для подготовки релиза
+- `.qwen/scripts/quality-gates/` - скрипты контрольных точек качества
 
 #### Основные файлы проекта:
 - `QWEN.md` - основной файл с поведенческой парадигмой
@@ -94,7 +94,7 @@
 Для автоматической подготовки релизной версии используйте скрипт:
 
 ```bash
-bash scripts/release-tools/clean-for-template.sh
+bash .qwen/scripts/release-tools/clean-for-template.sh
 ```
 
 Этот скрипт:
@@ -117,12 +117,12 @@ bash scripts/release-tools/clean-for-template.sh
 Для создания артефакта релиза выполните:
 
 ```bash
-bash scripts/release-tools/create-release-artifact.sh <версия-релиза>
+bash .qwen/scripts/release-tools/create-release-artifact.sh <версия-релиза>
 ```
 
 Например:
 ```bash
-bash scripts/release-tools/create-release-artifact.sh 1.0.0
+bash .qwen/scripts/release-tools/create-release-artifact.sh 1.0.0
 ```
 
 Этот скрипт создаст архив в директории `releases/` с именем `qwen-orc-kit-template-<версия>.tar.gz`.

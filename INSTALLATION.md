@@ -133,7 +133,7 @@ qwen --experimental-skills
    - `speckit.implement` - выполнение задач
 
 3. Спецификации хранятся в директории `specs/`
-4. Для получения более подробной информации см. `docs/architecture/specification-driven-development.md`
+4. Для получения более подробной информации см. `.qwen/.qwen/docs/architecture/specification-driven-development.md`
 
 ## Устранение неполадок
 
@@ -159,8 +159,8 @@ qwen --experimental-skills
 
 В проекте доступны скрипты для анализа состояния проекта:
 
-- `scripts/orchestration-tools/analyze-project-state.sh` - определение состояния проекта (пустой, с кодом, с частичными/полными спецификациями)
-- `scripts/orchestration-tools/orchestrate-project.sh` - адаптивное управление проектом на основе его состояния
+- `.qwen/scripts/orchestration-tools/analyze-project-state.sh` - определение состояния проекта (пустой, с кодом, с частичными/полными спецификациями)
+- `.qwen/scripts/orchestration-tools/orchestrate-project.sh` - адаптивное управление проектом на основе его состояния
 
 Эти инструменты позволяют оркестратору адаптировать свое поведение в зависимости от текущего состояния проекта.
 
@@ -169,5 +169,5 @@ qwen --experimental-skills
 После успешной установки ознакомьтесь с:
 
 - `QUICKSTART.md` - быстрый старт с проектом
-- `docs/architecture/` - архитектурная документация
+- `.qwen/.qwen/docs/architecture/` - архитектурная документация
 - `CONTRIBUTING.md` - руководство по участию в проекте

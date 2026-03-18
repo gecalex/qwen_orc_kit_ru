@@ -1,4 +1,3 @@
----
 description: Создание или обновление спецификации функции на основе описания функции на естественном языке.
 ---
 
@@ -58,10 +57,10 @@ $ARGUMENTS
       - Найдите самое высокое число N
       - Используйте N+1 для нового номера ветки
 
-   d. Запустите скрипт `.specify/scripts/bash/create-new-feature.sh --json "{{args}}"` с вычисленным номером и коротким именем:
+   d. Запустите скрипт `.qwen/specify/scripts/bash/create-new-feature.sh --json "{{args}}"` с вычисленным номером и коротким именем:
       - Передайте `--number N+1` и `--short-name "your-short-name"` вместе с описанием функции
-      - Пример bash: `.specify/scripts/bash/create-new-feature.sh --json "{{args}}" --json --number 5 --short-name "user-auth" "Add user authentication"`
-      - Пример PowerShell: `.specify/scripts/bash/create-new-feature.sh --json "{{args}}" -Json -Number 5 -ShortName "user-auth" "Add user authentication"`
+      - Пример bash: `.qwen/specify/scripts/bash/create-new-feature.sh --json "{{args}}" --json --number 5 --short-name "user-auth" "Add user authentication"`
+      - Пример PowerShell: `.qwen/specify/scripts/bash/create-new-feature.sh --json "{{args}}" -Json -Number 5 -ShortName "user-auth" "Add user authentication"`
 
    **ВАЖНО**:
    - Проверьте все три источника (удаленные ветки, локальные ветки, каталоги спецификаций), чтобы найти самое высокое число
@@ -72,7 +71,7 @@ $ARGUMENTS
    - Вывод JSON будет содержать пути BRANCH_NAME и SPEC_FILE
    - Для одинарных кавычек в аргументах, таких как "I'm Groot", используйте синтаксис экранирования: например 'I'\''m Groot' (или двойные кавычки, если возможно: "I'm Groot")
 
-3. Загрузите `.specify/templates/spec-template.md`, чтобы понять требуемые разделы.
+3. Загрузите `.qwen/specify/templates/spec-template.md`, чтобы понять требуемые разделы.
 
 4. Следуйте этому порядку выполнения:
 

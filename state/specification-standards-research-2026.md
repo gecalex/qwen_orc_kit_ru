@@ -506,52 +506,133 @@ exit 0
 
 ## 4. КОНКРЕТНЫЕ ПРЕДЛОЖЕНИЯ ПО ИЗМЕНЕНИЮ СТРУКТУРЫ specs/
 
-### 4.1. Новая структура проекта
+### 4.1. Новая структура проекта (согласно QWEN.md)
+
+**ВАЖНО:** Согласно правилам проекта и документации QWEN.md, директория `.specify/` должна находиться внутри `.qwen/` для глубокой интеграции с проектом.
 
 ```
 /home/alex/MyProjects/qwen_orc_kit_ru/
-├── .specify/                              # НОВАЯ директория (GitHub Spec Kit)
-│   ├── memory/
-│   │   └── constitution.md                # Конституция проекта
-│   ├── scripts/
-│   │   ├── check-prerequisites.sh
-│   │   ├── common.sh
-│   │   ├── create-new-feature.sh
-│   │   ├── setup-plan.sh
-│   │   ├── update-claude-md.sh
-│   │   └── validate-specs.sh              # Валидация спецификаций
-│   ├── specs/
-│   │   ├── 001-mcp-integration/           # Нумерованные фичи
-│   │   │   ├── spec.md                    # Функциональная спецификация
-│   │   │   ├── plan.md                    # План реализации
-│   │   │   ├── tasks.md                   # Задачи с исполнителями
-│   │   │   ├── research.md                # Исследования
-│   │   │   ├── data-model.md              # Модель данных
-│   │   │   └── contracts/
-│   │   │       ├── api-spec.yaml          # OpenAPI 3.1
-│   │   │       └── mcp-config.json        # MCP конфигурация
-│   │   ├── 002-skill-system/
-│   │   └── 003-agent-architecture/
-│   └── templates/
-│       ├── spec-template.md
-│       ├── plan-template.md
-│       ├── tasks-template.md
-│       └── CLAUDE-template.md
-│
-├── specs/                                 # ТЕКУЩАЯ директория (для совместимости)
-│   └── README.md                          # Указатель на .specify/specs/
-│
 ├── .qwen/
+│   ├── specify/                           # НОВАЯ директория (GitHub Spec Kit)
+│   │   ├── memory/
+│   │   │   └── constitution.md            # Конституция проекта
+│   │   ├── scripts/
+│   │   │   ├── check-prerequisites.sh
+│   │   │   ├── common.sh
+│   │   │   ├── create-new-feature.sh
+│   │   │   ├── setup-plan.sh
+│   │   │   ├── update-claude-md.sh
+│   │   │   └── validate-specs.sh          # Валидация спецификаций
+│   │   ├── specs/
+│   │   │   ├── 001-mcp-integration/       # Нумерованные фичи
+│   │   │   │   ├── spec.md                # Функциональная спецификация
+│   │   │   │   ├── plan.md                # План реализации
+│   │   │   │   ├── tasks.md               # Задачи с исполнителями
+│   │   │   │   ├── research.md            # Исследования
+│   │   │   │   ├── data-model.md          # Модель данных
+│   │   │   │   └── contracts/
+│   │   │   │       ├── api-spec.yaml      # OpenAPI 3.1
+│   │   │   │       └── mcp-config.json    # MCP конфигурация
+│   │   │   ├── 002-skill-system/
+│   │   │   └── 003-agent-architecture/
+│   │   └── templates/
+│   │       ├── spec-template.md
+│   │       ├── plan-template.md
+│   │       ├── tasks-template.md
+│   │       └── CLAUDE-template.md
+│   │
 │   ├── docs/
 │   │   └── architecture/
-│   │       └── specification-driven-development.md  # Обновить
-│   └── skills/
-│       ├── specification-analyzer/        # Обновить для валидации
-│       └── validate-specification/        # НОВЫЙ навык
+│   │       └── specification-driven-development.md  # Обновить ссылки на .qwen/specify/
+│   │
+│   ├── skills/
+│   │   ├── specification-analyzer/        # Обновить для валидации
+│   │   └── validate-specification/        # НОВЫЙ навык
+│   │
+│   └── scripts/
+│       └── quality-gates/
+│           └── check-specifications.sh    # НОВЫЙ quality gate
 │
-└── scripts/
-    └── quality-gates/
-        └── check-specifications.sh        # НОВЫЙ quality gate
+├── specs/                                 # ТЕКУЩАЯ директория (для совместимости)
+│   └── README.md                          # Указатель на .qwen/specify/specs/
+│
+└── state/
+    └── specification-standards-research-2026.md
+```
+
+### 4.2. Интеграция с QWEN.md
+
+**Ссылки в QWEN.md:**
+
+**Раздел 1.2 (Адаптивное поведение):**
+```markdown
+- **Пустой проект (код 10)**:
+  - Предложите создание конституции проекта через `speckit.constitution`
+    → Файл: `.qwen/specify/memory/constitution.md`
+  - Предложите создание первой спецификации через `speckit.specify`
+    → Файл: `.qwen/specify/specs/001-{feature}/spec.md`
+```
+
+**Раздел 6.2 (Компоненты автоматизированной фазы планирования):**
+```markdown
+- **Скрипт анализа** (`.qwen/scripts/orchestration-tools/phase0-analyzer.sh`):
+  → Интеграция с `.qwen/specify/scripts/check-prerequisites.sh`
+- **Схема плана фазы 0** (`state/planning-phase.schema.json`):
+  → Интеграция с `.qwen/specify/templates/plan-template.md`
+```
+
+**Раздел 7.2 (Использование навыков):**
+```markdown
+- Используйте навык `generate-report-header`
+  → Шаблон: `.qwen/specify/templates/report-template.md`
+- Используйте навык `validate-report-file`
+  → Навык: `.qwen/skills/validate-specification/`
+```
+
+### 4.3. Интеграция с .qwen/docs/
+
+**Обновление документации:**
+
+**Файл:** `.qwen/docs/architecture/specification-driven-development.md`
+
+**Добавить раздел:**
+```markdown
+## 11. Интеграция с .qwen/specify/
+
+### 11.1. Структура директории
+- `.qwen/specify/memory/constitution.md` — конституция проекта
+- `.qwen/specify/specs/{###}-{feature}/` — спецификации функций
+- `.qwen/specify/templates/` — шаблоны спецификаций
+
+### 11.2. Процесс работы
+1. Создание конституции: `speckit.constitution`
+2. Создание спецификации: `speckit.specify`
+3. Уточнение: `speckit.clarify`
+4. План реализации: `speckit.plan`
+5. Генерация задач: `speckit.tasks`
+6. Реализация: `speckit.implement`
+
+### 11.3. Валидация
+- Проверка конституции: `specification-compliance-checker`
+- Проверка спецификаций: `.qwen/specify/scripts/validate-specs.sh`
+- Quality Gate 5: Pre-Implementation Gate
+```
+
+**Файл:** `.qwen/docs/architecture/release-workflow.md`
+
+**Добавить раздел:**
+```markdown
+## 8. Спецификации в релизе
+
+### 8.1. Включение в main
+- `.qwen/specify/templates/` — шаблоны (включаются)
+- `.qwen/specify/memory/constitution.md` — конституция (включается)
+- `.qwen/specify/specs/` — спецификации функций (НЕ включаются, только для develop)
+
+### 8.2. Исключение из main
+- Активные спецификации в разработке
+- Черновики спецификаций
+- Временные файлы планирования
 ```
 
 ---

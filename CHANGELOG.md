@@ -7,6 +7,98 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-03-20
+
+### Added
+- **Pre-Flight Проверки (Новое в v0.5.0):**
+  - `.qwen/scripts/orchestration-tools/pre-flight-check.sh` — 10 проверок перед началом фазы
+  - Проверки: Git, develop, .gitignore, constitution, Quality Gates, агенты, команды, skills, MCP, scripts
+  - Блокирующая: true (останавливает процесс при неудаче)
+  - Вывод: цветной, детальный
+
+- **Автоматическая инициализация проекта:**
+  - `.qwen/scripts/orchestration-tools/initialize-project.sh` — полный цикл инициализации
+  - Инициализация Git репозитория
+  - Создание ветки develop
+  - Создание .gitignore
+  - Настройка pre-commit хука
+  - Проверка конституции проекта
+  - Проверка структуры проекта
+  - Запуск pre-flight проверок
+  - Создание CHANGELOG.md
+  - Создание README.md (если отсутствует)
+
+- **Журнал вызовов агентов:**
+  - `.qwen/scripts/agent-tools/log-agent-call.sh` — аудит вызовов агентов
+  - Формат: TIMESTAMP | AGENT | TASK | STATUS | NOTES
+  - Дневные отчеты: `.qwen/reports/agent-calls/calls-YYYY-MM-DD.md`
+  - Общий лог: `.qwen/logs/agent-calls.log`
+  - Статистика вызовов
+
+- **Система отчетов:**
+  - `.qwen/reports/` — централизованное хранилище отчетов
+  - 12 директорий для различных типов отчетов:
+    - quality-gates/gate-{1-5}-*/
+    - agent-calls/
+    - audits/
+    - phase-reports/
+    - health-checks/
+    - releases/
+  - `.qwen/reports/README.md` — документация системы
+
+- **Чеклисты для самопроверки:**
+  - `.qwen/docs/help/checklists.md` — 10 чеклистов
+  - Pre-Flight Checklist
+  - Pre-Commit Checklist
+  - Pre-Merge Checklist
+  - TDD Checklist
+  - Agent Assignment Checklist
+  - Specification Checklist
+  - Phase 0 Checklist
+  - Initialization Checklist
+  - Release Checklist
+  - Health Check Checklist
+
+- **Примеры обработки ошибок:**
+  - `.qwen/docs/help/error-handling-examples.md` — 12 примеров
+  - Git не инициализирован
+  - Quality Gate не прошел
+  - Агент отсутствует
+  - Коммит в main напрямую
+  - Spec не соответствует требованиям
+  - Тесты не проходят
+  - Pre-commit хук не проходит
+  - MCP сервер недоступен
+  - Агент создан постфактум
+  - State/ файлы в main
+  - Нет журнала вызовов агентов
+  - Сборка не проходит
+
+### Changed
+- **QWEN.md обновлен до версии 2.0 (v0.5.0):**
+  - Раздел 1.2: Pre-Flight проверки (Шаг 0)
+  - Раздел 9: Инициализация проекта
+  - Раздел 10: Полный процесс разработки (v0.5.0)
+  - Версия парадигмы: 2.0 (v0.5.0)
+
+- **phase0-analyzer.sh:**
+  - Добавлены уведомления о постфактум агентах
+  - Проверка наличия требуемых агентов
+  - Рекомендации по созданию отсутствующих агентов
+
+- **orc_planning_task_analyzer.md:**
+  - Интеграция Pre-Flight проверок
+  - Шаг 0: Pre-Flight перед Фазой 0
+
+### Improved
+- **Целостность логики оркестрации:**
+  - Pre-Flight перед началом любой фазы
+  - initialize-project.sh для новых проектов
+  - Журнал вызовов агентов для аудита
+  - Quality Gates интегрированы
+  - Чеклисты для самопроверки
+  - Примеры обработки ошибок
+
 ## [0.4.0] - 2026-03-19
 
 ### Added

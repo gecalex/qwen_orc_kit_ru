@@ -12530,3 +12530,16 @@ scripts/.tmp/
 .agent-tools/
 
 # Врем
+# State directory (development artifacts)
+state/
+
+# Development reports
+ORCHESTRATION_DEVELOPMENT_REPORT.md
+release_preparation_report.md
+
+# Release files
+RELEASE_*.md
+release_*.md
+
+# TEMPLATE.md
+TEMPLATE.md

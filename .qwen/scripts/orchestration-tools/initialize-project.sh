@@ -1,188 +1,391 @@
 #!/bin/bash
 # Скрипт: .qwen/scripts/orchestration-tools/initialize-project.sh
-# Назначение: Инициализация нового проекта на основе шаблона с адаптивной логикой
+# Назначение: Инициализация нового проекта на основе шаблона Qwen Code Orchestrator Kit
+# Использование: .qwen/scripts/orchestration-tools/initialize-project.sh [имя-проекта]
 
-PROJECT_NAME="$1"
-PROJECT_PATH="${2:-.}"
+set -e
 
-if [ -z "$PROJECT_NAME" ]; then
-    echo "Использование: $0 <имя-проекта> [путь-к-проекту]"
-    echo "Пример: $0 my-new-project ./projects/"
-    exit 1
-fi
+# Цвета для вывода
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
 
-echo "=== Инициализация проекта: $PROJECT_NAME ==="
+log_info() {
+    echo -e "${BLUE}ℹ️  $1${NC}"
+}
 
-# Определение состояния проекта
-STATE_ANALYSIS=$(./.qwen/scripts/orchestration-tools/analyze-project-state.sh 2>&1)
-STATE_CODE=$?
+log_success() {
+    echo -e "${GREEN}✅ $1${NC}"
+}
 
-# Интерпретация кода состояния
-if [ $STATE_CODE -eq 10 ]; then
-    PROJECT_STATE="empty"
-elif [ $STATE_CODE -eq 20 ]; then
-    PROJECT_STATE="existing_code_no_specs"
-elif [ $STATE_CODE -eq 30 ]; then
-    PROJECT_STATE="partial_specification"
-elif [ $STATE_CODE -eq 40 ]; then
-    PROJECT_STATE="full_specification"
-else
-    PROJECT_STATE="unknown"
-fi
+log_warning() {
+    echo -e "${YELLOW}⚠️  $1${NC}"
+}
 
-echo "Состояние проекта: $PROJECT_STATE"
+log_error() {
+    echo -e "${RED}❌ $1${NC}"
+}
 
-case $PROJECT_STATE in
-    "empty")
-        echo ""
-        echo "=== Пустой проект обнаружен ==="
-        echo "Рекомендуется начать с создания конституции проекта"
-        echo ""
-
-        # Запрос информации у пользователя для создания конституции
-        echo "Пожалуйста, ответьте на несколько вопросов для создания конституции проекта:"
-        echo ""
-
-        echo "1. Какие языки программирования вы планируете использовать?"
-        read -p "   Языки (через запятую): " LANGUAGES
-
-        echo ""
-        echo "2. Какие фреймворки/библиотеки планируете использовать?"
-        read -p "   Фреймворки: " FRAMEWORKS
-
-        echo ""
-        echo "3. Какие стандарты кодирования важны для проекта?"
-        read -p "   Стандарты: " STANDARDS
-
-        echo ""
-        echo "4. Какие требования к тестированию?"
-        read -p "   Тестирование: " TESTING
-
-        echo ""
-        echo "5. Какие UX-принципы должны быть соблюдены?"
-        read -p "   UX-принципы: " UX_PRINCIPLES
-
-        # Создание конституции проекта
-        echo ""
-        echo "Создание конституции проекта..."
-        mkdir -p .specify/memory
-        cat > .specify/memory/constitution.md << CONSTITUTION_EOF
-# Конституция проекта $PROJECT_NAME
-
-## Основные принципы
-
-### I. Принципы разработки
-- Код должен быть читаемым и понятным
-- Все функции должны быть покрыты тестами
-- Документация сопровождает код
-
-### II. Стандарты кодирования
-- Использование линтеров и форматтеров
-- Соглашение об именовании переменных и функций
-- Структура проекта по модулям
-
-### III. Тестирование
-- Модульные тесты для каждой функции
-- Интеграционные тесты для компонентов
-- Регрессионное тестирование
-
-### IV. Безопасность
-- Проверка ввода данных
-- Защита от уязвимостей
-- Безопасное хранение данных
-
-## Дополнительные ограничения
-- Использование только проверенных библиотек
-- Регулярные обновления зависимостей
-- Проверка безопасности кода
-
-## Рабочий процесс
-- Код-ревью перед мержем
-- Автоматические проверки качества
-- Документирование изменений
-
-## Управление
-- Все изменения фиксируются в логах
-- Регулярные ретроспективы
-- Непрерывное улучшение процессов
-
-**Версия**: 1.0.0 | **Утверждена**: $(date +%Y-%m-%d) | **Последнее изменение**: $(date +%Y-%m-%d)
-CONSTITUTION_EOF
-
-        echo "Конституция проекта создана: .specify/memory/constitution.md"
-        echo ""
-        echo "Теперь рекомендуется создать первую спецификацию:"
-        echo "  speckit.specify \"описание вашей первой функции\""
-        ;;
-
-    "existing_code_no_specs")
-        echo ""
-        echo "=== Существующий код без спецификаций обнаружен ==="
-        echo "Рекомендуется создать реверс-инжиниринг спецификаций"
-        echo ""
-
-        echo "Выполняется анализ существующего кода..."
-        # Используем агентов для анализа кода
-        echo "Анализ технологического стека..."
-        if [ -f "requirements.txt" ]; then
-            echo "  Обнаружен Python проект"
-            echo "  Зависимости: $(cat requirements.txt | wc -l) пакетов"
-        elif [ -f "package.json" ]; then
-            echo "  Обнаружен JavaScript/TypeScript проект"
-            echo "  Зависимости: $(grep -c '\"dependencies\":' package.json) основных зависимостей"
-        fi
-
-        echo ""
-        echo "Рекомендуется:"
-        echo "  1. Создать реверс-инжиниринг спецификаций на основе существующего кода"
-        echo "  2. Использовать команду: speckit.analyze для анализа кода"
-        echo "  3. Затем создать спецификации на основе анализа"
-        ;;
-
-    "partial_specification")
-        echo ""
-        echo "=== Проект с частичными спецификациями обнаружен ==="
-        echo "Рекомендуется доработать и дополнить существующие спецификации"
-        echo ""
-
-        SPEC_COUNT=$(find specs -name "spec.md" | wc -l)
-        echo "Обнаружено спецификаций: $SPEC_COUNT"
-
-        echo ""
-        echo "Рекомендуется:"
-        echo "  1. Проверить полноту существующих спецификаций"
-        echo "  2. Заполнить пробелы в спецификациях"
-        echo "  3. Проверить соответствие реализации спецификациям"
-        ;;
-
-    "full_specification")
-        echo ""
-        echo "=== Проект с полными спецификациями обнаружен ==="
-        echo "Рекомендуется следовать стандартному процессу Speckit"
-        echo ""
-
-        SPEC_COUNT=$(find specs -name "spec.md" | wc -l)
-        echo "Обнаружено спецификаций: $SPEC_COUNT"
-
-        echo ""
-        echo "Можно продолжить стандартный процесс:"
-        echo "  1. speckit.plan - создать план реализации"
-        echo "  2. speckit.tasks - сгенерировать задачи"
-        echo "  3. speckit.implement - выполнить реализацию"
-        ;;
-
-    *)
-        echo ""
-        echo "=== Неопределенное состояние проекта ==="
-        echo "Требуется ручной анализ и определение подходящего процесса"
-        echo ""
-        echo "Рекомендуется:"
-        echo "  1. Провести ручной анализ структуры проекта"
-        echo "  2. Определить наличие кода, спецификаций и конфигураций"
-        echo "  3. Выбрать подходящий процесс в зависимости от анализа"
-        ;;
-esac
+log_step() {
+    echo -e "${CYAN}📍 $1${NC}"
+}
 
 echo ""
-echo "=== Инициализация проекта завершена ==="
-echo "Следующие шаги зависят от состояния проекта (см. рекомендации выше)"
+echo "╔═══════════════════════════════════════════════════════════╗"
+echo "║  Инициализация проекта Qwen Code Orchestrator Kit        ║"
+echo "╚═══════════════════════════════════════════════════════════╝"
+echo ""
+
+# ============================================================================
+# ШАГ 1: Проверка окружения
+# ============================================================================
+log_step "Шаг 1: Проверка окружения..."
+
+if ! command -v git &> /dev/null; then
+    log_error "Git не установлен"
+    exit 1
+fi
+log_success "Git установлен: $(git --version)"
+
+if ! command -v node &> /dev/null; then
+    log_warning "Node.js не установлен (рекомендуется для некоторых функций)"
+else
+    log_success "Node.js установлен: $(node --version)"
+fi
+
+echo ""
+
+# ============================================================================
+# ШАГ 2: Инициализация Git репозитория
+# ============================================================================
+log_step "Шаг 2: Инициализация Git репозитория..."
+
+if [ -d ".git" ]; then
+    log_warning "Git репозиторий уже инициализирован"
+else
+    git init
+    log_success "Git репозиторий инициализирован"
+fi
+
+echo ""
+
+# ============================================================================
+# ШАГ 3: Создание ветки develop
+# ============================================================================
+log_step "Шаг 3: Создание ветки develop..."
+
+if ! git branch | grep -q "develop"; then
+    git branch develop
+    log_success "Ветка develop создана"
+else
+    log_warning "Ветка develop уже существует"
+fi
+
+# Проверка текущей ветки
+CURRENT_BRANCH=$(git branch --show-current)
+if [ "$CURRENT_BRANCH" = "main" ]; then
+    log_info "Переключение с main на develop..."
+    git checkout develop
+    log_success "Переключено на ветку develop"
+fi
+
+echo ""
+
+# ============================================================================
+# ШАГ 4: Создание .gitignore
+# ============================================================================
+log_step "Шаг 4: Создание .gitignore..."
+
+if [ ! -f ".gitignore" ]; then
+    cat > .gitignore << 'EOF'
+# State directory (development artifacts)
+state/
+
+# Development reports
+ORCHESTRATION_DEVELOPMENT_REPORT.md
+release_preparation_report.md
+
+# Release files
+RELEASE_*.md
+release_*.md
+
+# TEMPLATE.md
+TEMPLATE.md
+
+# Temporary files
+.tmp/
+*.tmp
+
+# Logs
+logs/
+*.log
+
+# Backup files
+*.backup
+backups/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node modules (если используется)
+node_modules/
+
+# Python (если используется)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Rust (если используется)
+target/
+**/target/
+
+# Build artifacts
+dist/
+build/
+EOF
+    log_success ".gitignore создан"
+else
+    log_warning ".gitignore уже существует"
+    
+    # Проверка наличия state/ в .gitignore
+    if ! grep -q "^state/" .gitignore 2>/dev/null; then
+        log_info "Добавление state/ в .gitignore..."
+        echo "" >> .gitignore
+        echo "# State directory" >> .gitignore
+        echo "state/" >> .gitignore
+        log_success "state/ добавлен в .gitignore"
+    fi
+fi
+
+echo ""
+
+# ============================================================================
+# ШАГ 5: Создание pre-commit хука
+# ============================================================================
+log_step "Шаг 5: Настройка pre-commit хука..."
+
+if [ ! -f ".git/hooks/pre-commit" ]; then
+    cat > .git/hooks/pre-commit << 'EOF'
+#!/bin/bash
+# Pre-commit хук для Qwen Code Orchestrator Kit
+
+echo "=== Pre-commit проверки ==="
+
+# Проверка синтаксиса bash скриптов
+for file in $(git diff --cached --name-only | grep '\.sh$'); do
+    if [ -f "$file" ]; then
+        bash -n "$file" || {
+            echo "❌ Ошибка синтаксиса в $file"
+            exit 1
+        }
+    fi
+done
+
+# Проверка markdown (если есть markdownlint)
+if command -v markdownlint &> /dev/null; then
+    markdownlint $(git diff --cached --name-only | grep '\.md$') || {
+        echo "❌ Ошибки markdown"
+        exit 1
+    }
+fi
+
+echo "✅ Pre-commit проверки пройдены"
+exit 0
+EOF
+    chmod +x .git/hooks/pre-commit
+    log_success "Pre-commit хук настроен"
+else
+    log_warning "Pre-commit хук уже существует"
+fi
+
+echo ""
+
+# ============================================================================
+# ШАГ 6: Проверка конституции проекта
+# ============================================================================
+log_step "Шаг 6: Проверка конституции проекта..."
+
+CONSTITUTION_FILE=".qwen/specify/memory/constitution.md"
+
+if [ ! -f "$CONSTITUTION_FILE" ]; then
+    log_warning "Конституция проекта отсутствует"
+    log_info "Создайте через: speckit.constitution"
+else
+    log_success "Конституция проекта существует"
+fi
+
+echo ""
+
+# ============================================================================
+# ШАГ 7: Проверка структуры проекта
+# ============================================================================
+log_step "Шаг 7: Проверка структуры проекта..."
+
+REQUIRED_DIRS=(
+    ".qwen/agents"
+    ".qwen/commands"
+    ".qwen/skills"
+    ".qwen/scripts"
+    ".qwen/docs"
+    ".qwen/templates"
+)
+
+for dir in "${REQUIRED_DIRS[@]}"; do
+    if [ ! -d "$dir" ]; then
+        log_error "Отсутствует директория: $dir"
+    fi
+done
+
+log_success "Структура проекта проверена"
+
+echo ""
+
+# ============================================================================
+# ШАГ 8: Запуск Pre-Flight проверок
+# ============================================================================
+log_step "Шаг 8: Запуск Pre-Flight проверок..."
+
+if [ -f ".qwen/scripts/orchestration-tools/pre-flight-check.sh" ]; then
+    .qwen/scripts/orchestration-tools/pre-flight-check.sh "Инициализация"
+    if [ $? -ne 0 ]; then
+        log_error "Pre-Flight проверки не пройдены"
+        exit 1
+    fi
+else
+    log_warning "pre-flight-check.sh отсутствует"
+fi
+
+echo ""
+
+# ============================================================================
+# ШАГ 9: Создание CHANGELOG.md
+# ============================================================================
+log_step "Шаг 9: Проверка CHANGELOG.md..."
+
+if [ ! -f "CHANGELOG.md" ]; then
+    cat > CHANGELOG.md << 'EOF'
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.1.0] - YYYY-MM-DD
+
+### Added
+- Initial project setup
+- Qwen Code Orchestrator Kit template
+
+EOF
+    log_success "CHANGELOG.md создан"
+else
+    log_warning "CHANGELOG.md уже существует"
+fi
+
+echo ""
+
+# ============================================================================
+# ШАГ 10: Создание README.md (если отсутствует)
+# ============================================================================
+log_step "Шаг 10: Проверка README.md..."
+
+if [ ! -f "README.md" ]; then
+    cat > README.md << 'EOF'
+# Проект
+
+Описание проекта.
+
+## Начало работы
+
+### Требования
+
+- Git
+- Node.js (рекомендуется)
+
+### Установка
+
+```bash
+git clone <repository-url>
+cd <project-directory>
+```
+
+### Использование
+
+```bash
+# Запуск Pre-Flight проверок
+.qwen/scripts/orchestration-tools/pre-flight-check.sh
+
+# Инициализация (если нужно)
+.qwen/scripts/orchestration-tools/initialize-project.sh
+```
+
+## Документация
+
+- [QWEN.md](QWEN.md) - Поведенческая парадигма
+- [QUICKSTART.md](QUICKSTART.md) - Быстрый старт
+- [INSTALLATION.md](INSTALLATION.md) - Установка
+
+## Разработка
+
+### Git Workflow
+
+- `main` — production релизы
+- `develop` — основная ветка разработки
+- `feature/*` — новые функции
+- `bugfix/*` — исправления ошибок
+- `hotfix/*` — срочные исправления
+
+### Коммиты
+
+Используем Conventional Commits:
+- `feat:` — новая функция
+- `fix:` — исправление
+- `docs:` — документация
+- `style:` — форматирование
+- `refactor:` — рефакторинг
+- `test:` — тесты
+- `chore:` — служебные
+
+## License
+
+EOF
+    log_success "README.md создан"
+else
+    log_warning "README.md уже существует"
+fi
+
+echo ""
+
+# ============================================================================
+# ФИНАЛ
+# ============================================================================
+echo "╔═══════════════════════════════════════════════════════════╗"
+echo "║  ✅ Инициализация проекта завершена!                     ║"
+echo "╚═══════════════════════════════════════════════════════════╝"
+echo ""
+log_success "Проект готов к разработке!"
+echo ""
+echo "Следующие шаги:"
+echo "  1. Изучите документацию: QWEN.md, QUICKSTART.md"
+echo "  2. Создайте конституцию: speckit.constitution"
+echo "  3. Создайте первую спецификацию: speckit.specify"
+echo "  4. Запустите Фазу 0: speckit.plan"
+echo ""
+log_info "Текущая ветка: $(git branch --show-current)"
+log_info "Git статус: $(git status --short | wc -l | xargs) изменений"
+echo ""

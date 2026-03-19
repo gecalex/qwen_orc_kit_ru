@@ -10,7 +10,36 @@
 **Ключевая особенность**: Адаптируйте свое поведение в зависимости от состояния проекта, определяемого автоматически.
 
 ### 1.2. Адаптивное поведение на основе состояния проекта
-**ОБЯЗАТЕЛЬНО** определите состояние проекта перед началом работы с помощью `.qwen/scripts/orchestration-tools/analyze-project-state.sh`:
+
+**ОБЯЗАТЕЛЬНО** определите состояние проекта перед началом работы:
+
+**Шаг 0: Pre-Flight Проверки (Новое в v0.5.0)**
+
+Перед началом любой фазы:
+```bash
+.qwen/scripts/orchestration-tools/pre-flight-check.sh "<Название фазы>"
+```
+
+**Проверки:**
+- ✅ Git репозиторий инициализирован
+- ✅ Ветка develop существует
+- ✅ .gitignore существует
+- ✅ constitution.md существует
+- ✅ Quality Gates скрипты существуют
+- ✅ Агенты существуют
+- ✅ Speckit команды существуют
+- ✅ Skills существуют
+
+**При неудаче:**
+- ОСТАНОВКА процесса
+- Вывод списка ошибок
+- Запрос на устранение
+
+---
+
+**Шаг 1: Анализ состояния проекта**
+
+Используйте `.qwen/scripts/orchestration-tools/analyze-project-state.sh`:
 
 - **Пустой проект (код 10)**:
   - Предложите создание конституции проекта через `speckit.constitution`
@@ -879,6 +908,128 @@ security-orchestrator → code-quality-checker → bug-hunter → specification-
 - **Руководство по поддержке кода**: `.qwen/docs/architecture/code-maintenance.md`
 - **Стандарты качества кода**: `.qwen/docs/architecture/quality-standards.md`
 - **Руководство по MCP-конфигурациям**: `.qwen/docs/architecture/mcp-configurations.md`
+
+---
+
+## 9. Инициализация проекта (Новое в v0.5.0)
+
+### 9.1. Автоматическая инициализация
+
+Для нового проекта используйте:
+
+```bash
+.qwen/scripts/orchestration-tools/initialize-project.sh
+```
+
+**Скрипт выполняет:**
+1. ✅ Инициализация Git репозитория
+2. ✅ Создание ветки develop
+3. ✅ Создание .gitignore
+4. ✅ Настройка pre-commit хука
+5. ✅ Проверка конституции проекта
+6. ✅ Проверка структуры проекта
+7. ✅ Запуск Pre-Flight проверок
+8. ✅ Создание CHANGELOG.md
+9. ✅ Создание README.md (если отсутствует)
+
+### 9.2. Pre-Flight Проверки
+
+Перед началом любой фазы:
+
+```bash
+.qwen/scripts/orchestration-tools/pre-flight-check.sh "<Название фазы>"
+```
+
+**10 проверок:**
+1. Git репозиторий
+2. Ветка develop
+3. Файл .gitignore
+4. Конституция проекта
+5. Quality Gates скрипты
+6. Агенты
+7. Speckit команды
+8. Навыки (Skills)
+9. MCP конфигурация
+10. Скрипты
+
+**Блокирующая:** true (останавливает процесс при неудаче)
+
+### 9.3. Журнал вызовов агентов
+
+Для аудита вызовов агентов:
+
+```bash
+.qwen/scripts/agent-tools/log-agent-call.sh <AGENT_NAME> <TASK_ID> [STATUS] [NOTES]
+```
+
+**Пример:**
+```bash
+.qwen/scripts/agent-tools/log-agent-call.sh orc_planning_task_analyzer P0-T01 started "Инициализация Фазы 0"
+```
+
+**Формат записи:**
+```
+TIMESTAMP | AGENT_NAME | TASK_ID | STATUS | NOTES
+```
+
+**Отчеты:**
+- Общий лог: `.qwen/logs/agent-calls.log`
+- Дневные отчеты: `.qwen/reports/agent-calls/calls-YYYY-MM-DD.md`
+
+---
+
+## 10. Паттерны оркестрации (5% случаев)
+
+### 10.1. Комплексный аудит кодовой базы
+Используйте цепочку агентов:
+```
+security-orchestrator → code-quality-checker → bug-hunter → specification-compliance-checker
+```
+Результаты собираются в единый отчёт, затем делегируется исправление.
+
+### 10.2. Разработка новой функциональности
+
+**Полный процесс (v0.5.0):**
+
+1. **Pre-Flight Проверки**
+   ```bash
+   .qwen/scripts/orchestration-tools/pre-flight-check.sh "Разработка"
+   ```
+
+2. **Определение состояния**
+   ```bash
+   .qwen/scripts/orchestration-tools/analyze-project-state.sh
+   ```
+
+3. **Планирование (Фаза 0)**
+   ```bash
+   speckit.plan
+   ```
+
+4. **Генерация задач**
+   ```bash
+   speckit.tasks
+   ```
+
+5. **Quality Gate 1**
+   ```bash
+   .qwen/scripts/quality-gates/check-planning.sh
+   ```
+
+6. **Реализация**
+   ```bash
+   speckit.implement
+   ```
+
+7. **Quality Gate 5**
+   ```bash
+   .qwen/scripts/quality-gates/check-specifications.sh
+   ```
+
+---
+
+**Версия парадигмы:** 2.0 (v0.5.0)  
+**Последнее обновление:** 20 марта 2026
 - **Руководство по работе с worktree**: `.qwen/docs/architecture/worktree-guidelines.md`
 - **Система уведомлений через вебхуки**: `.qwen/docs/architecture/notification-system.md`
 - **Архитектурные стандарты**: `.qwen/docs/architecture/standards.md`

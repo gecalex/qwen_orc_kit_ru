@@ -229,6 +229,43 @@ EOF
 
 log_info "Создан файл назначений: $ASSIGNMENTS_FILE"
 
+# ============================================================================
+# УВЕДОМЛЕНИЯ О ПОСТФАКТУМ АГЕНТАХ
+# ============================================================================
+log_info "Проверка постфактум агентов..."
+
+# Проверка: все ли агенты из плана существуют
+MISSING_AGANTS=0
+if [ -f "$AGENTS_FILE" ]; then
+    # Извлечь требуемых агентов из плана
+    REQUIRED_AGENTS=$(grep -o '"work_[^"]*"' "$AGENTS_FILE" 2>/dev/null | sort -u | wc -l)
+    
+    # Проверить наличие в .qwen/agents/
+    for agent in $(grep -o '"work_[^"]*"' "$AGENTS_FILE" 2>/dev/null | tr -d '"'); do
+        if [ ! -f ".qwen/agents/${agent}.md" ]; then
+            log_warning "Агент отсутствует: $agent"
+            MISSING_AGANTS=$((MISSING_AGANTS + 1))
+        fi
+    done
+    
+    if [ $MISSING_AGANTS -gt 0 ]; then
+        echo ""
+        log_warning "Обнаружено отсутствующих агентов: $MISSING_AGANTS"
+        log_info "Создайте агентов через:"
+        echo "  task '{"
+        echo "    \"subagent_type\": \"work_dev_meta_agent\","
+        echo "    \"description\": \"Создать отсутствующих агентов\","
+        echo "    \"prompt\": \"Создать агентов: <список>\""
+        echo "  }'"
+        echo ""
+        log_info "Или вручную:"
+        echo "  cp .qwen/templates/worker-template.md .qwen/agents/<agent-name>.md"
+        echo ""
+    else
+        log_success "Все требуемые агенты существуют"
+    fi
+fi
+
 # Финальный отчет
 echo ""
 log_success "=== Фаза 0: Анализ завершен ==="
@@ -240,6 +277,9 @@ echo "  Frontend: $FRONTEND_TASKS"
 echo "  Testing: $TESTING_TASKS"
 echo "  Documentation: $DOC_TASKS"
 echo "  Приоритет: $PRIORITY"
+if [ $MISSING_AGANTS -gt 0 ]; then
+    echo "  ⚠️  Отсутствуют агенты: $MISSING_AGANTS"
+fi
 echo ""
 echo "📁 Созданные файлы:"
 echo "  - $PLAN_FILE"

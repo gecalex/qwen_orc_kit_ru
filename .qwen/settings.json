@@ -1,24 +1,7 @@
 {
   "security": {
-    "auth": {
-      "apiKey": "${OPENROUTER_API_KEY}",
-      "baseUrl": "https://openrouter.ai/api/v1",
-      "selectedType": "qwen-oauth"
-    },
     "folderTrust": {
       "enabled": true
-    }
-  },
-  "model": {
-    "name": "qwen3-coder-plus",
-    "maxSessionTurns": -1,
-    "summarizeToolOutput": {
-      "run_shell_command": {
-        "tokenBudget": 2000
-      }
-    },
-    "chatCompression": {
-      "contextPercentageThreshold": 0.7
     }
   },
   "$version": 3,
@@ -77,45 +60,45 @@
       "command": "npx",
       "args": [
         "-y",
-        "chrome-devtools-mcp@0.20.1",
+        "chrome-devtools-mcp@latest",
         "--executable-path=/usr/bin/chromium",
         "--isolated"
       ]
     },
     "searxng": {
       "command": "npx",
-      "args": ["-y", "mcp-searxng@1.0.0"],
+      "args": ["-y", "mcp-searxng@latest"],
       "env": {
         "SEARXNG_URL": "http://localhost:8080"
       }
     },
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@2.1.4"]
+      "args": ["-y", "@upstash/context7-mcp@latest"]
     },
     "filesystem": {
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-filesystem@2026.1.14",
+        "@modelcontextprotocol/server-filesystem@latest",
         "/home/alex/MyProjects/qwen_orc_kit_ru"
       ]
     },
     "git": {
       "command": "uvx",
-      "args": ["mcp-server-git@0.0.12"],
+      "args": ["mcp-server-git@latest"],
       "cwd": "/home/alex/MyProjects/qwen_orc_kit_ru"
     },
     "github": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github@0.2.0"],
+      "args": ["-y", "@modelcontextprotocol/server-github@latest"],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
       }
     },
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-playwright@0.1.2"]
+      "args": ["-y", "@modelcontextprotocol/server-playwright@latest"]
     }
   }
 }

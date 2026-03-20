@@ -7,6 +7,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-03-21
+
+### Added
+- **Feedback System** - Система обратной связи
+  - 5 анализаторов (git, spec, agents, logic, quality)
+  - 2 генератора отчетов
+  - 4 чек-листа (200 пунктов)
+
+- **Git Workflow Automation** - Автоматизация git workflow
+  - create-feature-branch.sh
+  - auto-tag-release.sh
+  - pre-commit-review.sh
+  - check-workflow.sh
+
+- **Pre-Commit Validation** - Валидация перед коммитом
+  - pre-commit-validation.sh
+  - check-commit.sh (Quality Gate 3)
+
+- **Timeout Handling** - Обработка timeout
+  - graceful-shutdown навык
+  - progress-logging навык
+  - watchdog.sh мониторинг
+
+- **Mock External APIs** - Мокирование внешних API
+  - external-api-mocking навык
+  - pytest-fixtures-template.py
+  - mock-testing-guide.md
+
+### Changed
+- QWEN.md обновлен (разделы 3.2, 3.3, 3.4)
+- Оркестраторы обновлены (timeout configuration)
+- Quality Gates расширены
+
+### Fixed
+- Нарушения git workflow исправлены
+- Pre-commit валидация добавлена
+- Timeout handling реализован
+
+### Metrics
+- Файлов создано: 25+
+- Строк добавлено: ~6000
+- Приоритет: 60% (6/10)
+
 ## [0.5.0] - 2026-03-20
 
 ### Added
@@ -104,9 +147,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Фаза 0 (Phase 0) планирования:**
   - `.qwen/specify/scripts/phase0-analyzer.sh` — анализ задач
-  - `.qwen/specify/specs/{ID}/plans/phase0-plan.json` — план Фазы 0
-  - `.qwen/specify/specs/{ID}/plans/phase0-agents.json` — требуемые агенты
-  - `.qwen/specify/specs/{ID}/plans/phase0-assignments.json` — назначения
+  - `specs/{ID}/plans/phase0-plan.json` — план Фазы 0
+  - `specs/{ID}/plans/phase0-agents.json` — требуемые агенты
+  - `specs/{ID}/plans/phase0-assignments.json` — назначения
 
 - **Quality Gate 1 (Planning Quality Gate):**
   - `.qwen/scripts/quality-gates/check-planning.sh` — проверка планирования

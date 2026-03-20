@@ -26,14 +26,14 @@ $ARGUMENTS
 
 ```bash
 # Проверить завершение Фазы 0
-if [ ! -f ".qwen/specify/specs/{ID}/plans/phase0-plan.json" ]; then
+if [ ! -f "specs/{ID}/plans/phase0-plan.json" ]; then
     echo "❌ ОШИБКА: Фаза 0 не завершена"
     echo "Запустите: speckit.plan для инициализации"
     exit 1
 fi
 
 # Загрузить результаты Фазы 0
-cat .qwen/specify/specs/{ID}/plans/phase0-assignments.json
+cat specs/{ID}/plans/phase0-assignments.json
 ```
 
 **Важно:** Используйте назначения агентов из Фазы 0 для генерации задач.

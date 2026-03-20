@@ -53,13 +53,13 @@ cp .qwen/templates/gitignore .gitignore
 **Решение:**
 ```bash
 # Запустить проверку с деталями
-.qwen/scripts/quality-gates/check-planning.sh .qwen/specify/specs/{ID}
+.qwen/scripts/quality-gates/check-planning.sh specs/{ID}
 
 # Исправить ошибки (см. вывод скрипта)
 # ...
 
 # Повторить проверку
-.qwen/scripts/quality-gates/check-planning.sh .qwen/specify/specs/{ID}
+.qwen/scripts/quality-gates/check-planning.sh specs/{ID}
 ```
 
 **Профилактика:**
@@ -148,7 +148,7 @@ git cherry-pick <commit-hash>  # Перенести коммит
 **Решение:**
 ```bash
 # Запустить проверку с деталями
-.qwen/scripts/quality-gates/check-specifications.sh .qwen/specify/specs/{ID}
+.qwen/scripts/quality-gates/check-specifications.sh specs/{ID}
 
 # Исправить spec.md
 # Добавить отсутствующие разделы:
@@ -163,7 +163,7 @@ git cherry-pick <commit-hash>  # Перенести коммит
 # - Риски
 
 # Повторить проверку
-.qwen/scripts/quality-gates/check-specifications.sh .qwen/specify/specs/{ID}
+.qwen/scripts/quality-gates/check-specifications.sh specs/{ID}
 ```
 
 **Профилактика:**
@@ -287,11 +287,11 @@ qwen
 **Решение:**
 ```bash
 # Проверить phase0-agents.json
-cat .qwen/specify/specs/{ID}/plans/phase0-agents.json
+cat specs/{ID}/plans/phase0-agents.json
 
 # Если агент отсутствует:
 # 1. Обновить Фазу 0
-.qwen/specify/scripts/phase0-analyzer.sh .qwen/specify/specs/{ID}
+.qwen/specify/scripts/phase0-analyzer.sh specs/{ID}
 
 # 2. Создать агента
 task '{

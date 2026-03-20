@@ -29,11 +29,11 @@ $ARGUMENTS
 
 ```bash
 # Запустить анализ Фазы 0
-.qwen/specify/scripts/phase0-analyzer.sh .qwen/specify/specs/{ID}-{feature}
+.qwen/specify/scripts/phase0-analyzer.sh specs/{ID}-{feature}
 
 # Проверить результаты
-cat .qwen/specify/specs/{ID}/plans/phase0-plan.json
-cat .qwen/specify/specs/{ID}/plans/phase0-agents.json
+cat specs/{ID}/plans/phase0-plan.json
+cat specs/{ID}/plans/phase0-agents.json
 ```
 
 **Важно:** Убедитесь, что Фаза 0 завершена перед продолжением.

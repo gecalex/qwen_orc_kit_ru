@@ -1,6 +1,6 @@
 {
   "name": "qwen-orchestrator-kit-ru",
-  "version": "0.3.0",
+  "version": "0.6.0",
   "description": "Qwen Code Orchestrator Kit - набор инструментов с ИИ-агентами, скиллами, слэш-командами, MCP конфигурациями и Quality Gates для создания production-ready проектов",
   "main": "index.js",
   "scripts": {
@@ -61,8 +61,8 @@
     "@qwen-code/qwen-code": ">=0.6.0"
   },
   "devDependencies": {
-    "eslint": "^8.57.0",
-    "eslint-plugin-markdown": "^3.0.1"
+    "eslint": "^9.0.0",
+    "eslint-plugin-markdown": "^4.0.0"
   },
   "publishConfig": {
     "access": "public"

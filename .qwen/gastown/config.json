@@ -1,0 +1,104 @@
+{
+  "$schema": "https://qwen-orchestrator-kit.dev/schemas/gastown-config.json",
+  "version": "0.6.0",
+  "name": "Gastown Multi-Agent Orchestration",
+  "description": "Конфигурация системы параллельной разработки в изолированных worktree",
+  
+  "worktree": {
+    "basePath": ".qwen/gastown/worktrees",
+    "namingPattern": "agent-{agent-id}-{task-id}",
+    "maxWorktrees": 10,
+    "autoPrune": true,
+    "pruneAfterDays": 7,
+    "isolatedEnv": true,
+    "sharedObjects": false
+  },
+  
+  "timeout": {
+    "task": {
+      "default": 3600,
+      "short": 300,
+      "medium": 1800,
+      "long": 7200
+    },
+    "heartbeat": {
+      "interval": 60,
+      "maxMissed": 5,
+      "gracePeriod": 120
+    },
+    "monitoring": {
+      "interval": 30,
+      "healthCheckInterval": 120
+    }
+  },
+  
+  "monitoring": {
+    "enabled": true,
+    "logLevel": "info",
+    "logPath": ".qwen/gastown/logs",
+    "metricsPath": ".qwen/gastown/metrics",
+    "alertsEnabled": true,
+    "alertChannels": ["log", "file"],
+    "healthCheck": {
+      "enabled": true,
+      "endpoint": "health",
+      "retryCount": 3,
+      "retryDelay": 10
+    }
+  },
+  
+  "merge": {
+    "strategy": "squash",
+    "autoResolve": false,
+    "conflictStrategy": "manual",
+    "requireTests": true,
+    "requireQualityGate": true,
+    "backupBeforeMerge": true,
+    "preserveHistory": true,
+    "commitTemplate": "merge(gastown): {task-id} - {description}",
+    "allowedBranches": ["develop", "main"],
+    "blockedPatterns": ["**/config.json", "**/secrets/**"]
+  },
+  
+  "resources": {
+    "maxCpuPercent": 80,
+    "maxMemoryMB": 4096,
+    "maxDiskUsageMB": 10240,
+    "throttleOnLimit": true
+  },
+  
+  "security": {
+    "isolateNetwork": false,
+    "restrictFileSystem": true,
+    "allowedPaths": [".qwen", "src", "lib", "tests"],
+    "blockedCommands": ["rm -rf /", "mkfs", "dd"],
+    "auditLogging": true
+  },
+  
+  "notifications": {
+    "onTaskStart": true,
+    "onTaskComplete": true,
+    "onTaskFail": true,
+    "onTimeout": true,
+    "onConflict": true,
+    "channels": {
+      "log": {
+        "enabled": true,
+        "path": ".qwen/gastown/notifications.log"
+      },
+      "webhook": {
+        "enabled": false,
+        "url": ""
+      }
+    }
+  },
+  
+  "cleanup": {
+    "autoRemoveWorktrees": true,
+    "removeAfterMerge": true,
+    "keepLogsDays": 30,
+    "keepMetricsDays": 7,
+    "archiveCompleted": true,
+    "archivePath": ".qwen/gastown/archives"
+  }
+}

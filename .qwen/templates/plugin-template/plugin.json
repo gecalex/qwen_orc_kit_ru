@@ -1,0 +1,49 @@
+{
+  "name": "{{plugin-name}}",
+  "displayName": "{{Plugin Display Name}}",
+  "version": "1.0.0",
+  "description": "{{Описание плагина}}",
+  "author": "{{Author Name}}",
+  "license": "MIT",
+  "category": "{{category}}",
+  "tags": ["{{tag1}}", "{{tag2}}"],
+  "enabled": true,
+  "dependencies": [],
+  "optionalDependencies": [],
+  "conflicts": [],
+  "minOrchestratorVersion": "0.6.0",
+  "repository": "https://github.com/{{username}}/{{plugin-name}}",
+  "components": {
+    "agents": [
+      {
+        "name": "{{agent-name}}",
+        "file": "agents/{{agent-name}}.md",
+        "description": "{{Описание агента}}"
+      }
+    ],
+    "commands": [
+      {
+        "name": "{{command-name}}",
+        "file": "commands/{{command-name}}.md",
+        "description": "{{Описание команды}}"
+      }
+    ],
+    "skills": [
+      {
+        "name": "{{skill-name}}",
+        "file": "skills/{{skill-name}}.md",
+        "description": "{{Описание навыка}}"
+      }
+    ]
+  },
+  "configuration": {
+    "{{setting1}}": "{{default1}}",
+    "{{setting2}}": "{{default2}}"
+  },
+  "scripts": {
+    "onEnable": "echo '{{Plugin}} enabled'",
+    "onDisable": "echo '{{Plugin}} disabled'"
+  },
+  "createdAt": "{{date}}",
+  "updatedAt": "{{date}}"
+}

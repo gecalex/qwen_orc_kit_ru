@@ -1,0 +1,60 @@
+{
+  "name": "testing-automation",
+  "displayName": "Testing Automation",
+  "version": "1.0.0",
+  "description": "Плагин для автоматизации тестирования: unit, integration, e2e тесты",
+  "author": "Qwen Orchestrator Kit",
+  "license": "MIT",
+  "category": "testing",
+  "tags": ["testing", "automation", "qa", "ci-cd"],
+  "enabled": true,
+  "dependencies": [],
+  "components": {
+    "agents": [
+      {
+        "name": "test-writer",
+        "file": "agents/test-writer.md",
+        "description": "Агент для написания unit тестов"
+      },
+      {
+        "name": "integration-tester",
+        "file": "agents/integration-tester.md",
+        "description": "Агент для написания integration тестов"
+      },
+      {
+        "name": "e2e-tester",
+        "file": "agents/e2e-tester.md",
+        "description": "Агент для написания e2e тестов"
+      }
+    ],
+    "commands": [
+      {
+        "name": "testing",
+        "file": "commands/testing.md",
+        "description": "Команды для автоматизации тестирования"
+      }
+    ],
+    "skills": [
+      {
+        "name": "testing-expertise",
+        "file": "skills/testing-expertise.md",
+        "description": "Навыки эксперта по тестированию"
+      }
+    ]
+  },
+  "configuration": {
+    "frameworks": ["pytest", "jest", "playwright"],
+    "coverage": {
+      "enabled": true,
+      "threshold": 80
+    },
+    "parallelExecution": true,
+    "autoGenerate": true
+  },
+  "scripts": {
+    "onEnable": "echo 'Testing Automation plugin enabled'",
+    "onDisable": "echo 'Testing Automation plugin disabled'"
+  },
+  "createdAt": "2026-03-21",
+  "updatedAt": "2026-03-21"
+}

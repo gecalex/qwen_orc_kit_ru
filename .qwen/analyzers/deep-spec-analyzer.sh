@@ -14,7 +14,7 @@ set -e
 
 # Пути
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 CONSTITUTION_FILE="$PROJECT_ROOT/.qwen/specify/constitution.md"
 
 # Цвета для вывода

@@ -160,38 +160,53 @@ check_directory_structure() {
 # Запуск анализатора
 run_analyzer() {
     local name="$1"
-    local script="$2"
+    local cmd="$2"
     
+    # Разделение пути и аргументов
+    local script="${cmd%% *}"
+    local args="${cmd#* }"
+    if [ "$script" = "$args" ]; then
+        args=""
+    fi
+
     log_step "Запуск $name..."
-    
+
     local start_time=$(date +%s)
     local result="success"
     local exit_code=0
-    
+
     if [ -x "$script" ]; then
         # Запуск в тихом режиме
-        if ! "$script" -q -o "$OUTPUT_DIR" 2>&1; then
-            result="failed"
-            exit_code=$?
-            ERRORS+=("$name: exit code $exit_code")
+        if [ -n "$args" ]; then
+            if ! "$script" $args -q -o "$OUTPUT_DIR" 2>&1; then
+                result="failed"
+                exit_code=$?
+                ERRORS+=("$name: exit code $exit_code")
+            fi
+        else
+            if ! "$script" -q -o "$OUTPUT_DIR" 2>&1; then
+                result="failed"
+                exit_code=$?
+                ERRORS+=("$name: exit code $exit_code")
+            fi
         fi
     else
         result="not_found"
         exit_code=1
         ERRORS+=("$name: script not found or not executable")
     fi
-    
+
     local end_time=$(date +%s)
     local duration=$((end_time - start_time))
-    
+
     ANALYZER_RESULTS+=("$name:$result:$duration")
-    
+
     if [ "$result" = "success" ]; then
         log_success "$name завершен за ${duration}с"
     else
         log_error "$name: $result (${duration}с)"
     fi
-    
+
     return $exit_code
 }
 

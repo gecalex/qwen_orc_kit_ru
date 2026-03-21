@@ -174,10 +174,11 @@ count_implementation_details() {
     
     for pattern in "${patterns[@]}"; do
         local pattern_lower=$(echo "$pattern" | tr '[:upper:]' '[:lower:]')
-        local matches=$(echo "$content_lower" | grep -o -i "$pattern_lower" | wc -l)
-        ((count += matches))
+        local matches=$(echo "$content_lower" | grep -o -i "$pattern_lower" | wc -l | tr -d '[:space:]')
+        matches=${matches:-0}
+        ((count += matches)) || true
     done
-    
+
     echo "$count"
 }
 
@@ -224,18 +225,22 @@ calculate_traceability() {
     
     # Подсчет требований
     local requirements=$(get_section_content "$spec_file" "Требования")
-    local req_count=$(echo "$requirements" | grep -c "^[-*0-9]" || echo "0")
-    
+    local req_count=$(echo "$requirements" | grep -c "^[-*0-9]" 2>/dev/null || echo "0")
+    req_count=$(echo "$req_count" | tr -d '[:space:]')
+    req_count=${req_count:-0}
+
     # Подсчет задач
     local task_count=$(grep -c "^[-*][[:space:]]*\[" "$tasks_file" 2>/dev/null || echo "0")
-    
+    task_count=$(echo "$task_count" | tr -d '[:space:]')
+    task_count=${task_count:-0}
+
     # Эвристика: покрытие = мин(100, задачи/требования * 100)
     local coverage=0
-    if [[ $req_count -gt 0 ]]; then
+    if [[ "$req_count" -gt 0 ]]; then
         coverage=$((task_count * 100 / req_count))
-        [[ $coverage -gt 100 ]] && coverage=100
+        [[ "$coverage" -gt 100 ]] && coverage=100
     fi
-    
+
     echo "$task_count|$req_count|$coverage"
 }
 

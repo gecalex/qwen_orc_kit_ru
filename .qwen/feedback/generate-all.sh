@@ -37,6 +37,8 @@ RUN_SPEC_COMPLIANCE=true
 RUN_AGENT_INTERACTION=true
 RUN_LOGIC_CONSISTENCY=true
 RUN_QUALITY_TRENDS=true
+RUN_AGENT_ANALYTICS=true
+RUN_CHECKLIST_VALIDATION=true
 GENERATE_REPORT=true
 GENERATE_METRICS=true
 
@@ -196,29 +198,57 @@ run_analyzer() {
 # Запуск всех анализаторов
 run_all_analyzers() {
     log_header "Запуск анализаторов"
-    
+
     local failed=0
-    
+
     if [ "$RUN_GIT_WORKFLOW" = true ]; then
         run_analyzer "Git Workflow" "$ANALYZERS_DIR/git-workflow-analyzer.sh" || ((failed++))
     fi
-    
+
     if [ "$RUN_SPEC_COMPLIANCE" = true ]; then
         run_analyzer "Spec Compliance" "$ANALYZERS_DIR/spec-compliance-analyzer.sh" || ((failed++))
     fi
-    
+
     if [ "$RUN_AGENT_INTERACTION" = true ]; then
         run_analyzer "Agent Interaction" "$ANALYZERS_DIR/agent-interaction-analyzer.sh" || ((failed++))
     fi
-    
+
     if [ "$RUN_LOGIC_CONSISTENCY" = true ]; then
         run_analyzer "Logic Consistency" "$ANALYZERS_DIR/logic-consistency-analyzer.sh" || ((failed++))
     fi
-    
+
     if [ "$RUN_QUALITY_TRENDS" = true ]; then
         run_analyzer "Quality Trends" "$ANALYZERS_DIR/quality-trends-analyzer.sh" || ((failed++))
     fi
+
+    if [ "$RUN_AGENT_ANALYTICS" = true ]; then
+        run_analyzer "Agent Analytics" "$PROJECT_ROOT/.qwen/analytics/agent-call-analyzer.sh" || ((failed++))
+    fi
+
+    if [ "$RUN_CHECKLIST_VALIDATION" = true ]; then
+        run_analyzer "Checklist Validation" "$PROJECT_ROOT/.qwen/checklists/validate-checklist.sh --all" || ((failed++))
+    fi
+
+    # === Новые анализаторы (Error KB и Spec Analyzer) ===
     
+    # Deep Spec Analyzer
+    if [ "$RUN_SPEC_COMPLIANCE" = true ]; then
+        run_analyzer "Deep Spec Analysis" "$PROJECT_ROOT/.qwen/analyzers/deep-spec-analyzer.sh --all" || ((failed++))
+    fi
+    
+    # Spec Quality Metrics
+    if [ "$RUN_SPEC_COMPLIANCE" = true ]; then
+        run_analyzer "Spec Quality Metrics" "$PROJECT_ROOT/.qwen/analyzers/spec-quality-metrics.sh --all" || ((failed++))
+    fi
+    
+    # Requirements Traceability
+    if [ "$RUN_SPEC_COMPLIANCE" = true ]; then
+        run_analyzer "Requirements Traceability" "$PROJECT_ROOT/.qwen/analyzers/requirements-traceability.sh --all" || ((failed++))
+    fi
+    
+    # Error Knowledge Base Stats
+    run_analyzer "Error KB Stats" "$PROJECT_ROOT/.qwen/knowledge-base/auto-learn.sh --stats" || ((failed++))
+
     return $failed
 }
 
@@ -362,6 +392,8 @@ ${WHITE}Опции:${NC}
   --skip-agent            Пропустить Agent Interaction анализ
   --skip-logic            Пропустить Logic Consistency анализ
   --skip-quality          Пропустить Quality Trends анализ
+  --skip-analytics        Пропустить Agent Analytics
+  --skip-checklists       Пропустить Checklist Validation
   --skip-report           Пропустить генерацию отчета
   --skip-metrics          Пропустить генерацию метрик
   
@@ -380,6 +412,17 @@ ${WHITE}Анализаторы:${NC}
   3. Agent Interaction - Анализ взаимодействия агентов
   4. Logic Consistency - Проверка логической целостности
   5. Quality Trends - Анализ трендов качества
+  6. Agent Analytics - Аналитика вызовов агентов
+  7. Checklist Validation - Валидация чеклистов
+  8. Deep Spec Analysis - Глубокий анализ спецификаций (новый)
+  9. Spec Quality Metrics - Метрики качества spec (новый)
+  10. Requirements Traceability - Матрица трассировки (новый)
+  11. Error KB Stats - Статистика базы знаний об ошибках (новый)
+
+${WHITE}Error Knowledge Base:${NC}
+  - error-search.sh - Поиск решений по ошибкам
+  - auto-learn.sh - Автоматическое обучение на новых ошибках
+  - error-index.json - Индекс ошибок
 
 ${WHITE}Выход:${NC}
   - JSON отчеты от каждого анализатора
@@ -432,6 +475,14 @@ while [[ $# -gt 0 ]]; do
             ;;
         --skip-quality)
             RUN_QUALITY_TRENDS=false
+            shift
+            ;;
+        --skip-analytics)
+            RUN_AGENT_ANALYTICS=false
+            shift
+            ;;
+        --skip-checklists)
+            RUN_CHECKLIST_VALIDATION=false
             shift
             ;;
         --skip-report)

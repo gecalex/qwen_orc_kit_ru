@@ -1,0 +1,162 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-03-21",
+    "source": "error-handling-examples.md",
+    "total_errors": 12
+  },
+  "categories": [
+    "Git",
+    "Quality Gates",
+    "Агенты",
+    "TDD",
+    "MCP",
+    "Сборка"
+  ],
+  "errors": [
+    {
+      "id": "ERR-GIT-001",
+      "category": "Git",
+      "title": "Git не инициализирован",
+      "pattern": "Git репозиторий не инициализирован",
+      "cause": "Разработка началась без инициализации Git",
+      "solution": "git init + создать ветку develop + cp .qwen/templates/gitignore .gitignore",
+      "prevention": "Запускать initialize-project.sh перед началом разработки, Pre-Flight проверки",
+      "file": "error-handling-examples.md",
+      "section": 1,
+      "keywords": ["git", "инициализация", "репозиторий", "init"]
+    },
+    {
+      "id": "ERR-QG-001",
+      "category": "Quality Gates",
+      "title": "Quality Gate не прошел",
+      "pattern": "Gate не пройден, проверки не пройдены",
+      "cause": "Отсутствуют необходимые файлы, спецификация не заполнена, Фаза 0 не завершена",
+      "solution": "Запустить проверку с деталями, исправить ошибки, повторить проверку",
+      "prevention": "Следовать чеклистам, запускать Pre-Flight проверки",
+      "file": "error-handling-examples.md",
+      "section": 2,
+      "keywords": ["quality gate", "проверка", "gate", "спецификация", "фаза 0"]
+    },
+    {
+      "id": "ERR-AGENT-001",
+      "category": "Агенты",
+      "title": "Агент отсутствует",
+      "pattern": "Агент не найден, Невозможно выполнить задачу без специализированного агента",
+      "cause": "Агент не создан вовремя, План Фазы 0 не определил требуемого агента",
+      "solution": "Создать агента через work_dev_meta_agent или вручную из шаблона",
+      "prevention": "Запускать Фазу 0 перед разработкой, проверять наличие агентов в phase0-agents.json",
+      "file": "error-handling-examples.md",
+      "section": 3,
+      "keywords": ["агент", "worker", "специализированный", "создание"]
+    },
+    {
+      "id": "ERR-GIT-002",
+      "category": "Git",
+      "title": "Коммит в main напрямую",
+      "pattern": "Нарушение Git workflow, Коммит в ветку main запрещен",
+      "cause": "Разработка велась напрямую в main, Ветка develop не создана",
+      "solution": "Создать ветку develop, переключиться, cherry-pick коммиты из main",
+      "prevention": "Pre-Flight проверки, следовать Git workflow",
+      "file": "error-handling-examples.md",
+      "section": 4,
+      "keywords": ["git", "main", "workflow", "коммит", "ветка", "develop"]
+    },
+    {
+      "id": "ERR-SPEC-001",
+      "category": "Quality Gates",
+      "title": "Spec не соответствует требованиям",
+      "pattern": "раздела spec.md отсутствуют",
+      "cause": "Спецификация не заполнена полностью, требования не тестируемые, критерии успеха не измеримы",
+      "solution": "Добавить отсутствующие разделы: Краткое описание, Контекст, Акторы, Требования, Сценарии, Условия успеха, Ограничения, Предположения, Риски",
+      "prevention": "Использовать speckit.specify, speckit.clarify, следовать шаблону",
+      "file": "error-handling-examples.md",
+      "section": 5,
+      "keywords": ["spec", "спецификация", "требования", "критерии", "разделы"]
+    },
+    {
+      "id": "ERR-TDD-001",
+      "category": "TDD",
+      "title": "Тесты не проходят",
+      "pattern": "test failed, tests failed",
+      "cause": "Код не соответствует требованиям, тесты устарели, зависимости не установлены",
+      "solution": "Запустить тесты с деталями, исправить код или обновить тесты",
+      "prevention": "TDD: тесты ДО кода, запускать тесты после каждого изменения",
+      "file": "error-handling-examples.md",
+      "section": 6,
+      "keywords": ["тесты", "test", "tdd", "cargo test", "failed"]
+    },
+    {
+      "id": "ERR-GIT-003",
+      "category": "Git",
+      "title": "Pre-commit хук не проходит",
+      "pattern": "Pre-commit hook failed, warnings",
+      "cause": "Код не отформатирован, линтеры не пройдены, тесты не проходят",
+      "solution": "cargo fmt, cargo clippy, cargo test, повторить коммит",
+      "prevention": "Запускать линтеры до коммита, использовать IDE с автоформатированием",
+      "file": "error-handling-examples.md",
+      "section": 7,
+      "keywords": ["pre-commit", "hook", "линтер", "clippy", "fmt", "форматирование"]
+    },
+    {
+      "id": "ERR-MCP-001",
+      "category": "MCP",
+      "title": "MCP сервер недоступен",
+      "pattern": "MCP server unavailable, Cannot fetch documentation",
+      "cause": "MCP сервер не настроен, сетевая проблема, сервер недоступен",
+      "solution": "Проверить конфигурацию MCP, переключить конфигурацию, перезапустить Qwen Code",
+      "prevention": "Проверять доступность MCP перед использованием, иметь резервную конфигурацию",
+      "file": "error-handling-examples.md",
+      "section": 8,
+      "keywords": ["mcp", "сервер", "documentation", "конфигурация", "сеть"]
+    },
+    {
+      "id": "ERR-AGENT-002",
+      "category": "Агенты",
+      "title": "Агент создан постфактум",
+      "pattern": "Агент создан ПОСЛЕ начала разработки, Код написан без специализированного агента",
+      "cause": "Фаза 0 не определила требуемого агента, агент создан после начала задач",
+      "solution": "Проверить phase0-agents.json, обновить Фазу 0, создать агента, перегенерировать задачи",
+      "prevention": "Запускать Фазу 0 перед разработкой, проверять phase0-agents.json",
+      "file": "error-handling-examples.md",
+      "section": 9,
+      "keywords": ["агент", "фаза 0", "phase0-agents", "постфактум", "создание"]
+    },
+    {
+      "id": "ERR-GIT-004",
+      "category": "Git",
+      "title": "State/ файлы в main",
+      "pattern": "state/ обнаружена в main, Файлы разработки не должны быть в main",
+      "cause": ".gitignore не настроен, файлы разработки закоммичены",
+      "solution": "Добавить state/ в .gitignore, удалить из Git с --cached, закоммитить изменения",
+      "prevention": "Использовать initialize-project.sh, Pre-Flight проверки",
+      "file": "error-handling-examples.md",
+      "section": 10,
+      "keywords": ["state", "gitignore", "main", "файлы", "cached"]
+    },
+    {
+      "id": "ERR-LOG-001",
+      "category": "Агенты",
+      "title": "Нет журнала вызовов агентов",
+      "pattern": "Журнал вызовов агентов отсутствует, Невозможно аудировать выполнение задач",
+      "cause": "log-agent-call.sh не используется, агенты вызываются напрямую",
+      "solution": "Создать директорию логов, логировать вызовы через log-agent-call.sh, проверить журнал",
+      "prevention": "Интегрировать log-agent-call.sh в оркестраторы, требовать логирование в документации",
+      "file": "error-handling-examples.md",
+      "section": 11,
+      "keywords": ["лог", "журнал", "агент", "аудит", "log-agent-call", "вызовы"]
+    },
+    {
+      "id": "ERR-BUILD-001",
+      "category": "Сборка",
+      "title": "Сборка не проходит",
+      "pattern": "build failed, Compilation error",
+      "cause": "Синтаксические ошибки, зависимости не установлены, конфликты версий",
+      "solution": "cargo fetch, cargo check, исправить ошибки компиляции, cargo build",
+      "prevention": "Запускать cargo check перед коммитом, использовать IDE с проверкой типов",
+      "file": "error-handling-examples.md",
+      "section": 12,
+      "keywords": ["сборка", "build", "compilation", "ошибки", "зависимости", "cargo"]
+    }
+  ]
+}

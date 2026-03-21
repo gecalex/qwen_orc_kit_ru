@@ -75,12 +75,29 @@ ${YELLOW}Примеры:${NC}
 EOF
 }
 
-# Функция проверки наличия раздела
+# Функция проверки наличия раздела (поддерживает нумерацию)
 check_section_exists() {
     local file="$1"
     local section="$2"
-    
-    grep -qi "^##*[[:space:]]*$section" "$file" 2>/dev/null
+
+    # Проверка точного совпадения
+    if grep -qi "^##*[[:space:]]*$section" "$file" 2>/dev/null; then
+        return 0
+    fi
+
+    # Проверка с нумерацией (например, "1. Обзор" для "Обзор")
+    local section_clean=$(echo "$section" | sed 's/^[0-9]*\.*[:space:]*//')
+    if grep -qi "^##*[[:space:]]*[0-9]*\.*[:space:]]*$section_clean" "$file" 2>/dev/null; then
+        return 0
+    fi
+
+    # Проверка частичного совпадения (например, "Обзор проекта" для "Обзор")
+    local section_first_word=$(echo "$section" | awk '{print $1}')
+    if grep -qi "^##*[[:space:]]*$section_first_word" "$file" 2>/dev/null; then
+        return 0
+    fi
+
+    return 1
 }
 
 # Функция подсчета разделов

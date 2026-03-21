@@ -93,7 +93,8 @@ collect_quality_metrics() {
             
             # Подсчет проверок
             local checks
-            checks=$(grep -oE '"(violations|warnings|errors|anomalies|contradictions)":\s*\[' "$report" 2>/dev/null | wc -l || echo "0")
+            checks=$(grep -oE '"(violations|warnings|errors|anomalies|contradictions)":\s*\[' "$report" 2>/dev/null | wc -l | tr -d '[:space:]')
+            checks=${checks:-0}
             TOTAL_CHECKS=$((TOTAL_CHECKS + checks))
         fi
     done <<< "$latest_reports"
@@ -114,8 +115,9 @@ collect_quality_metrics() {
         while IFS= read -r report; do
             if [ -f "$report" ]; then
                 local score
-                score=$(grep -o '"score":\s*[0-9]\+' "$report" 2>/dev/null | grep -o '[0-9]\+' || echo "0")
-                
+                score=$(grep -o '"score":\s*[0-9]\+' "$report" 2>/dev/null | grep -o '[0-9]\+' | tr -d '[:space:]')
+                score=${score:-0}
+
                 if [ "$score" -gt 0 ]; then
                     old_total=$((old_total + score))
                     ((old_count++)) || true

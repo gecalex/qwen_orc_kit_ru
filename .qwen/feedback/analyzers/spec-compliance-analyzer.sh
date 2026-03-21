@@ -18,7 +18,7 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 OUTPUT_DIR="${OUTPUT_DIR:-$SCRIPT_DIR/../reports}"
-SPEC_DIR="${SPEC_DIR:-$PROJECT_ROOT/.qwen/specify/specs}"
+SPEC_DIR="${SPEC_DIR:-$PROJECT_ROOT/specs}"
 TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
 
 # Переменные для сбора данных

@@ -171,8 +171,9 @@ detect_anomalies() {
                 
                 # Поиск множественных вызовов одного агента
                 local next_agent_mentions
-                next_agent_mentions=$(echo "$content" | grep -oE "nextAgent[\"']?\s*[:=]\s*[\"']?[a-z_]+" 2>/dev/null | wc -l || echo "0")
-                
+                next_agent_mentions=$(echo "$content" | grep -oE "nextAgent[\"']?\s*[:=]\s*[\"']?[a-z_]+" 2>/dev/null | wc -l | tr -d '[:space:]')
+                next_agent_mentions=${next_agent_mentions:-0}
+
                 if [ "$next_agent_mentions" -gt 5 ]; then
                     ((REPEATED_CALLS++)) || true
                 fi
@@ -183,8 +184,9 @@ detect_anomalies() {
     # Проверка логов на ошибки
     if [ -d "$LOGS_DIR" ]; then
         local error_count
-        error_count=$(grep -ri "error\|ошибка\|failed\|неудачно" "$LOGS_DIR" 2>/dev/null | wc -l || echo "0")
-        
+        error_count=$(grep -ri "error\|ошибка\|failed\|неудачно" "$LOGS_DIR" 2>/dev/null | wc -l | tr -d '[:space:]')
+        error_count=${error_count:-0}
+
         if [ "$error_count" -gt 0 ]; then
             AGENT_ERRORS=$error_count
             ERRORS+=("Найдено ошибок в логах: $error_count")

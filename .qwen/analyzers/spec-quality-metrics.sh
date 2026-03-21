@@ -259,18 +259,26 @@ calculate_measurability() {
 # Функция расчета traceability coverage
 calculate_traceability() {
     local spec_dir="$1"
-    
+
     local spec_file="$spec_dir/spec.md"
     local tasks_file="$spec_dir/tasks.md"
-    
+
     if [[ ! -f "$tasks_file" ]]; then
         echo "0|0|0"
         return
     fi
-    
-    # Подсчет требований
+
+    # Подсчет требований (из spec.md или tasks.md)
     local requirements=$(get_section_content "$spec_file" "Требования")
-    local req_count=$(echo "$requirements" | grep -c "^[-*0-9]" 2>/dev/null || echo "0")
+    local req_count=0
+    
+    if [ -z "$requirements" ]; then
+        # Если нет раздела требований в spec.md, считаем задачи в tasks.md
+        req_count=$(grep -c "^[-*][[:space:]]*\[" "$tasks_file" 2>/dev/null || echo "0")
+    else
+        req_count=$(echo "$requirements" | grep -c "^[-*0-9]" 2>/dev/null || echo "0")
+    fi
+    
     req_count=$(echo "$req_count" | tr -d '[:space:]')
     req_count=${req_count:-0}
 

@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.0] - 2026-03-21
 
+### Priority 0 (Критическое) - 100% ✅
+
 ### Added
 - **Feedback System** - Система обратной связи
   - 5 анализаторов (git, spec, agents, logic, quality)
@@ -32,22 +34,111 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Mock External APIs** - Мокирование внешних API
   - external-api-mocking навык
-  - pytest-fixtures-template.py
-  - mock-testing-guide.md
+  - pytest-fixtures-template.py (819 строк)
+  - mock-testing-guide.md (1030 строк)
+
+### Priority 1 (Важное) - 100% ✅
+
+### Added
+- **Agent Analytics** - Аналитика агентов
+  - agent-call-analyzer.sh
+  - generate-agent-dashboard.sh
+  - detect-anomalies.sh
+  - 10 автоматизированных чек-листов (78 пунктов)
+
+- **Checklist Automation** - Автоматизация чек-листов
+  - validate-checklist.sh
+  - checklist-runner.sh
+  - Pre-Flight, Pre-Commit, Pre-Merge, TDD, etc.
+
+- **Error Knowledge Base** - База знаний об ошибках
+  - error-search.sh (поиск решений)
+  - error-index.json (12 ошибок)
+  - auto-learn.sh (автообучение)
+
+- **Specification Analyzer** - Анализ спецификаций
+  - deep-spec-analyzer.sh
+  - requirements-traceability.sh
+  - spec-quality-metrics.sh
+
+- **Unified Orchestration** - Единая оркестрация
+  - orchestration-standard.md
+  - cross-orchestrator-communication.md
+
+- **Cross-Component Integration** - Интеграция компонентов
+  - component-registry.sh (126 компонентов)
+  - integration-test-runner.sh (6/6 тестов)
+  - component-linker.sh
+  - integration-guide.md
+
+### Priority 2 (Среднее) - 100% ✅
+
+### Added
+- **Gastown Multi-Agent** - Мульти-агентная оркестрация
+  - 5 команд (onboard, work, status, upgrade, witness)
+  - 7 скриптов (onboard, dispatch, collect, monitor, witness, refinery, status)
+  - Параллельная разработка в worktree
+
+- **Plugin Architecture** - Архитектура плагинов
+  - 5 плагинов (python-development, security-scanning, testing-automation, database-operations, infrastructure-devops)
+  - 12 агентов
+  - plugin-manager.sh, load-plugin.sh, plugin-dependencies.sh
+  - 42 файла
+
+- **SpecKit Full Integration** - Полная SpecKit интеграция
+  - 9 команд (analyze, specify, clarify, plan, implement, checklist, tasks, constitution, taskstoissues)
+  - 9 скриптов
+  - 4 шаблона
+
+- **Command→Agent→Skill Pattern** - Паттерн разделения ответственности
+  - Документация паттерна
+  - Рефакторинг 3 команд
+
+- **Unified MCP Configuration** - Единая MCP конфигурация
+  - 5 конфигураций (base, database, testing, infrastructure, full)
+  - 3 скрипта управления
+  - context7, searxng, chrome-devtools (обязательные)
+
+### Release Tools
+
+### Added
+- **Publish Release Script** - Скрипт публикации релиза
+  - publish-release.sh
+  - Создание ветки без истории (orphan)
+  - Очистка временных файлов
+  - 1 коммит в истории релиза
+
+- **Feedback Collection** - Сбор обратной связи
+  - collect-feedback.sh
+  - FEEDBACK_FORM_TEMPLATE.md
+  - FEEDBACK_GUIDE.md
+  - Автоматический сбор логов и метрик
 
 ### Changed
-- QWEN.md обновлен (разделы 3.2, 3.3, 3.4)
+- QWEN.md обновлен (разделы 3.2, 3.3, 3.4, MCP конфигурация)
 - Оркестраторы обновлены (timeout configuration)
 - Quality Gates расширены
+- MCP конфигурации обновлены (context7, searxng, chrome-devtools обязательные)
 
 ### Fixed
 - Нарушения git workflow исправлены
 - Pre-commit валидация добавлена
 - Timeout handling реализован
+- Разделение develop/production пространств
+- Очистка истории разработки из релиза
 
 ### Metrics
-- Файлов создано: 25+
-- Строк добавлено: ~6000
+- Файлов создано: 100+
+- Строк добавлено: ~25,000
+- Коммитов: 19
+- Скриптов: 60+
+- Навыков: 15+
+- Плагинов: 5 (12 агентов)
+- Чек-листов: 10 (78 пунктов)
+- Документации: 30+ файлов
+- MCP конфигураций: 5
+- SpecKit команд: 9
+- Gastown компонентов: 12
 - Приоритет: 60% (6/10)
 
 ## [0.5.0] - 2026-03-20

@@ -1,0 +1,122 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "description": "Документация библиотек и фреймворков",
+      "category": "development"
+    },
+    "searxng": {
+      "command": "npx",
+      "args": ["-y", "mcp-searxng@latest"],
+      "env": {
+        "SEARXNG_URL": "http://localhost:8080"
+      },
+      "description": "Поиск в интернете через SearXNG",
+      "category": "research"
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--executable-path=/usr/bin/chromium",
+        "--isolated"
+      ],
+      "description": "Автоматизация браузера Chrome/Chromium",
+      "category": "testing"
+    },
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest"],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "${SUPABASE_ACCESS_TOKEN}",
+        "SUPABASE_PROJECT_ID": "${SUPABASE_PROJECT_ID}"
+      },
+      "description": "Работа с Supabase (PostgreSQL, Auth, Storage)",
+      "category": "database"
+    },
+    "postgresql": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres@latest"],
+      "env": {
+        "DATABASE_URL": "${DATABASE_URL}"
+      },
+      "description": "Подключение к PostgreSQL базам данных",
+      "category": "database"
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sqlite@latest"],
+      "description": "Работа с SQLite базами данных",
+      "category": "database"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "description": "E2E тестирование с Playwright",
+      "category": "testing"
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer@latest"],
+      "description": "Автоматизация браузера для тестирования",
+      "category": "testing"
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github@latest"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "description": "Работа с GitHub API (репозитории, issues, PR)",
+      "category": "infrastructure"
+    },
+    "gitlab": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-gitlab@latest"],
+      "env": {
+        "GITLAB_PERSONAL_ACCESS_TOKEN": "${GITLAB_TOKEN}",
+        "GITLAB_API_URL": "https://gitlab.com/api/v4"
+      },
+      "description": "Работа с GitLab API",
+      "category": "infrastructure"
+    },
+    "docker": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-docker@latest"],
+      "description": "Управление Docker контейнерами",
+      "category": "infrastructure"
+    },
+    "kubernetes": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-kubernetes@latest"],
+      "description": "Управление Kubernetes кластерами",
+      "category": "infrastructure"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/alex/MyProjects/qwen_orc_kit_ru"
+      ],
+      "description": "Доступ к файловой системе",
+      "category": "development"
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git"],
+      "cwd": "/home/alex/MyProjects/qwen_orc_kit_ru",
+      "description": "Работа с Git репозиторием",
+      "category": "development"
+    }
+  },
+  "_metadata": {
+    "name": "full",
+    "description": "Полная конфигурация всех MCP серверов",
+    "version": "1.0.0",
+    "servers_count": 14,
+    "categories": ["development", "research", "testing", "database", "infrastructure"]
+  }
+}

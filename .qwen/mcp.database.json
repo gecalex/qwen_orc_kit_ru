@@ -1,0 +1,35 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest"],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "${SUPABASE_ACCESS_TOKEN}",
+        "SUPABASE_PROJECT_ID": "${SUPABASE_PROJECT_ID}"
+      },
+      "description": "Работа с Supabase (PostgreSQL, Auth, Storage)",
+      "category": "database"
+    },
+    "postgresql": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres@latest"],
+      "env": {
+        "DATABASE_URL": "${DATABASE_URL}"
+      },
+      "description": "Подключение к PostgreSQL базам данных",
+      "category": "database"
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sqlite@latest"],
+      "description": "Работа с SQLite базами данных",
+      "category": "database"
+    }
+  },
+  "_metadata": {
+    "name": "database",
+    "description": "Конфигурация MCP серверов для работы с базами данных",
+    "version": "1.0.0",
+    "servers_count": 3
+  }
+}

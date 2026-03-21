@@ -136,34 +136,45 @@ calculate_completeness() {
     echo "$found|$total|$score"
 }
 
-# Функция расчета тестируемости требований
+# Функция расчета тестируемости требований (ищет в spec.md и tasks.md)
 calculate_testability() {
     local file="$1"
+    local spec_dir=$(dirname "$file")
+    local tasks_file="$spec_dir/tasks.md"
+
+    local requirements=""
     
-    local requirements=$(get_section_content "$file" "Требования")
+    # Поиск требований в spec.md
+    requirements=$(get_section_content "$file" "Требования")
+    
+    # Если не найдено, поиск в tasks.md
+    if [ -z "$requirements" ] && [ -f "$tasks_file" ]; then
+        requirements=$(cat "$tasks_file")
+    fi
+
     local testable=0
     local total=0
-    
+
     while IFS= read -r line; do
-        if [[ "$line" =~ ^[-*0-9] ]]; then
+        if [[ "$line" =~ ^[-*0-9] ]] || [[ "$line" =~ ^\[[-*]\ ]]; then
             ((total++))
-            
+
             local line_lower=$(echo "$line" | tr '[:upper:]' '[:lower:]')
-            
+
             # Паттерны тестируемых требований
-            if [[ "$line_lower" =~ (должен|необходимо|обязан|требуется|критерий|проверка|тест|валид) ]] || \
+            if [[ "$line_lower" =~ (должен|необходимо|обязан|требуется|критерий|проверка|тест|валид|verify|must|should) ]] || \
                [[ "$line" =~ [0-9]+ ]] || \
                [[ "$line_lower" =~ (все|полный|ноль|без) ]]; then
                 ((testable++))
             fi
         fi
     done <<< "$requirements"
-    
+
     local score=0
     if [[ $total -gt 0 ]]; then
         score=$((testable * 100 / total))
     fi
-    
+
     echo "$testable|$total|$score"
 }
 
@@ -195,32 +206,53 @@ count_implementation_details() {
     echo "$count"
 }
 
-# Функция расчета измеримости критериев
+# Функция расчета измеримости критериев (ищет в spec.md, tasks.md, checklists)
 calculate_measurability() {
     local file="$1"
+    local spec_dir=$(dirname "$file")
     
-    local criteria=$(get_section_content "$file" "Условия успеха")
+    local criteria=""
+    
+    # Поиск условий успеха в spec.md
+    criteria=$(get_section_content "$file" "Условия успеха")
+    
+    # Если не найдено, поиск критериев в tasks.md
+    if [ -z "$criteria" ]; then
+        local tasks_file="$spec_dir/tasks.md"
+        if [ -f "$tasks_file" ]; then
+            criteria=$(grep -i "критерий\|acceptance" "$tasks_file" 2>/dev/null || echo "")
+        fi
+    fi
+    
+    # Если не найдено, поиск в checklists
+    if [ -z "$criteria" ]; then
+        local checklist_file="$spec_dir/checklist.md"
+        if [ -f "$checklist_file" ]; then
+            criteria=$(cat "$checklist_file")
+        fi
+    fi
+
     local measurable=0
     local total=0
-    
+
     while IFS= read -r line; do
-        if [[ "$line" =~ ^[-*] ]]; then
+        if [[ "$line" =~ ^[-*] ]] || [[ "$line" =~ ^\[[-*]\ ]]; then
             ((total++))
-            
+
             # Проверка на измеримость
             if [[ "$line" =~ [0-9]+ ]] || \
-               [[ "$line" =~ (секунд|минут|часов|мс|%) ]] || \
-               [[ "$line" =~ (все|полный|100|ноль|без) ]]; then
+               [[ "$line" =~ (секунд|минут|часов|мс|%|percent) ]] || \
+               [[ "$line" =~ (все|полный|100|ноль|без|all|every) ]]; then
                 ((measurable++))
             fi
         fi
     done <<< "$criteria"
-    
+
     local score=0
     if [[ $total -gt 0 ]]; then
         score=$((measurable * 100 / total))
     fi
-    
+
     echo "$measurable|$total|$score"
 }
 

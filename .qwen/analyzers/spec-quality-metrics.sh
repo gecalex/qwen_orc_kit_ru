@@ -86,8 +86,8 @@ check_section_exists() {
     fi
 
     # Проверка с нумерацией (например, "1. Обзор" для "Обзор")
-    local section_clean=$(echo "$section" | sed 's/^[0-9]*\.*[:space:]*//')
-    if grep -qi "^##*[[:space:]]*[0-9]*\.*[:space:]]*$section_clean" "$file" 2>/dev/null; then
+    local section_clean=$(echo "$section" | sed 's/^[0-9]*[.[:space:]]*//')
+    if grep -qi "^##*[[:space:]]*[0-9]*[.[:space:]]*$section_clean" "$file" 2>/dev/null; then
         return 0
     fi
 

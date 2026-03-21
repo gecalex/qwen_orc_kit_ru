@@ -26,26 +26,17 @@ CYAN='\033[0;36m'
 MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
-# Обязательные разделы (поддерживаются оба формата)
+# Обязательные разделы (формат Speckit)
 REQUIRED_SECTIONS=(
-    # Формат 1 (старый)
-    "Краткое описание"
-    "Контекст"
-    "Акторы"
-    "Требования"
-    "Сценарии использования"
-    "Условия успеха"
-    "Ограничения"
-    "Предположения"
-    "Риски"
-    # Формат 2 (новый, из spec-template.md)
-    "Обзор проекта"
-    "Функциональные требования"
-    "Нефункциональные требования"
-    "Ограничения"
-    "Предположения"
-    "Зависимости"
-    "Риски"
+    "Обзор"
+    "Архитектура"
+    "Компоненты"
+    "Модель данных"
+    "API"
+    "Безопасность"
+    "Производительность"
+    "Тестирование"
+    "Развертывание"
 )
 
 # Функция вывода справки
@@ -80,20 +71,13 @@ check_section_exists() {
     local file="$1"
     local section="$2"
 
-    # Проверка точного совпадения
-    if grep -qi "^##*[[:space:]]*$section" "$file" 2>/dev/null; then
+    # Поиск раздела с нумерацией или без (например, "## 1. Обзор" или "## Обзор")
+    if grep -qiE "^##+[[:space:]]*[0-9]*[.[:space:]]*$section" "$file" 2>/dev/null; then
         return 0
     fi
 
-    # Проверка с нумерацией (например, "1. Обзор" для "Обзор")
-    local section_clean=$(echo "$section" | sed 's/^[0-9]*[.[:space:]]*//')
-    if grep -qi "^##*[[:space:]]*[0-9]*[.[:space:]]*$section_clean" "$file" 2>/dev/null; then
-        return 0
-    fi
-
-    # Проверка частичного совпадения (например, "Обзор проекта" для "Обзор")
-    local section_first_word=$(echo "$section" | awk '{print $1}')
-    if grep -qi "^##*[[:space:]]*$section_first_word" "$file" 2>/dev/null; then
+    # Поиск частичного совпадения (например, "Обзор" в "1. Обзор проекта")
+    if grep -qiE "^##+[[:space:]]*[0-9]*[.[:space:]]*[^[:space:]]*$section" "$file" 2>/dev/null; then
         return 0
     fi
 
@@ -112,18 +96,21 @@ count_words() {
     wc -w < "$file" 2>/dev/null || echo "0"
 }
 
-# Функция извлечения содержимого раздела
+# Функция извлечения содержимого раздела (поддерживает нумерацию)
 get_section_content() {
     local file="$1"
     local section="$2"
-    
+
+    # Поиск раздела с нумерацией или без
     awk -v section="$section" '
-        BEGIN { in_section = 0 }
+        BEGIN { in_section = 0; section_lower = tolower(section) }
         /^[##]+[[:space:]]+/ {
             if (in_section) exit
             header = $0
-            gsub(/^[##]+[[:space:]]+/, "", header)
-            if (tolower(header) == tolower(section)) {
+            gsub(/^[##]+[[:space:]]*/, "", header)
+            gsub(/^[0-9]+[.[:space:]]*/, "", header)  # Удалить нумерацию
+            header_lower = tolower(header)
+            if (index(header_lower, section_lower) > 0) {
                 in_section = 1
                 next
             }

@@ -5,7 +5,8 @@
 # Версия: 1.0.0
 #
 
-set -euo pipefail
+# Убрано set -euo pipefail - скрипт должен работать всегда
+set -u
 
 # Цвета для вывода
 RED='\033[0;31m'
@@ -61,20 +62,22 @@ check_spec_directory() {
     if [ ! -d "$SPEC_DIR" ]; then
         log_warning "Директория спецификаций не найдена: $SPEC_DIR"
         MISSING_SPECS+=("Директория спецификаций отсутствует")
-        return 1
+        TOTAL_SPECS=0
+        return 0
     fi
-    
+
     # Поиск spec.md файлов
     local spec_files
-    spec_files=$(find "$SPEC_DIR" -name "spec.md" -o -name "specification.md" -o -name "*.spec.md" 2>/dev/null | wc -l)
-    TOTAL_SPECS=$spec_files
-    
+    spec_files=$(find "$SPEC_DIR" -name "spec.md" -o -name "specification.md" -o -name "*.spec.md" 2>/dev/null | wc -l | tr -d '[:space:]')
+    TOTAL_SPECS=${spec_files:-0}
+
     if [ "$TOTAL_SPECS" -eq 0 ]; then
-        log_warning "Файлы spec.md не найдены"
+        log_warning "Файлы spec.md не найдены. Проект на ранней стадии разработки"
         MISSING_SPECS+=("Отсутствуют файлы spec.md в $SPEC_DIR")
-        return 1
+        RECOMMENDATIONS+=("Создайте спецификации функций используя speckit.specify")
+        return 0
     fi
-    
+
     log_success "Найдено спецификаций: $TOTAL_SPECS"
     return 0
 }

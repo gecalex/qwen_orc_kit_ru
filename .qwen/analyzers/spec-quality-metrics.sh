@@ -156,7 +156,7 @@ calculate_testability() {
     local total=0
 
     while IFS= read -r line; do
-        if [[ "$line" =~ ^[-*0-9] ]] || [[ "$line" =~ ^\[[-*]\ ]]; then
+        if [[ "$line" =~ ^[-*0-9] ]] || [[ "$line" == "["-*"]"* ]]; then
             ((total++))
 
             local line_lower=$(echo "$line" | tr '[:upper:]' '[:lower:]')
@@ -236,7 +236,7 @@ calculate_measurability() {
     local total=0
 
     while IFS= read -r line; do
-        if [[ "$line" =~ ^[-*] ]] || [[ "$line" =~ ^\[[-*]\ ]]; then
+        if [[ "$line" =~ ^[-*] ]] || [[ "$line" == "["-*"]"* ]]; then
             ((total++))
 
             # Проверка на измеримость

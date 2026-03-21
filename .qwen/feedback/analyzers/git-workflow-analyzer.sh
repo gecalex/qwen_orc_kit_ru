@@ -5,7 +5,8 @@
 # Версия: 1.0.0
 #
 
-set -euo pipefail
+# Убрано set -euo pipefail - скрипт должен работать всегда
+set -u
 
 # Цвета для вывода
 RED='\033[0;31m'
@@ -32,6 +33,7 @@ DIRECT_MAIN_COMMITS=0
 COMMITS_WITHOUT_REVIEW=0
 MISSING_TAGS=0
 UNCOMMITTED_CHANGES=0
+SCORE=100
 
 # Функция для логирования
 log_info() {
@@ -92,35 +94,44 @@ log_info "Анализ git workflow в $PROJECT_ROOT"
 # 1. Проверка работы в main/dev напрямую
 check_direct_branch_commits() {
     log_info "Проверка коммитов напрямую в main/dev..."
-    
+
     local current_branch
-    current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
-    
+    current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+
     # Проверка текущей ветки
     if [[ "$current_branch" == "main" ]] || [[ "$current_branch" == "master" ]] || [[ "$current_branch" == "dev" ]] || [[ "$current_branch" == "develop" ]]; then
         WARNINGS+=("Работа в защищенной ветке: $current_branch")
         ((DIRECT_MAIN_COMMITS++)) || true
     fi
-    
-    # Проверка последних коммитов в main/master
-    local main_branch="main"
-    if git show-ref --verify --quiet refs/heads/main; then
+
+    # Проверка существования main/master веток
+    local main_branch=""
+    if git show-ref --verify --quiet refs/heads/main 2>/dev/null; then
         main_branch="main"
-    elif git show-ref --verify --quiet refs/heads/master; then
+    elif git show-ref --verify --quiet refs/heads/master 2>/dev/null; then
         main_branch="master"
     fi
-    
+
+    if [ -z "$main_branch" ]; then
+        WARNINGS+=("Ветки main/master не найдены. Проект на ранней стадии разработки")
+        RECOMMENDATIONS+=("Создайте ветку main для релизов и develop для разработки")
+        # Подсчет коммитов в текущей ветке
+        TOTAL_COMMITS=$(git rev-list --count HEAD 2>/dev/null || echo "0")
+        return 0
+    fi
+
     # Проверка коммитов в main без PR
     local recent_commits
-    recent_commits=$(git log "$main_branch" --oneline -10 2>/dev/null | wc -l)
-    TOTAL_COMMITS=$recent_commits
-    
-    if [ "$recent_commits" -gt 0 ]; then
+    recent_commits=$(git log "$main_branch" --oneline -10 2>/dev/null | wc -l | tr -d '[:space:]')
+    TOTAL_COMMITS=${recent_commits:-0}
+
+    if [ "$TOTAL_COMMITS" -gt 0 ]; then
         # Проверяем наличие merge коммитов (признак PR)
         local merge_commits
-        merge_commits=$(git log "$main_branch" --oneline -10 --merges 2>/dev/null | wc -l)
-        
-        if [ "$merge_commits" -eq 0 ] && [ "$recent_commits" -gt 0 ]; then
+        merge_commits=$(git log "$main_branch" --oneline -10 --merges 2>/dev/null | wc -l | tr -d '[:space:]')
+        merge_commits=${merge_commits:-0}
+
+        if [ "$merge_commits" -eq 0 ] && [ "$TOTAL_COMMITS" -gt 0 ]; then
             WARNINGS+=("Возможные коммиты напрямую в $main_branch без Pull Request")
             ((COMMITS_WITHOUT_REVIEW++)) || true
         fi
@@ -130,15 +141,14 @@ check_direct_branch_commits() {
 # 2. Проверка отсутствия feature-веток
 check_feature_branches() {
     log_info "Проверка feature-веток..."
-    
+
     local branches
     branches=$(git branch --list 2>/dev/null || echo "")
-    
+
     # Подсчет feature веток
-    FEATURE_BRANCHES=$(echo "$branches" | grep -cE "^(feature|feat)/" || true)
+    FEATURE_BRANCHES=$(echo "$branches" | grep -cE "^(feature|feat)/" 2>/dev/null || echo "0")
+    FEATURE_BRANCHES=$(echo "$FEATURE_BRANCHES" | tr -d '[:space:]')
     FEATURE_BRANCHES=${FEATURE_BRANCHES:-0}
-    FEATURE_BRANCHES=$(echo "$FEATURE_BRANCHES" | tr -cd '0-9')
-    [ -z "$FEATURE_BRANCHES" ] && FEATURE_BRANCHES=0
 
     if [ "$FEATURE_BRANCHES" -eq 0 ] 2>/dev/null; then
         WARNINGS+=("Отсутствуют feature-ветки. Рекомендуется использовать feature-branch workflow")
@@ -146,7 +156,7 @@ check_feature_branches() {
     else
         log_success "Найдено feature-веток: $FEATURE_BRANCHES"
     fi
-    
+
     # Проверка stale веток (старше 7 дней без изменений)
     local stale_branches=0
     while IFS= read -r branch; do
@@ -159,7 +169,7 @@ check_feature_branches() {
                 local now_ts
                 now_ts=$(date +%s)
                 local diff_days=$(( (now_ts - last_commit_ts) / 86400 ))
-                
+
                 if [ "$diff_days" -gt 7 ]; then
                     ((stale_branches++)) || true
                     WARNINGS+=("Stale ветка: $branch (последний коммит $diff_days дней назад)")
@@ -167,7 +177,7 @@ check_feature_branches() {
             fi
         fi
     done < <(git branch --list "feature/*" "feat/*" 2>/dev/null | sed 's/^[* ]*//')
-    
+
     if [ "$stale_branches" -gt 0 ]; then
         RECOMMENDATIONS+=("Удалите $stale_branches устаревших feature-веток или завершите работу над ними")
     fi
@@ -221,28 +231,30 @@ check_commits_review() {
 # 4. Проверка отсутствия тегов
 check_tags() {
     log_info "Проверка тегов..."
-    
+
     local tags_count
-    tags_count=$(git tag -l 2>/dev/null | wc -l)
-    
+    tags_count=$(git tag -l 2>/dev/null | wc -l | tr -d '[:space:]')
+    tags_count=${tags_count:-0}
+
     if [ "$tags_count" -eq 0 ]; then
         WARNINGS+=("Отсутствуют теги версий")
         MISSING_TAGS=1
         RECOMMENDATIONS+=("Создайте теги для версий: git tag -a v0.1.0 -m 'Version 0.1.0'")
     else
         log_success "Найдено тегов: $tags_count"
-        
+
         # Проверка наличия последнего тега
         local last_tag
         last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-        
+
         if [ -z "$last_tag" ]; then
             WARNINGS+=("Не удалось определить последний тег")
         else
             # Проверка коммитов после последнего тега
             local commits_after_tag
             commits_after_tag=$(git rev-list "$last_tag"..HEAD --count 2>/dev/null || echo "0")
-            
+            commits_after_tag=${commits_after_tag:-0}
+
             if [ "$commits_after_tag" -gt 20 ]; then
                 WARNINGS+=("$commits_after_tag коммитов после последнего тега $last_tag")
                 RECOMMENDATIONS+=("Создайте новый тег версии")

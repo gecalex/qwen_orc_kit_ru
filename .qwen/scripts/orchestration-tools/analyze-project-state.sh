@@ -27,10 +27,12 @@ check_directories() {
 
 # Функция для проверки наличия файлов конфигурации
 check_config_files() {
-    local configs=("package.json" "pyproject.toml" "requirements.txt" "Gemfile" "Cargo.toml" "go.mod" "pom.xml" "build.gradle" "composer.json")
+    # Исключаем package.json из корня (может быть частью Qwen Code)
+    # Считаем только конфиги, которые указывают на наличие проекта
+    local project_configs=("pyproject.toml" "requirements.txt" "Gemfile" "Cargo.toml" "go.mod" "pom.xml" "build.gradle" "composer.json")
     local found_configs=()
 
-    for config in "${configs[@]}"; do
+    for config in "${project_configs[@]}"; do
         if [ -f "$config" ]; then
             found_configs+=("$config")
         fi

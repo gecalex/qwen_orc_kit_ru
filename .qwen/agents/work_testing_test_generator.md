@@ -141,3 +141,126 @@ color: yellow
 - Используйте навык `run-quality-gate` для проверки
 - Используйте навык `generate-report-header` для отчетов
 - Используйте навык `validate-report-file` для проверки
+- Используйте навык `external-api-mocking` для мокирования внешних зависимостей
+
+## Mock First Rule
+
+### При генерации тестов следуйте правилу "Mock First":
+
+**Порядок генерации тестов:**
+
+1. **Сначала создать моки для всех внешних зависимостей**
+   - Определить все внешние вызовы (HTTP, БД, файловая система)
+   - Создать фикстуры для каждого типа зависимости
+   - Настроить mock ответы для успешных сценариев
+   - Настроить mock ответы для ошибочных сценариев
+
+2. **Затем писать тест логику**
+   - Использовать созданные фикстуры
+   - Тестировать бизнес-логику без внешних вызовов
+   - Проверять взаимодействия с моками (assert_called_with)
+
+3. **Добавить маркеры тестов**
+   - `@pytest.mark.network` - для тестов, требующих сети
+   - `@pytest.mark.slow` - для медленных тестов
+   - `@pytest.mark.integration` - для интеграционных тестов
+   - `@pytest.mark.external_api` - для тестов с внешними API
+
+### Шаблон генерации теста:
+
+```python
+# Шаг 1: Импорты и фикстуры
+import pytest
+from unittest.mock import patch, MagicMock
+
+# Шаг 2: Фикстуры (если не в conftest.py)
+@pytest.fixture
+def mock_external_service():
+    """Мок для внешнего сервиса."""
+    with patch('module.ExternalService') as mock:
+        mock.return_value.call.return_value = {'status': 'success'}
+        yield mock
+
+# Шаг 3: Тесты с моками
+def test_function_with_mock(mock_external_service):
+    """Тест функции с мокированным сервисом."""
+    from module import function
+    
+    result = function()
+    
+    assert result['status'] == 'success'
+    mock_external_service.return_value.call.assert_called_once()
+
+# Шаг 4: Тесты с маркерами
+@pytest.mark.network
+def test_function_with_real_api():
+    """Тест с реальным API (только для локальной разработки)."""
+    from module import function
+    
+    result = function()
+    assert result is not None
+
+@pytest.mark.slow
+def test_complex_scenario():
+    """Медленный тест сложного сценария."""
+    pass
+```
+
+### Checklist для генерации тестов:
+
+- [ ] Определены все внешние зависимости
+- [ ] Созданы фикстуры для каждой зависимости
+- [ ] Настроены mock ответы для success сценариев
+- [ ] Настроены mock ответы для error сценариев
+- [ ] Написаны тесты с использованием фикстур
+- [ ] Добавлены assert для проверки вызовов mock
+- [ ] Добавлены маркеры для сетевых/медленных тестов
+- [ ] Тесты изолированы и не зависят друг от друга
+- [ ] Тесты запускаются без доступа к сети
+
+### Примеры мокирования:
+
+**HTTP запросы (requests):**
+```python
+@pytest.fixture
+def mock_requests_get():
+    with patch('requests.get') as mock:
+        mock.return_value.status_code = 200
+        mock.return_value.json.return_value = {'data': 'value'}
+        yield mock
+```
+
+**yt-dlp:**
+```python
+@pytest.fixture
+def mock_youtube_downloader():
+    with patch('yt_dlp.YoutubeDL') as mock:
+        mock.return_value.download.return_value = 0
+        mock.return_value.extract_info.return_value = {
+            'id': 'test_id',
+            'title': 'Test Video'
+        }
+        yield mock
+```
+
+**База данных:**
+```python
+@pytest.fixture
+def mock_db_connection():
+    with patch('sqlite3.connect') as mock:
+        mock_conn = MagicMock()
+        mock_cursor = MagicMock()
+        mock.return_value = mock_conn
+        mock_conn.cursor.return_value = mock_cursor
+        mock_cursor.fetchall.return_value = []
+        yield mock_conn, mock_cursor
+```
+
+**Файловая система:**
+```python
+@pytest.fixture
+def tmp_config(tmp_path):
+    config_file = tmp_path / "config.json"
+    config_file.write_text('{"test": true}')
+    yield config_file
+```

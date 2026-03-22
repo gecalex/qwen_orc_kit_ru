@@ -3,7 +3,7 @@
 **Ветка**: `qwen-code-cli-specialist` | **Дата**: 31.01.2026 | **Спецификация**: [/.qwen/docs/help/qwen_orchestrator_kit/specification.md](file:///home/alex/MyProjects/qwen_orc_kit_ru/.qwen/docs/help/qwen_orchestrator_kit/specification.md)
 **Входные данные**: Спецификация функции из `/.qwen/docs/help/qwen_orchestrator_kit/specification.md`
 
-**Примечание**: Этот шаблон заполняется командой `/speckit.plan`. См. `.specify/templates/commands/plan.md` для рабочего процесса выполнения.
+**Примечание**: Этот шаблон заполняется командой `/speckit.plan`. См. `.qwen/specify/templates/commands/plan.md` для рабочего процесса выполнения.
 
 ## Резюме
 

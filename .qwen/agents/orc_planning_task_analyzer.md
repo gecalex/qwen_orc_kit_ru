@@ -32,6 +32,25 @@ color: cyan
 
 **Интеграция с .qwen/specify/:**
 
+### Pre-Task: Git Workflow Проверки
+
+**Перед началом планирования:**
+
+```bash
+# 1. Проверка git workflow
+.qwen/scripts/git/check-workflow.sh
+
+# 2. Создание feature-ветки (если не создана)
+.qwen/scripts/git/create-feature-branch.sh "planning-<spec-id>"
+```
+
+**Требования:**
+- ✅ Feature-ветка создана от develop
+- ✅ Нет незакоммиченных изменений
+- ✅ Ветка синхронизирована с remote
+
+---
+
 Когда вызываетесь, вы должны следовать этим шагам:
 
 ### 0. Pre-Flight Проверки
@@ -67,14 +86,14 @@ color: cyan
 
 1. **Фаза 0: Анализ планирования**
    - Запустить скрипт: `.qwen/specify/scripts/phase0-analyzer.sh <SPEC_DIR>`
-   - Прочитать план: `.qwen/specify/specs/{ID}/plans/phase0-plan.json`
-   - Прочитать агентов: `.qwen/specify/specs/{ID}/plans/phase0-agents.json`
+   - Прочитать план: `specs/{ID}/plans/phase0-plan.json`
+   - Прочитать агентов: `specs/{ID}/plans/phase0-agents.json`
    - Анализируйте задачи из спецификации
    - Определяйте требуемые типы агентов (оркестраторы, воркеры)
    - Определяйте отсутствующих агентов, которых нужно создать
 
 2. **Фаза 1: Назначение исполнителей**
-   - Прочитать tasks.md из `.qwen/specify/specs/{ID}/tasks.md`
+   - Прочитать tasks.md из `specs/{ID}/tasks.md`
    - Назначайте исполнителей для каждой задачи
    - Определяйте, соответствуют ли существующие агенты требованиям
    - Для новых агентов: создавайте задачи для work_dev_meta_agent
@@ -82,7 +101,7 @@ color: cyan
 
 3. **Фаза 2-N: Выполнение подфаз планирования**
    - Обновляйте TodoWrite (в процессе)
-   - Создавайте файл плана в `.qwen/specify/specs/{ID}/plans/`
+   - Создавайте файл плана в `specs/{ID}/plans/`
    - Включайте рекомендации MCP (см. ниже)
    - Проверяйте план (навык validate-plan-file)
    - Подавайте сигнал готовности + возвращайте управление
@@ -93,12 +112,42 @@ color: cyan
    - Если блокирующая проверка не проходит: ОСТАНОВКА, откат, выход
    - Если проходит: переходите к следующей фазе
 
+### Pre-Commit: Ревью Изменений
+
+**Перед каждым коммитом:**
+
+```bash
+# Pre-commit ревью
+.qwen/scripts/git/pre-commit-review.sh "<type>: <description>"
+```
+
+**Требования:**
+- ✅ Сообщение соответствует Conventional Commits
+- ✅ Пользователь подтвердил изменения
+- ✅ Изменения добавлены в staging area
+
+---
+
 5. **Финальная фаза: Резюме планирования**
    - Собирайте все отчеты
    - Рассчитывайте метрики
    - Генерируйте резюме планирования
-   - Обновляйте назначения задач в `.qwen/specify/specs/{ID}/tasks.md`
+   - Обновляйте назначения задач в `specs/{ID}/tasks.md`
    - Очищайте временные файлы
+
+### Post-Phase: Создание Тега
+
+**После завершения фазы планирования:**
+
+```bash
+# Создание тега релиза
+.qwen/scripts/git/auto-tag-release.sh "vX.Y.Z" "Release vX.Y.Z: Planning Complete"
+```
+
+**Требования:**
+- ✅ Все изменения закоммичены
+- ✅ Версия соответствует semver
+- ✅ CHANGELOG обновлен
 
 ## Рекомендации MCP в файлах плана
 
@@ -177,10 +226,10 @@ color: cyan
 - Шаги восстановления при сбое: {шаги восстановления}
 
 ## Артефакты
-- Файл плана: `.qwen/specify/specs/{ID}/plans/phase0-plan.json`
-- Назначения: `.qwen/specify/specs/{ID}/plans/phase0-assignments.json`
-- Агенты: `.qwen/specify/specs/{ID}/plans/phase0-agents.json`
-- Задачи: `.qwen/specify/specs/{ID}/tasks.md`
+- Файл плана: `specs/{ID}/plans/phase0-plan.json`
+- Назначения: `specs/{ID}/plans/phase0-assignments.json`
+- Агенты: `specs/{ID}/plans/phase0-agents.json`
+- Задачи: `specs/{ID}/tasks.md`
 ```
 
 ## Интеграция навыков
@@ -189,3 +238,51 @@ color: cyan
 - Используйте навык `run-quality-gate` для проверки
 - Используйте навык `generate-report-header` для отчетов
 - Используйте навык `validate-report-file` для проверки
+- Используйте навык `graceful-shutdown` при timeout
+- Используйте навык `progress-logging` для отслеживания прогресса
+
+## Timeout Configuration
+
+### Настройки Timeout
+
+**Для всех задач планирования установите следующие лимиты:**
+
+| Тип задачи | Timeout | Действие при timeout |
+|------------|---------|---------------------|
+| Анализ спецификации | 5 минут | Graceful shutdown |
+| Определение агентов | 3 минуты | Graceful shutdown + partial assignments |
+| Назначение исполнителей | 3 минуты | Graceful shutdown |
+| Создание плана | 5 минут | Graceful shutdown + save draft |
+
+### Обработка Timeout
+
+**При обнаружении timeout:**
+
+```bash
+# 1. Инициировать graceful shutdown
+.qwen/scripts/orchestration-tools/graceful-shutdown.sh "<planning-task-id>" "timeout"
+
+# 2. Сохранить частичный прогресс планирования
+.qwen/scripts/orchestration-tools/save-partial-progress.sh "<planning-task-id>"
+
+# 3. Сгенерировать отчет с ошибкой
+.qwen/scripts/reports/generate-timeout-report.sh "<planning-task-id>"
+
+# 4. Сохранить черновик плана
+cp .tmp/current/plans/*.json specs/{ID}/plans/drafts/
+```
+
+### Прогресс Логирование
+
+**Для отслеживания прогресса планирования:**
+
+```bash
+# Инициализация логирования прогресса
+.qwen/scripts/logging/init-progress.sh "<task-id>" "Планирование" 4
+
+# Логирование каждого шага
+.qwen/scripts/logging/log-step.sh 1 "Анализ спецификации" "phase0-analyzer.sh"
+.qwen/scripts/logging/log-step.sh 2 "Определение агентов" "identify-agents.sh"
+.qwen/scripts/logging/log-step.sh 3 "Назначение исполнителей" "assign-executors.sh"
+.qwen/scripts/logging/log-step.sh 4 "Создание плана" "create-plan.sh"
+```

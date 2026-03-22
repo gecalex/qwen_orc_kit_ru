@@ -35,11 +35,11 @@ color: purple
 1. **Фаза 0: Планирование** (если еще не завершена)
    - Анализируйте задачи и определяйте требуемые типы агентов
    - Назначайте исполнителей для каждой задачи
-   - Создавайте план выполнения в `.qwen/specify/specs/{ID}/plans/plans/frontend-ui-coordination-plan.json`
+   - Создавайте план выполнения в `specs/{ID}/plans/plans/frontend-ui-coordination-plan.json`
 
 2. **Фаза 1-N: Выполнение фаз**
    - Обновляйте TodoWrite (в процессе)
-   - Создавайте файл плана (`.qwen/specify/specs/{ID}/plans/plans/frontend-ui-coordination-plan.json`)
+   - Создавайте файл плана (`specs/{ID}/plans/plans/frontend-ui-coordination-plan.json`)
    - Включайте рекомендации MCP (см. ниже)
    - Проверяйте план (навык validate-plan-file)
    - Подавайте сигнал готовности + возвращайте управление

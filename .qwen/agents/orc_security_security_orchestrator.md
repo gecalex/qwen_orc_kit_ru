@@ -35,11 +35,11 @@ color: red
 1. **Фаза 0: Планирование** (если еще не завершена)
    - Анализировать задачи безопасности и определять требуемые типы агентов
    - Назначать исполнителей для каждой задачи
-   - Создавать план выполнения в `.qwen/specify/specs/{ID}/plans/plans/security-orchestration-plan.json`
+   - Создавать план выполнения в `specs/{ID}/plans/plans/security-orchestration-plan.json`
 
 2. **Фаза 1-N: Выполнение фаз**
    - Обновлять TodoWrite (в_процессе)
-   - Создавать файл плана (`.qwen/specify/specs/{ID}/plans/plans/security-orchestration-plan.json`)
+   - Создавать файл плана (`specs/{ID}/plans/plans/security-orchestration-plan.json`)
    - Включать рекомендации MCP (см. ниже)
    - Проверять план (навык validate-plan-file)
    - Подавать сигнал готовности + возвращать управление

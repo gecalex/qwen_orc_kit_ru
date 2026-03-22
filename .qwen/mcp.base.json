@@ -1,0 +1,36 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "description": "Документация библиотек и фреймворков",
+      "category": "development"
+    },
+    "searxng": {
+      "command": "npx",
+      "args": ["-y", "mcp-searxng@latest"],
+      "env": {
+        "SEARXNG_URL": "http://localhost:8080"
+      },
+      "description": "Поиск в интернете через SearXNG",
+      "category": "research"
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--executable-path=/usr/bin/chromium",
+        "--isolated"
+      ],
+      "description": "Автоматизация браузера Chrome/Chromium",
+      "category": "testing"
+    }
+  },
+  "_metadata": {
+    "name": "base",
+    "description": "Базовая конфигурация MCP серверов для повседневной разработки",
+    "version": "1.0.0",
+    "servers_count": 3
+  }
+}

@@ -32,18 +32,37 @@ color: blue
 
 **Интеграция с .qwen/specify/:**
 
+### Pre-Task: Git Workflow Проверки
+
+**Перед началом ЛЮБОЙ задачи:**
+
+```bash
+# 1. Проверка git workflow
+.qwen/scripts/git/check-workflow.sh
+
+# 2. Создание feature-ветки (если не создана)
+.qwen/scripts/git/create-feature-branch.sh "<task-name>"
+```
+
+**Требования:**
+- ✅ Feature-ветка создана от develop
+- ✅ Нет незакоммиченных изменений
+- ✅ Ветка синхронизирована с remote
+
+---
+
 Когда вызываетесь, вы должны следовать этим шагам:
 
 1. **Фаза 0: Планирование** (если еще не завершена)
-   - Проверить завершение Фазы 0: `.qwen/specify/specs/{ID}/plans/phase0-plan.json`
+   - Проверить завершение Фазы 0: `specs/{ID}/plans/phase0-plan.json`
    - Если Фаза 0 не завершена: запустить `orc_planning_task_analyzer`
    - Прочитать результаты Фазы 0: `phase0-assignments.json`
    - Назначить исполнителей для каждой задачи
-   - Создать план выполнения в `.qwen/specify/specs/{ID}/plans/dev-task-coordination-plan.json`
+   - Создать план выполнения в `specs/{ID}/plans/dev-task-coordination-plan.json`
 
 2. **Фаза 1-N: Выполнение фаз**
    - Обновлять TodoWrite (в процессе)
-   - Создавать файл плана в `.qwen/specify/specs/{ID}/plans/`
+   - Создавать файл плана в `specs/{ID}/plans/`
    - Включать рекомендации MCP (см. ниже)
    - Проверять план (навык validate-plan-file)
    - Подавать сигнал готовности + возвращать управление
@@ -54,12 +73,42 @@ color: blue
    - Если блокирующая проверка не проходит: ОСТАНОВКА, откат, выход
    - Если проходит: переходить к следующей фазе
 
+### Pre-Commit: Ревью Изменений
+
+**Перед каждым коммитом:**
+
+```bash
+# Pre-commit ревью
+.qwen/scripts/git/pre-commit-review.sh "<type>: <description>"
+```
+
+**Требования:**
+- ✅ Сообщение соответствует Conventional Commits
+- ✅ Пользователь подтвердил изменения
+- ✅ Изменения добавлены в staging area
+
+---
+
 4. **Финальная фаза: Резюме**
    - Собирать все отчеты
    - Рассчитывать метрики
    - Генерировать резюме
-   - Обновлять задачи в `.qwen/specify/specs/{ID}/tasks.md`
+   - Обновлять задачи в `specs/{ID}/tasks.md`
    - Очищать временные файлы
+
+### Post-Phase: Создание Тега
+
+**После завершения фазы:**
+
+```bash
+# Создание тега релиза
+.qwen/scripts/git/auto-tag-release.sh "vX.Y.Z" "Release vX.Y.Z: Description"
+```
+
+**Требования:**
+- ✅ Все изменения закоммичены
+- ✅ Версия соответствует semver
+- ✅ CHANGELOG обновлен
 
 ## Рекомендации MCP в файлах плана
 
@@ -146,3 +195,87 @@ color: blue
 - Используйте навык `run-quality-gate` для проверки
 - Используйте навык `generate-report-header` для отчетов
 - Используйте навык `validate-report-file` для проверки
+- Используйте навык `graceful-shutdown` при timeout
+- Используйте навык `progress-logging` для отслеживания прогресса
+
+## Timeout Configuration
+
+### Настройки Timeout
+
+**Для всех задач установите следующие лимиты:**
+
+| Тип задачи | Timeout | Действие при timeout |
+|------------|---------|---------------------|
+| Планирование | 5 минут | Graceful shutdown |
+| Разработка | 10 минут | Graceful shutdown + save state |
+| Тестирование | 5 минут | Graceful shutdown + partial report |
+| Документирование | 3 минуты | Graceful shutdown |
+| Анализ | 5 минут | Graceful shutdown |
+
+### Обработка Timeout
+
+**При обнаружении timeout:**
+
+```bash
+# 1. Инициировать graceful shutdown
+.qwen/scripts/orchestration-tools/graceful-shutdown.sh "<task-id>" "timeout"
+
+# 2. Сохранить частичный прогресс
+.qwen/scripts/orchestration-tools/save-partial-progress.sh "<task-id>"
+
+# 3. Сгенерировать отчет с ошибкой
+.qwen/scripts/reports/generate-timeout-report.sh "<task-id>"
+
+# 4. Предложить fallback опции
+echo "Доступные опции восстановления:"
+echo "  1. Продолжить с контрольной точки"
+echo "  2. Откатить и начать заново"
+echo "  3. Упрощенное выполнение"
+```
+
+### Прогресс Логирование
+
+**Для отслеживания прогресса:**
+
+```bash
+# Инициализация логирования прогресса
+.qwen/scripts/logging/init-progress.sh "<task-id>" "<task-name>" <total-steps>
+
+# Логирование каждого шага
+.qwen/scripts/logging/log-step.sh <step-num> "<step-name>" "<command>"
+
+# Обновление прогресс-бара
+.qwen/scripts/logging/update-progress.sh <completed-steps>
+```
+
+### Мониторинг Длительности
+
+**Периодическая проверка:**
+
+```bash
+# Проверка длительности задачи (каждую минуту)
+while task_running; do
+    elapsed=$(get_elapsed_time)
+    if [ $elapsed -gt $TIMEOUT ]; then
+        trigger_timeout_handler
+    fi
+    log_heartbeat
+    sleep 60
+done
+```
+
+### Fallback Стратегии
+
+**При timeout предложите:**
+
+1. **Продолжение с контрольной точки**
+   - Восстановить последнее сохраненное состояние
+   - Продолжить с последнего завершенного шага
+
+2. **Упрощенное выполнение**
+   - Пропустить необязательные шаги
+   - Использовать кэшированные результаты
+
+3. **Откат и перезапуск**
+   - Откатить все изменения
+   - Начать выполнение заново

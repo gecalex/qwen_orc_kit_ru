@@ -1,0 +1,53 @@
+{
+  "name": "infrastructure-devops",
+  "displayName": "Infrastructure & DevOps",
+  "version": "1.0.0",
+  "description": "Плагин для DevOps и инфраструктуры: CI/CD, контейнеризация, оркестрация",
+  "author": "Qwen Orchestrator Kit",
+  "license": "MIT",
+  "category": "devops",
+  "tags": ["devops", "infrastructure", "kubernetes", "ci-cd", "docker"],
+  "enabled": true,
+  "dependencies": [],
+  "components": {
+    "agents": [
+      {
+        "name": "devops-engineer",
+        "file": "agents/devops-engineer.md",
+        "description": "Агент для DevOps задач и CI/CD"
+      },
+      {
+        "name": "kubernetes-specialist",
+        "file": "agents/kubernetes-specialist.md",
+        "description": "Агент для работы с Kubernetes"
+      }
+    ],
+    "commands": [
+      {
+        "name": "devops",
+        "file": "commands/devops.md",
+        "description": "Команды для DevOps операций"
+      }
+    ],
+    "skills": [
+      {
+        "name": "devops-expertise",
+        "file": "skills/devops-expertise.md",
+        "description": "Навыки эксперта DevOps"
+      }
+    ]
+  },
+  "configuration": {
+    "containerRegistry": "docker",
+    "orchestrator": "kubernetes",
+    "ciProviders": ["github-actions", "gitlab-ci", "jenkins"],
+    "iacTools": ["terraform", "ansible"],
+    "monitoring": ["prometheus", "grafana"]
+  },
+  "scripts": {
+    "onEnable": "echo 'Infrastructure DevOps plugin enabled'",
+    "onDisable": "echo 'Infrastructure DevOps plugin disabled'"
+  },
+  "createdAt": "2026-03-21",
+  "updatedAt": "2026-03-21"
+}

@@ -1,0 +1,41 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github@latest"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "description": "Работа с GitHub API (репозитории, issues, PR)",
+      "category": "infrastructure"
+    },
+    "gitlab": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-gitlab@latest"],
+      "env": {
+        "GITLAB_PERSONAL_ACCESS_TOKEN": "${GITLAB_TOKEN}",
+        "GITLAB_API_URL": "https://gitlab.com/api/v4"
+      },
+      "description": "Работа с GitLab API",
+      "category": "infrastructure"
+    },
+    "docker": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-docker@latest"],
+      "description": "Управление Docker контейнерами",
+      "category": "infrastructure"
+    },
+    "kubernetes": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-kubernetes@latest"],
+      "description": "Управление Kubernetes кластерами",
+      "category": "infrastructure"
+    }
+  },
+  "_metadata": {
+    "name": "infrastructure",
+    "description": "Конфигурация MCP серверов для работы с инфраструктурой",
+    "version": "1.0.0",
+    "servers_count": 4
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-03-21",
+  "registry": {
+    "python-development": {
+      "name": "python-development",
+      "displayName": "Python Development",
+      "version": "1.0.0",
+      "description": "Плагин для Python разработки: разработка, тестирование, линтинг кода",
+      "author": "Qwen Orchestrator Kit",
+      "license": "MIT",
+      "category": "development",
+      "tags": ["python", "development", "testing", "linting"],
+      "repository": "https://github.com/qwen-orchestrator-kit/plugins/python-development",
+      "dependencies": [],
+      "optionalDependencies": [],
+      "conflicts": [],
+      "minOrchestratorVersion": "0.6.0",
+      "status": "stable",
+      "downloads": 0,
+      "rating": 0
+    },
+    "security-scanning": {
+      "name": "security-scanning",
+      "displayName": "Security Scanning",
+      "version": "1.0.0",
+      "description": "Плагин для сканирования безопасности: поиск уязвимостей, анализ кода на безопасность",
+      "author": "Qwen Orchestrator Kit",
+      "license": "MIT",
+      "category": "security",
+      "tags": ["security", "scanning", "vulnerability", "analysis"],
+      "repository": "https://github.com/qwen-orchestrator-kit/plugins/security-scanning",
+      "dependencies": [],
+      "optionalDependencies": ["python-development"],
+      "conflicts": [],
+      "minOrchestratorVersion": "0.6.0",
+      "status": "stable",
+      "downloads": 0,
+      "rating": 0
+    },
+    "testing-automation": {
+      "name": "testing-automation",
+      "displayName": "Testing Automation",
+      "version": "1.0.0",
+      "description": "Плагин для автоматизации тестирования: unit, integration, e2e тесты",
+      "author": "Qwen Orchestrator Kit",
+      "license": "MIT",
+      "category": "testing",
+      "tags": ["testing", "automation", "qa", "ci-cd"],
+      "repository": "https://github.com/qwen-orchestrator-kit/plugins/testing-automation",
+      "dependencies": [],
+      "optionalDependencies": ["python-development"],
+      "conflicts": [],
+      "minOrchestratorVersion": "0.6.0",
+      "status": "stable",
+      "downloads": 0,
+      "rating": 0
+    },
+    "database-operations": {
+      "name": "database-operations",
+      "displayName": "Database Operations",
+      "version": "1.0.0",
+      "description": "Плагин для операций с базами данных: проектирование, миграции, оптимизация",
+      "author": "Qwen Orchestrator Kit",
+      "license": "MIT",
+      "category": "database",
+      "tags": ["database", "sql", "migration", "optimization"],
+      "repository": "https://github.com/qwen-orchestrator-kit/plugins/database-operations",
+      "dependencies": [],
+      "optionalDependencies": [],
+      "conflicts": [],
+      "minOrchestratorVersion": "0.6.0",
+      "status": "stable",
+      "downloads": 0,
+      "rating": 0
+    },
+    "infrastructure-devops": {
+      "name": "infrastructure-devops",
+      "displayName": "Infrastructure & DevOps",
+      "version": "1.0.0",
+      "description": "Плагин для DevOps и инфраструктуры: CI/CD, контейнеризация, оркестрация",
+      "author": "Qwen Orchestrator Kit",
+      "license": "MIT",
+      "category": "devops",
+      "tags": ["devops", "infrastructure", "kubernetes", "ci-cd", "docker"],
+      "repository": "https://github.com/qwen-orchestrator-kit/plugins/infrastructure-devops",
+      "dependencies": [],
+      "optionalDependencies": ["security-scanning"],
+      "conflicts": [],
+      "minOrchestratorVersion": "0.6.0",
+      "status": "stable",
+      "downloads": 0,
+      "rating": 0
+    }
+  },
+  "categories": [
+    {
+      "id": "development",
+      "name": "Development",
+      "description": "Плагины для разработки кода"
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "description": "Плагины для безопасности"
+    },
+    {
+      "id": "testing",
+      "name": "Testing",
+      "description": "Плагины для тестирования"
+    },
+    {
+      "id": "database",
+      "name": "Database",
+      "description": "Плагины для работы с базами данных"
+    },
+    {
+      "id": "devops",
+      "name": "DevOps",
+      "description": "Плагины для DevOps и инфраструктуры"
+    }
+  ],
+  "installed": [],
+  "enabled": []
+}

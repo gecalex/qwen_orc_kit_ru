@@ -141,6 +141,173 @@ task '{
 
 **Детали и скрипты**: `.qwen/docs/architecture/quality-gates.md`
 
+---
+
+### Pre-Commit Валидация (Gate 3)
+
+**ПРАВИЛО:** Перед КАЖДЫМ коммитом:
+
+```bash
+.qwen/scripts/quality-gates/pre-commit-validation.sh
+# Или с подробным выводом:
+.qwen/scripts/quality-gates/pre-commit-validation.sh --verbose
+```
+
+**Проверки:**
+- ✅ Синтаксис Python (`python -m py_compile`)
+- ✅ Синтаксис Bash (`bash -n`)
+- ✅ Линтинг Markdown (`markdownlint`)
+- ✅ Валидация JSON (`jq` или `python -m json.tool`)
+- ✅ Валидация YAML (`python + PyYAML`)
+
+**Блокирующая:** true
+
+**Полная проверка Quality Gate 3:**
+
+```bash
+.qwen/scripts/quality-gates/check-commit.sh
+```
+
+**Дополнительные проверки check-commit.sh:**
+- Pre-commit валидация синтаксиса
+- Проверка git workflow
+- Валидация сообщения коммита (Conventional Commits)
+- Наличие и настройка .gitignore
+- Базовая проверка на наличие секретов
+
+**Документация**: `.qwen/docs/pre-commit-validation.md`
+
+### 3.3. Автоматизация Git Workflow
+
+**ПРАВИЛО:** Перед началом ЛЮБОЙ задачи:
+
+```bash
+# 1. Проверка и создание feature-ветки
+.qwen/scripts/git/create-feature-branch.sh "<task-name>"
+
+# 2. Pre-commit ревью
+.qwen/scripts/git/pre-commit-review.sh "<message>"
+
+# 3. Post-commit push
+git push -u origin feature/<name>
+```
+
+**ПРАВИЛО:** После завершения фазы:
+
+```bash
+# Создание тега
+.qwen/scripts/git/auto-tag-release.sh "vX.Y.Z" "Release vX.Y.Z"
+```
+
+#### 3.3.1. Скрипты автоматизации
+
+| Скрипт | Назначение | Пример |
+|--------|-------------|--------|
+| `create-feature-branch.sh` | Создание feature-ветки от develop | `.qwen/scripts/git/create-feature-branch.sh "my-feature"` |
+| `pre-commit-review.sh` | Pre-commit ревью изменений | `.qwen/scripts/git/pre-commit-review.sh "feat: Add feature"` |
+| `auto-tag-release.sh` | Автоматическое создание тегов | `.qwen/scripts/git/auto-tag-release.sh "v0.6.0" "Release"` |
+| `check-workflow.sh` | Проверка соблюдения workflow | `.qwen/scripts/git/check-workflow.sh` |
+| `pre-commit-validation.sh` | Валидация синтаксиса перед коммитом | `.qwen/scripts/quality-gates/pre-commit-validation.sh --verbose` |
+| `check-commit.sh` | Полная проверка Quality Gate 3 | `.qwen/scripts/quality-gates/check-commit.sh` |
+
+#### 3.3.2. create-feature-branch.sh
+
+**Назначение:** Автоматическое создание feature-ветки от develop
+
+**Использование:**
+```bash
+.qwen/scripts/git/create-feature-branch.sh "<task-name>"
+```
+
+**Функционал:**
+- Проверка текущей ветки
+- Если main или develop → создать feature-ветку
+- Генерация имени ветки из названия задачи
+- Валидация имени ветки
+- Push новой ветки на GitHub
+
+**Выход:**
+- Успех: имя созданной ветки
+- Ошибка: код ошибки + сообщение
+
+#### 3.3.3. pre-commit-review.sh
+
+**Назначение:** Pre-commit ревью изменений
+
+**Использование:**
+```bash
+.qwen/scripts/git/pre-commit-review.sh "<commit-message>"
+.qwen/scripts/git/pre-commit-review.sh "<commit-message>" --no-interactive
+```
+
+**Функционал:**
+- Показать git status
+- Показать git diff --stat
+- Показать git diff (опционально)
+- Запросить подтверждение
+- Только после подтверждения → git add и git commit
+
+**Требования:**
+- Интерактивный режим по умолчанию
+- Поддержка --no-interactive для CI/CD
+- Валидация сообщения коммита (Conventional Commits)
+
+#### 3.3.4. auto-tag-release.sh
+
+**Назначение:** Автоматическое создание тегов версий
+
+**Использование:**
+```bash
+.qwen/scripts/git/auto-tag-release.sh "<version>" "<description>"
+```
+
+**Функционал:**
+- Анализ завершённых фаз
+- Генерация версии (semver)
+- Создание аннотированного тега
+- Push тега на GitHub
+- Обновление CHANGELOG
+
+#### 3.3.5. check-workflow.sh
+
+**Назначение:** Проверка соблюдения git workflow
+
+**Использование:**
+```bash
+.qwen/scripts/git/check-workflow.sh
+```
+
+**Функционал:**
+- Проверка текущей ветки
+- Проверка наличия незакоммиченных изменений
+- Проверка синхронизации с remote
+- Проверка тегов
+- Вывод рекомендаций
+
+**Коды возврата:**
+- 0: Все проверки пройдены
+- 1: Предупреждения (workflow работает)
+- 2: Ошибки (требуется внимание)
+
+### 3.4. Проверка Workflow
+
+**ПРАВИЛО:** Перед каждым коммитом:
+
+```bash
+.qwen/scripts/git/check-workflow.sh
+```
+
+**Чеклист проверки:**
+
+- [ ] Git репозиторий инициализирован
+- [ ] Текущая ветка корректна (feature/bugfix/hotfix)
+- [ ] Нет незакоммиченных изменений (или они staged)
+- [ ] Ветка синхронизирована с remote
+- [ ] .gitignore существует и настроен
+- [ ] Теги версий созданы
+
+**Полная документация**: `.qwen/docs/git-workflow-automation.md`
+
 ## 4. Новые архитектурные компоненты
 
 ### 4.1. Паттерн health-workflow

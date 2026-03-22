@@ -1,0 +1,52 @@
+{
+  "name": "security-scanning",
+  "displayName": "Security Scanning",
+  "version": "1.0.0",
+  "description": "Плагин для сканирования безопасности: поиск уязвимостей, анализ кода на безопасность",
+  "author": "Qwen Orchestrator Kit",
+  "license": "MIT",
+  "category": "security",
+  "tags": ["security", "scanning", "vulnerability", "analysis"],
+  "enabled": true,
+  "dependencies": [],
+  "components": {
+    "agents": [
+      {
+        "name": "security-scanner",
+        "file": "agents/security-scanner.md",
+        "description": "Агент для сканирования кода на уязвимости"
+      },
+      {
+        "name": "vulnerability-analyzer",
+        "file": "agents/vulnerability-analyzer.md",
+        "description": "Агент для анализа и классификации уязвимостей"
+      }
+    ],
+    "commands": [
+      {
+        "name": "security-scan",
+        "file": "commands/security-scan.md",
+        "description": "Команды для сканирования безопасности"
+      }
+    ],
+    "skills": [
+      {
+        "name": "security-analysis",
+        "file": "skills/security-analysis.md",
+        "description": "Навыки анализа безопасности"
+      }
+    ]
+  },
+  "configuration": {
+    "scanners": ["bandit", "safety", "snyk"],
+    "severityThreshold": "medium",
+    "autoFix": false,
+    "reportFormat": "json"
+  },
+  "scripts": {
+    "onEnable": "echo 'Security Scanning plugin enabled'",
+    "onDisable": "echo 'Security Scanning plugin disabled'"
+  },
+  "createdAt": "2026-03-21",
+  "updatedAt": "2026-03-21"
+}

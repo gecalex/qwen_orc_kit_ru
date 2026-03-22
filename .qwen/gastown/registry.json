@@ -1,0 +1,38 @@
+{
+  "$schema": "https://qwen-orchestrator-kit.dev/schemas/gastown-registry.json",
+  "version": "0.6.0",
+  "lastUpdated": "2026-03-21T00:00:00Z",
+  
+  "worktrees": [],
+  
+  "agents": [],
+  
+  "tasks": {
+    "active": [],
+    "completed": [],
+    "failed": []
+  },
+  
+  "history": {
+    "merges": [],
+    "conflicts": [],
+    "resolutions": []
+  },
+  
+  "statistics": {
+    "totalWorktreesCreated": 0,
+    "totalTasksDispatched": 0,
+    "totalTasksCompleted": 0,
+    "totalTasksFailed": 0,
+    "totalMergesPerformed": 0,
+    "totalConflictsResolved": 0,
+    "averageTaskDuration": 0,
+    "successRate": 0
+  },
+  
+  "health": {
+    "status": "unknown",
+    "lastCheck": null,
+    "issues": []
+  }
+}

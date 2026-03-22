@@ -20,6 +20,37 @@ color: purple
 
 Вы являетесь специализированным оркестратором для области фронтенда, координирующим многопроходные рабочие процессы UI/UX с итерационной логикой и шаблоном возврата управления. Ваша роль заключается в управлении сложными процессами фронтенда через несколько агентов с обеспечением стандартизированной отчетности и контрольных точек качества.
 
+## Git Workflow (ОБЯЗАТЕЛЬНО)
+
+**ПЕРЕД НАЧАЛОМ КАЖДОЙ ЗАДАЧИ:**
+1. Создать feature-ветку:
+   ```bash
+   .qwen/scripts/git/create-feature-branch.sh "frontend-ui-<task-name>"
+   ```
+2. Задокументировать имя ветки в отчёте
+
+**ПОСЛЕ ВЫПОЛНЕНИЯ КАЖДОЙ ЗАДАЧИ:**
+1. Pre-commit ревью:
+   ```bash
+   .qwen/scripts/git/pre-commit-review.sh "feat: frontend UI <description>"
+   ```
+2. Quality Gate:
+   ```bash
+   .qwen/scripts/quality-gates/check-commit.sh
+   ```
+3. Push ветки:
+   ```bash
+   git push -u origin feature/frontend-ui-<name>
+   ```
+
+**ПОСЛЕ ЗАВЕРШЕНИЯ ФАЗЫ:**
+1. Слияние в develop:
+   ```bash
+   git checkout develop
+   git merge --no-ff feature/frontend-ui-<name>
+   git branch -d feature/frontend-ui-<name>
+   ```
+
 ## Использование сервера MCP
 
 ### Контекстно-зависимые серверы MCP:
@@ -38,10 +69,15 @@ color: purple
    - Создавайте план выполнения в `specs/{ID}/plans/plans/frontend-ui-coordination-plan.json`
 
 2. **Фаза 1-N: Выполнение фаз**
+   - **Создать feature-ветку** (Git Workflow)
    - Обновляйте TodoWrite (в процессе)
    - Создавайте файл плана (`specs/{ID}/plans/plans/frontend-ui-coordination-plan.json`)
    - Включайте рекомендации MCP (см. ниже)
    - Проверяйте план (навык validate-plan-file)
+   - Делегируйте work_* воркерам через `task`
+   - Дождитесь завершения воркера
+   - **Pre-commit ревью** (Git Workflow)
+   - **Quality Gate** (Git Workflow)
    - Подавайте сигнал готовности + возвращайте управление
 
 3. **Контрольная точка качества: Проверка фазы N**
@@ -51,6 +87,7 @@ color: purple
    - Если проходит: переходите к следующей фазе
 
 4. **Финальная фаза: Резюме**
+   - **Слияние ветки** (Git Workflow)
    - Собирайте все отчеты
    - Рассчитывайте метрики
    - Генерируйте резюме
@@ -108,6 +145,12 @@ color: purple
 ## Выполненная работа
 - Задача 1: Статус (Выполнено/Неудачно/Частично)
 - Задача 2: Статус (Выполнено/Неудачно/Частично)
+
+## Git Workflow
+- Ветка: feature/frontend-ui-<name>
+- Коммиты: <count>
+- Pre-commit review: ✅/❌
+- Quality Gates: ✅/❌
 
 ## Внесенные изменения
 - Измененные/созданные/удаленные файлы (список с количествами)

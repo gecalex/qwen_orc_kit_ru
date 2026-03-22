@@ -102,6 +102,75 @@ color: $COLOR
 ## Назначение
 Краткое описание функций агента $FULL_NAME. Агент должен выполнять задачи в домене $DOMAIN и следовать архитектурным принципам проекта.
 
+## Git Workflow (ОБЯЗАТЕЛЬНО)
+EOF
+
+# Добавление Git Workflow в зависимости от типа агента
+if [ "$AGENT_TYPE" = "orc" ]; then
+    cat >> "$AGENT_FILE" << 'EOF'
+
+**ПЕРЕД НАЧАЛОМ КАЖДОЙ ЗАДАЧИ:**
+1. Создать feature-ветку:
+   ```bash
+   .qwen/scripts/git/create-feature-branch.sh "<domain>-<task-name>"
+   ```
+2. Задокументировать имя ветки в отчёте
+
+**ПОСЛЕ ВЫПОЛНЕНИЯ КАЖДОЙ ЗАДАЧИ:**
+1. Pre-commit ревью:
+   ```bash
+   .qwen/scripts/git/pre-commit-review.sh "feat: <domain> <description>"
+   ```
+2. Quality Gate:
+   ```bash
+   .qwen/scripts/quality-gates/check-commit.sh
+   ```
+3. Push ветки:
+   ```bash
+   git push -u origin feature/<domain>-<name>
+   ```
+
+**ПОСЛЕ ЗАВЕРШЕНИЯ ФАЗЫ:**
+1. Слияние в develop:
+   ```bash
+   git checkout develop
+   git merge --no-ff feature/<domain>-<name>
+   git branch -d feature/<domain>-<name>
+   ```
+EOF
+else
+    cat >> "$AGENT_FILE" << 'EOF'
+
+**ВОЛНОВЫЕ АГЕНТЫ выполняют Git Workflow после КАЖДОЙ задачи:**
+
+**ПОСЛЕ ВЫПОЛНЕНИЯ ЗАДАЧИ:**
+1. Pre-commit ревью:
+   ```bash
+   .qwen/scripts/git/pre-commit-review.sh "<type>: <description>"
+   ```
+   Где `<type>`: feat, fix, docs, style, refactor, test, chore
+
+2. Quality Gate:
+   ```bash
+   .qwen/scripts/quality-gates/check-commit.sh
+   ```
+
+3. Коммит (только после успешного Quality Gate):
+   ```bash
+   git add -A
+   git commit -m "<type>: <description>"
+   ```
+
+**ВАЖНО:**
+- Воркеры НЕ создают feature-ветки (это делает оркестратор)
+- Воркеры ДЕЛАЮТ коммиты после каждой завершённой задачи
+- Воркеры ПРОВЕРЯЮТ Quality Gate перед коммитом
+EOF
+fi
+
+# Добавление остальной части шаблона
+cat >> "$AGENT_FILE" << EOF
+
 ## Использование сервера MCP
 - Используйте \`mcp__context7__*\` для поиска актуальных паттернов и API при реализации функций
 - Триггер: При реализации функций с использованием внешних библиотек или фреймворков
@@ -128,10 +197,13 @@ color: $COLOR
 4.2. Убедиться, что результат соответствует требованиям
 4.3. Проверить соблюдение стандартов качества
 
-### Фаза 5: Отчетность
-5.1. Сформировать отчет о выполнении задачи
-5.2. Зафиксировать метрики выполнения
-5.3. Подготовить данные для следующего этапа (если применимо)
+### Фаза 5: Git Workflow и Отчетность
+5.1. **Pre-commit ревью** (Git Workflow)
+5.2. **Quality Gate** (Git Workflow)
+5.3. **Коммит** (Git Workflow)
+5.4. Сформировать отчет о выполнении задачи
+5.5. Зафиксировать метрики выполнения
+5.6. Подготовить данные для следующего этапа (если применимо)
 
 ## Формат файла плана
 \`\`\`json
@@ -162,6 +234,10 @@ color: $COLOR
 - Заголовок: "Выполнение задачи: {описание_задачи}"
 - Исполнительное резюме: Краткое описание выполненной работы
 - Выполненная работа: Перечень выполненных действий
+- **Git Workflow:**
+  - Pre-commit review: ✅/❌
+  - Quality Gate: ✅/❌
+  - Коммит: <hash>
 - Внесенные изменения: Список измененных файлов
 - Результаты валидации: Статус проверок качества
 - Метрики: Время выполнения, количество обработанных элементов
@@ -177,8 +253,6 @@ color: $COLOR
 - \`validate-plan-file\` - для проверки корректности плана
 - \`validate-report-file\` - для проверки формата отчетов
 EOF
-
-log_success "Агент $FULL_NAME успешно создан: $AGENT_FILE"
 
 # Обновление индекса агентов (если файл существует)
 if [ -f "docs/agents-index.md" ]; then

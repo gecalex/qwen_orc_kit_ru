@@ -238,9 +238,8 @@ while IFS= read -r line || [ -n "$line" ]; do
             # Проверка существования агента
             if check_agent_exists "$AGENT_NAME"; then
                 log_success "Задача: $CURRENT_TASK → Агент: $AGENT_NAME"
-                ASSIGNED_TASKS=$((ASSIGNED_TASKS + 1))
                 ASSIGNED_AGENTS+=("$AGENT_NAME")
-                
+
                 # Добавление агента в описание задачи
                 echo "$LINE"
                 echo "- **Агент:** $AGENT_NAME"
@@ -248,12 +247,12 @@ while IFS= read -r line || [ -n "$line" ]; do
                 log_warning "Задача: $CURRENT_TASK → Агент не найден: $AGENT_NAME (помечено)"
                 NEEDS_CREATION=$((NEEDS_CREATION + 1))
                 MISSING_AGENTS+=("$AGENT_NAME")
-                
+
                 # Пометка отсутствующего агента
                 echo "$LINE"
                 echo "- **Агент:** [needs_creation:$AGENT_NAME]"
             fi
-            
+
             ASSIGNED_TASKS=$((ASSIGNED_TASKS + 1))
         fi
         

@@ -227,8 +227,8 @@ CURRENT_DESC=""
 IN_TASK=false
 
 while IFS= read -r line || [ -n "$line" ]; do
-    # Проверка на начало задачи (### T-XXX: или ### T-XXX)
-    if echo "$line" | grep -qE "^### (T-[0-9]+:|T-[0-9]+)"; then
+    # Проверка на начало задачи (### T001: или ### T-001: или ### T001)
+    if echo "$line" | grep -qE "^### (T[0-9]+:|T-[0-9]+:|T[0-9]+)"; then
         # Если была предыдущая задача, записываем её
         if [ -n "$CURRENT_TASK" ]; then
             # Определение агента для предыдущей задачи

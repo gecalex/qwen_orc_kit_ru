@@ -59,10 +59,10 @@ fix_tools_format() {
             print;
             next;
         }
-        in_yaml && in_tools && /^[[:space:]]*-[[:space:]]*'[^']*'/ { 
+        in_yaml && in_tools && /^[[:space:]]*-[[:space:]]*'"'"'[^'"'"']*'"'"'/ {
             # Обработка строк вида - 'tool_name'
             gsub(/^[[:space:]]*-/, " -");
-            gsub(/'/, "");
+            gsub(/'"'"'/, "");
             print;
             next;
         }

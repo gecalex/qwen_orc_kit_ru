@@ -5,12 +5,14 @@
 # Функция для подсчета файлов определенного типа
 count_files_by_extension() {
     local extension=$1
-    local count=$(find . -name "*.$extension" -type f 2>/dev/null | wc -l)
+    # Исключаем директорию .qwen/ из подсчёта (системная директория Qwen Code)
+    local count=$(find . -path "./.qwen" -prune -o -name "*.$extension" -type f -print 2>/dev/null | wc -l)
     echo $count
 }
 
 # Функция для проверки наличия директорий
 check_directories() {
+    # Исключаем системные директории (.qwen, .git, .specify)
     local dirs=("src" "lib" "app" "backend" "frontend" "api" "services" "models" "components" "core")
     local found_dirs=()
 

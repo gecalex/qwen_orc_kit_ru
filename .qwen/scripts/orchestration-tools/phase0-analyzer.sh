@@ -10,7 +10,7 @@ set -e
 
 # Конфигурация
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 SPECS_DIR="$PROJECT_ROOT/specs"
 TMP_DIR="$PROJECT_ROOT/.tmp/current"
 ASSIGN_SCRIPT="$PROJECT_ROOT/.qwen/scripts/specification-tools/assign-agents-to-tasks.sh"

@@ -5,12 +5,14 @@
 # Функция для подсчета файлов определенного типа
 count_files_by_extension() {
     local extension=$1
-    local count=$(find . -name "*.$extension" -type f 2>/dev/null | wc -l)
+    # Исключаем директорию .qwen/ из подсчёта (системная директория Qwen Code)
+    local count=$(find . -path "./.qwen" -prune -o -name "*.$extension" -type f -print 2>/dev/null | wc -l)
     echo $count
 }
 
 # Функция для проверки наличия директорий
 check_directories() {
+    # Исключаем системные директории (.qwen, .git, .specify)
     local dirs=("src" "lib" "app" "backend" "frontend" "api" "services" "models" "components" "core")
     local found_dirs=()
 
@@ -25,10 +27,12 @@ check_directories() {
 
 # Функция для проверки наличия файлов конфигурации
 check_config_files() {
-    local configs=("package.json" "pyproject.toml" "requirements.txt" "Gemfile" "Cargo.toml" "go.mod" "pom.xml" "build.gradle" "composer.json")
+    # Исключаем package.json из корня (может быть частью Qwen Code)
+    # Считаем только конфиги, которые указывают на наличие проекта
+    local project_configs=("pyproject.toml" "requirements.txt" "Gemfile" "Cargo.toml" "go.mod" "pom.xml" "build.gradle" "composer.json")
     local found_configs=()
 
-    for config in "${configs[@]}"; do
+    for config in "${project_configs[@]}"; do
         if [ -f "$config" ]; then
             found_configs+=("$config")
         fi

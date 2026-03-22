@@ -7,6 +7,16 @@
 .DS_Store
 Thumbs.db
 
+# Директории разработки (не включать в релиз)
+reports/
+specs/
+tests/
+
+# Файлы Claude (не относятся к Qwen Orchestrator Kit)
+.qwen/docs/claude*
+.qwen/docs/tmp/claude*
+.qwen/docs/reports/reports/analysis-of-differences-between-qwen-and-claude*
+
 # Виртуальные окружения
 .venv/
 venv/

@@ -87,13 +87,16 @@ log_info "Инициализация нового Git репозитория..."
 git init
 log_success "  Git репозиторий инициализирован"
 
-# Создание .gitignore (если не существует)
-if [ ! -f ".gitignore" ]; then
-    log_info "Создание .gitignore..."
-    cat > .gitignore << 'EOF'
-# Qwen Code
-.qwen/
+# Удаление старого .gitignore (из шаблона разработки)
+if [ -f ".gitignore" ]; then
+    log_info "Удаление старого .gitignore (шаблон разработки)..."
+    rm -f ".gitignore"
+    log_success "  Старый .gitignore удалён"
+fi
 
+# Создание чистого .gitignore для проекта пользователя
+log_info "Создание .gitignore для проекта..."
+cat > .gitignore << 'EOF'
 # Node modules
 node_modules/
 
@@ -135,10 +138,7 @@ build/
 *.min.js
 *.min.css
 EOF
-    log_success "  .gitignore создан"
-else
-    log_info "  .gitignore уже существует"
-fi
+log_success "  .gitignore создан (НЕ игнорирует .qwen/!)"
 
 # Создание начальной структуры README.md
 log_info "Создание README.md..."

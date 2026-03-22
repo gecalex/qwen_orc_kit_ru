@@ -73,6 +73,16 @@ for file in "${FILES_TO_REMOVE[@]}"; do
     fi
 done
 
+# Удаление директорий разработки (не нужны в проекте пользователя)
+DIRS_TO_REMOVE=("reports" "specs" "tests")
+log_info "Удаление директорий разработки..."
+for dir in "${DIRS_TO_REMOVE[@]}"; do
+    if [ -d "$dir" ]; then
+        rm -rf "$dir"
+        log_info "  Удалена директория: $dir"
+    fi
+done
+
 # Удаление старой директории .git (если существует)
 if [ -d ".git" ]; then
     log_info "Удаление старой Git истории..."

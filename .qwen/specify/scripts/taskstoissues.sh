@@ -59,7 +59,7 @@ check_env() {
 check_dependencies() {
     log_info "Проверка зависимостей..."
     
-    if [ ! -f "$PROJECT_ROOT/specs/$SPEC_ID/tasks.md" ]; then
+    if [ ! -f "$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/tasks.md" ]; then
         log_error "tasks.md не найден. Запустите сначала speckit.tasks"
         exit 1
     fi
@@ -79,8 +79,8 @@ check_dependencies() {
 
 # Парсинг задач из tasks.md
 parse_tasks() {
-    local tasks_file="$PROJECT_ROOT/specs/$SPEC_ID/tasks.md"
-    local parsed_tasks="$PROJECT_ROOT/specs/$SPEC_ID/parsed-tasks.json"
+    local tasks_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/tasks.md"
+    local parsed_tasks="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/parsed-tasks.json"
     
     log_info "Парсинг задач из tasks.md..."
     
@@ -204,7 +204,7 @@ add_labels() {
 
 # Создание лога создания issues
 create_issues_log() {
-    local log_file="$PROJECT_ROOT/specs/$SPEC_ID/issues-log.md"
+    local log_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/issues-log.md"
     
     log_info "Создание issues-log.md..."
     
@@ -256,7 +256,7 @@ EOF
 
 # Создание github-links.md
 create_github_links() {
-    local links_file="$PROJECT_ROOT/specs/$SPEC_ID/github-links.md"
+    local links_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/github-links.md"
     
     log_info "Создание github-links.md..."
     
@@ -305,7 +305,7 @@ EOF
 
 # Обновление tasks.md ссылками
 update_tasks_with_links() {
-    local tasks_file="$PROJECT_ROOT/specs/$SPEC_ID/tasks.md"
+    local tasks_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/tasks.md"
     
     log_info "Обновление tasks.md ссылками на issues..."
     
@@ -333,7 +333,7 @@ EOF
 
 # Обновление состояния
 update_state() {
-    local state_file="$PROJECT_ROOT/specs/$SPEC_ID/state.json"
+    local state_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/state.json"
     
     log_info "Обновление состояния..."
     
@@ -351,7 +351,7 @@ main() {
     DRY_RUN="${2:-false}"
     
     if [ -z "$SPEC_ID" ]; then
-        SPEC_ID=$(ls -t "$PROJECT_ROOT/specs/" 2>/dev/null | head -1)
+        SPEC_ID=$(ls -t "$PROJECT_ROOT/.qwen/specify/specs/" 2>/dev/null | head -1)
         if [ -z "$SPEC_ID" ]; then
             log_error "SPEC_ID не указан и спецификации не найдены"
             exit 1

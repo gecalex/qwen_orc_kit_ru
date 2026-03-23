@@ -45,10 +45,10 @@
 
 ## Выходные артефакты
 
-- `specs/{ID}/checklist.md` - Основной чек-лист
-- `specs/{ID}/acceptance-tests.md` - Acceptance тесты
-- `specs/{ID}/acceptance-criteria.md` - Критерии приемки
-- `specs/{ID}/validation-report.md` - Отчет валидации
+- `.qwen/specify/.qwen/specify/specs/{ID}/checklist.md` - Основной чек-лист
+- `.qwen/specify/.qwen/specify/specs/{ID}/acceptance-tests.md` - Acceptance тесты
+- `.qwen/specify/.qwen/specify/specs/{ID}/acceptance-criteria.md` - Критерии приемки
+- `.qwen/specify/.qwen/specify/specs/{ID}/validation-report.md` - Отчет валидации
 
 ## Интеграция
 
@@ -56,7 +56,7 @@
 
 **Следующая команда:** `speckit.tasks`
 
-**Зависимости:** `specs/{ID}/spec.md`, `specs/{ID}/implementation-summary.md`
+**Зависимости:** `.qwen/specify/.qwen/specify/specs/{ID}/spec.md`, `.qwen/specify/.qwen/specify/specs/{ID}/implementation-summary.md`
 
 ## Пример структуры checklist.md
 

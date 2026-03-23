@@ -47,10 +47,10 @@
 
 ## Выходные артефакты
 
-- `specs/{ID}/plan.md` - Основной план реализации
-- `specs/{ID}/timeline.md` - Временная шкала
-- `specs/{ID}/dependencies.md` - Матрица зависимостей
-- `specs/{ID}/resource-plan.md` - План ресурсов
+- `.qwen/specify/.qwen/specify/specs/{ID}/plan.md` - Основной план реализации
+- `.qwen/specify/.qwen/specify/specs/{ID}/timeline.md` - Временная шкала
+- `.qwen/specify/.qwen/specify/specs/{ID}/dependencies.md` - Матрица зависимостей
+- `.qwen/specify/.qwen/specify/specs/{ID}/resource-plan.md` - План ресурсов
 
 ## Интеграция
 
@@ -58,7 +58,7 @@
 
 **Следующая команда:** `speckit.implement`
 
-**Зависимости:** `specs/{ID}/spec.md`
+**Зависимости:** `.qwen/specify/.qwen/specify/specs/{ID}/spec.md`
 
 ## Пример структуры plan.md
 

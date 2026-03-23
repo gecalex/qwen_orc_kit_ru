@@ -28,25 +28,19 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 # Проверка зависимостей
 check_dependencies() {
     log_info "Проверка зависимостей..."
-    
-    if [ ! -f "$PROJECT_ROOT/specs/$SPEC_ID/spec.md" ]; then
-        log_error "spec.md не найден. Запустите сначала speckit.specify"
-        exit 1
-    fi
-    
-    if [ ! -f "$PROJECT_ROOT/specs/$SPEC_ID/tasks.md" ]; then
-        log_warning "tasks.md не найден. Запустите speckit.tasks"
-    fi
-    
-    log_success "Зависимости проверены"
+
+    # constitution.md - ПЕРВАЯ команда, нет зависимостей!
+    # Speckit стандарт: конституция создаётся до spec.md и tasks.md
+
+    log_success "Зависимости проверены (нет зависимостей - первая команда)"
 }
 
 # Создание constitution.md
 create_constitution() {
-    local constitution_file="$PROJECT_ROOT/specs/$SPEC_ID/constitution.md"
-    
+    local constitution_file="$PROJECT_ROOT/.qwen/specify/memory/constitution.md"
+
     log_info "Создание constitution.md..."
-    
+
     cat > "$constitution_file" << EOF
 # Project Constitution: $PROJECT_NAME
 
@@ -314,7 +308,7 @@ EOF
 
 # Создание coding-standards.md
 create_coding_standards() {
-    local standards_file="$PROJECT_ROOT/specs/$SPEC_ID/coding-standards.md"
+    local standards_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/coding-standards.md"
     
     log_info "Создание coding-standards.md..."
     
@@ -464,7 +458,7 @@ EOF
 
 # Создание architecture-rules.md
 create_architecture_rules() {
-    local rules_file="$PROJECT_ROOT/specs/$SPEC_ID/architecture-rules.md"
+    local rules_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/architecture-rules.md"
     
     log_info "Создание architecture-rules.md..."
     
@@ -555,7 +549,7 @@ EOF
 
 # Создание review-checklist.md
 create_review_checklist() {
-    local checklist_file="$PROJECT_ROOT/specs/$SPEC_ID/review-checklist.md"
+    local checklist_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/review-checklist.md"
     
     log_info "Создание review-checklist.md..."
     
@@ -646,7 +640,7 @@ EOF
 
 # Обновление состояния
 update_state() {
-    local state_file="$PROJECT_ROOT/specs/$SPEC_ID/state.json"
+    local state_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/state.json"
     
     log_info "Обновление состояния..."
     
@@ -664,7 +658,7 @@ main() {
     PROJECT_NAME="${2:-New Project}"
     
     if [ -z "$SPEC_ID" ]; then
-        SPEC_ID=$(ls -t "$PROJECT_ROOT/specs/" 2>/dev/null | head -1)
+        SPEC_ID=$(ls -t "$PROJECT_ROOT/.qwen/specify/specs/" 2>/dev/null | head -1)
         if [ -z "$SPEC_ID" ]; then
             log_error "SPEC_ID не указан и спецификации не найдены"
             exit 1

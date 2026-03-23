@@ -44,10 +44,10 @@
 
 ## Выходные артефакты
 
-- `specs/{ID}/spec.md` - Обновленная спецификация
-- `specs/{ID}/clarification-questions.md` - Список вопросов
-- `specs/{ID}/clarification-answers.md` - Ответы пользователя
-- `specs/{ID}/spec-changelog.md` - История изменений
+- `.qwen/specify/.qwen/specify/specs/{ID}/spec.md` - Обновленная спецификация
+- `.qwen/specify/.qwen/specify/specs/{ID}/clarification-questions.md` - Список вопросов
+- `.qwen/specify/.qwen/specify/specs/{ID}/clarification-answers.md` - Ответы пользователя
+- `.qwen/specify/.qwen/specify/specs/{ID}/spec-changelog.md` - История изменений
 
 ## Интеграция
 
@@ -55,7 +55,7 @@
 
 **Следующая команда:** `speckit.plan`
 
-**Зависимости:** `specs/{ID}/spec.md`
+**Зависимости:** `.qwen/specify/.qwen/specify/specs/{ID}/spec.md`
 
 ## Пример вопросов для уточнения
 

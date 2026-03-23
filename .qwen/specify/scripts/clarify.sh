@@ -28,7 +28,7 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 check_dependencies() {
     log_info "Проверка зависимостей..."
     
-    if [ ! -f "$PROJECT_ROOT/specs/$SPEC_ID/spec.md" ]; then
+    if [ ! -f "$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/spec.md" ]; then
         log_error "spec.md не найден. Запустите сначала speckit.specify"
         exit 1
     fi
@@ -38,8 +38,8 @@ check_dependencies() {
 
 # Анализ пробелов
 analyze_gaps() {
-    local spec_file="$PROJECT_ROOT/specs/$SPEC_ID/spec.md"
-    local gaps_file="$PROJECT_ROOT/specs/$SPEC_ID/gaps-analysis.md"
+    local spec_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/spec.md"
+    local gaps_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/gaps-analysis.md"
     
     log_info "Анализ пробелов в спецификации..."
     
@@ -79,7 +79,7 @@ EOF
 
 # Генерация вопросов
 generate_questions() {
-    local questions_file="$PROJECT_ROOT/specs/$SPEC_ID/clarification-questions.md"
+    local questions_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/clarification-questions.md"
     
     log_info "Генерация вопросов для уточнения..."
     
@@ -159,8 +159,8 @@ EOF
 
 # Обновление спецификации
 update_spec() {
-    local answers_file="$PROJECT_ROOT/specs/$SPEC_ID/clarification-answers.md"
-    local changelog_file="$PROJECT_ROOT/specs/$SPEC_ID/spec-changelog.md"
+    local answers_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/clarification-answers.md"
+    local changelog_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/spec-changelog.md"
     
     log_info "Подготовка к обновлению спецификации..."
     
@@ -206,7 +206,7 @@ EOF
 
 # Обновление состояния
 update_state() {
-    local state_file="$PROJECT_ROOT/specs/$SPEC_ID/state.json"
+    local state_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/state.json"
     
     log_info "Обновление состояния..."
     
@@ -223,7 +223,7 @@ main() {
     SPEC_ID="${1:-}"
     
     if [ -z "$SPEC_ID" ]; then
-        SPEC_ID=$(ls -t "$PROJECT_ROOT/specs/" 2>/dev/null | head -1)
+        SPEC_ID=$(ls -t "$PROJECT_ROOT/.qwen/specify/specs/" 2>/dev/null | head -1)
         if [ -z "$SPEC_ID" ]; then
             log_error "SPEC_ID не указан и спецификации не найдены"
             exit 1

@@ -29,7 +29,7 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 check_dependencies() {
     log_info "Проверка зависимостей..."
     
-    if [ ! -f "$PROJECT_ROOT/specs/$SPEC_ID/requirements.md" ]; then
+    if [ ! -f "$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/requirements.md" ]; then
         log_error "requirements.md не найден. Запустите сначала speckit.analyze"
         exit 1
     fi
@@ -39,7 +39,7 @@ check_dependencies() {
 
 # Создание spec.md
 create_spec() {
-    local spec_file="$PROJECT_ROOT/specs/$SPEC_ID/spec.md"
+    local spec_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/spec.md"
     
     log_info "Создание spec.md..."
     
@@ -182,7 +182,7 @@ EOF
 
 # Создание резюме
 create_summary() {
-    local summary_file="$PROJECT_ROOT/specs/$SPEC_ID/spec-summary.md"
+    local summary_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/spec-summary.md"
     
     log_info "Создание резюме спецификации..."
     
@@ -219,7 +219,7 @@ EOF
 
 # Создание глоссария
 create_glossary() {
-    local glossary_file="$PROJECT_ROOT/specs/$SPEC_ID/glossary.md"
+    local glossary_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/glossary.md"
     
     log_info "Создание глоссария..."
     
@@ -252,7 +252,7 @@ EOF
 
 # Обновление состояния
 update_state() {
-    local state_file="$PROJECT_ROOT/specs/$SPEC_ID/state.json"
+    local state_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/state.json"
     
     log_info "Обновление состояния..."
     
@@ -271,7 +271,7 @@ main() {
     
     if [ -z "$SPEC_ID" ]; then
         # Поиск последней спецификации
-        SPEC_ID=$(ls -t "$PROJECT_ROOT/specs/" 2>/dev/null | head -1)
+        SPEC_ID=$(ls -t "$PROJECT_ROOT/.qwen/specify/specs/" 2>/dev/null | head -1)
         if [ -z "$SPEC_ID" ]; then
             log_error "SPEC_ID не указан и спецификации не найдены"
             exit 1

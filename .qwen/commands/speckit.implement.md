@@ -44,10 +44,10 @@
 
 ## Выходные артефакты
 
-- `specs/{ID}/implementation-log.md` - Лог выполнения
-- `specs/{ID}/phase-reports/` - Отчеты по фазам
-- `specs/{ID}/implementation-summary.md` - Итоговое резюме
-- `specs/{ID}/code-changes.md` - Список изменений кода
+- `.qwen/specify/.qwen/specify/specs/{ID}/implementation-log.md` - Лог выполнения
+- `.qwen/specify/.qwen/specify/specs/{ID}/phase-reports/` - Отчеты по фазам
+- `.qwen/specify/.qwen/specify/specs/{ID}/implementation-summary.md` - Итоговое резюме
+- `.qwen/specify/.qwen/specify/specs/{ID}/code-changes.md` - Список изменений кода
 
 ## Интеграция
 
@@ -55,7 +55,7 @@
 
 **Следующая команда:** `speckit.checklist`
 
-**Зависимости:** `specs/{ID}/plan.md`
+**Зависимости:** `.qwen/specify/.qwen/specify/specs/{ID}/plan.md`
 
 ## Агенты для делегирования
 

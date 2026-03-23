@@ -31,7 +31,7 @@ log_progress() { echo -e "${CYAN}[PROGRESS]${NC} $1"; }
 check_dependencies() {
     log_info "Проверка зависимостей..."
     
-    if [ ! -f "$PROJECT_ROOT/specs/$SPEC_ID/plan.md" ]; then
+    if [ ! -f "$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/plan.md" ]; then
         log_error "plan.md не найден. Запустите сначала speckit.plan"
         exit 1
     fi
@@ -41,7 +41,7 @@ check_dependencies() {
 
 # Инициализация логов реализации
 init_implementation_log() {
-    local log_file="$PROJECT_ROOT/specs/$SPEC_ID/implementation-log.md"
+    local log_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/implementation-log.md"
     
     log_info "Инициализация лога реализации..."
     
@@ -77,12 +77,12 @@ EOF
 execute_phase() {
     local phase_num="$1"
     local phase_name="$2"
-    local log_file="$PROJECT_ROOT/specs/$SPEC_ID/implementation-log.md"
+    local log_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/implementation-log.md"
     
     log_progress "Начало фазы $phase_num: $phase_name"
     
     # Создание отчета о фазе
-    local phase_report="$PROJECT_ROOT/specs/$SPEC_ID/phase-reports/phase-$phase_num-report.md"
+    local phase_report="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/phase-reports/phase-$phase_num-report.md"
     mkdir -p "$(dirname "$phase_report")"
     
     cat > "$phase_report" << EOF
@@ -125,12 +125,12 @@ delegate_task() {
     local task_id="$1"
     local task_desc="$2"
     local agent="$3"
-    local log_file="$PROJECT_ROOT/specs/$SPEC_ID/implementation-log.md"
+    local log_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/implementation-log.md"
     
     log_info "Делегирование задачи $task_id агенту $agent..."
     
     # Создание директории для задачи
-    local task_dir="$PROJECT_ROOT/specs/$SPEC_ID/tasks/$task_id"
+    local task_dir="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/tasks/$task_id"
     mkdir -p "$task_dir"
     
     # Создание контекста задачи
@@ -168,7 +168,7 @@ EOF
 
 # Мониторинг прогресса
 monitor_progress() {
-    local log_file="$PROJECT_ROOT/specs/$SPEC_ID/implementation-log.md"
+    local log_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/implementation-log.md"
     local total_tasks=17  # Из плана
     local completed=0
     local in_progress=0
@@ -176,8 +176,8 @@ monitor_progress() {
     log_info "Мониторинг прогресса..."
     
     # Подсчет выполненных задач
-    if [ -d "$PROJECT_ROOT/specs/$SPEC_ID/tasks" ]; then
-        for task_dir in "$PROJECT_ROOT/specs/$SPEC_ID/tasks"/T-*; do
+    if [ -d "$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/tasks" ]; then
+        for task_dir in "$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/tasks"/T-*; do
             if [ -d "$task_dir" ]; then
                 if [ -f "$task_dir/completed.md" ]; then
                     ((completed++))
@@ -205,7 +205,7 @@ monitor_progress() {
 
 # Создание итогового резюме
 create_summary() {
-    local summary_file="$PROJECT_ROOT/specs/$SPEC_ID/implementation-summary.md"
+    local summary_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/implementation-summary.md"
     
     log_info "Создание итогового резюме..."
     
@@ -282,7 +282,7 @@ EOF
 
 # Обновление состояния
 update_state() {
-    local state_file="$PROJECT_ROOT/specs/$SPEC_ID/state.json"
+    local state_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/state.json"
     
     log_info "Обновление состояния..."
     
@@ -301,7 +301,7 @@ main() {
     PHASE="${3:-all}"
     
     if [ -z "$SPEC_ID" ]; then
-        SPEC_ID=$(ls -t "$PROJECT_ROOT/specs/" 2>/dev/null | head -1)
+        SPEC_ID=$(ls -t "$PROJECT_ROOT/.qwen/specify/specs/" 2>/dev/null | head -1)
         if [ -z "$SPEC_ID" ]; then
             log_error "SPEC_ID не указан и спецификации не найдены"
             exit 1

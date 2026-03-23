@@ -86,7 +86,7 @@ EOF
 # Сбор требований
 collect_requirements() {
     local spec_id="$1"
-    local requirements_file="$PROJECT_ROOT/specs/$spec_id/requirements.md"
+    local requirements_file="$PROJECT_ROOT/.qwen/specify/specs/$spec_id/requirements.md"
     
     log_info "Сбор требований..."
     
@@ -136,8 +136,8 @@ EOF
 # Анализ полноты
 analyze_completeness() {
     local spec_id="$1"
-    local requirements_file="$PROJECT_ROOT/specs/$spec_id/requirements.md"
-    local analysis_file="$PROJECT_ROOT/specs/$spec_id/analysis-report.md"
+    local requirements_file="$PROJECT_ROOT/.qwen/specify/specs/$spec_id/requirements.md"
+    local analysis_file="$PROJECT_ROOT/.qwen/specify/specs/$spec_id/analysis-report.md"
     
     log_info "Анализ полноты требований..."
     
@@ -208,7 +208,7 @@ EOF
 # Выявление противоречий
 detect_contradictions() {
     local spec_id="$1"
-    local contradictions_file="$PROJECT_ROOT/specs/$spec_id/contradictions.md"
+    local contradictions_file="$PROJECT_ROOT/.qwen/specify/specs/$spec_id/contradictions.md"
     
     log_info "Выявление противоречий..."
     
@@ -237,7 +237,7 @@ EOF
 # Обновление состояния
 update_state() {
     local spec_id="$1"
-    local state_file="$PROJECT_ROOT/specs/$spec_id/state.json"
+    local state_file="$PROJECT_ROOT/.qwen/specify/specs/$spec_id/state.json"
     
     log_info "Обновление состояния..."
     

@@ -1,74 +1,70 @@
-# SpecKit Command: Constitution
+---
+description: Создание конституции проекта — ПЕРВАЯ команда, нет зависимостей
+scripts.sh: scripts/bash/constitution.sh
+scripts.ps: scripts/powershell/constitution.ps1
+handoffs:
+  - label: "Создать спецификацию"
+    agent: speckit.specify
+    prompt: "Создать спецификацию на основе конституции"
+---
 
-**Назначение:** Создание конституции проекта
+# Speckit Command: constitution
 
-**Версия:** 1.0.0
+**Назначение:** Создание конституции проекта — фундаментальные принципы и стандарты
+
+**Версия:** 2.0.0 (Speckit стандарт)
+
+**Порядок:** ПЕРВАЯ команда (нет зависимостей)
 
 ---
 
 ## Описание
 
-Команда `speckit.constitution` генерирует конституцию проекта, определяющую принципы разработки, стандарты кода и архитектурные ограничения.
+Команда `/speckit.constitution` создаёт конституцию проекта — документ с фундаментальными принципами, стандартами и архитектурными ограничениями.
+
+**Speckit стандарт:**
+- Конституция создаётся ПЕРВОЙ
+- Нет зависимостей от spec.md или tasks.md
+- Располагается в `.qwen/specify/memory/constitution.md`
+
+---
 
 ## Использование
 
 ```bash
-/qwen speckit.constitution
+/speckit.constitution
 ```
 
-## Функционал
+Или через Qwen Code CLI:
+```bash
+qwen
+# Введите: создай конституцию проекта для Personal Knowledge Base
+```
 
-### 1. Генерация constitution.md
-- Использование шаблона `.qwen/specify/templates/constitution-template.md`
-- Адаптация под конкретный проект
-- Определение фундаментальных принципов
-- Установление стандартов
+---
 
-### 2. Принципы разработки
-- Основные ценности проекта
-- Принципы чистого кода
-- Подходы к проектированию
-- Философия разработки
+## Что создаётся
 
-### 3. Стандарты кода
-- Стиль кодирования
-- Соглашения об именовании
-- Требования к документации
-- Практики код-ревью
+**Файлы:**
+- `.qwen/specify/memory/constitution.md` — конституция проекта
+- `.qwen/specify/memory/coding-standards.md` — стандарты кода
+- `.qwen/specify/memory/architecture-rules.md` — архитектурные правила
+- `.qwen/specify/memory/review-checklist.md` — чек-лист ревью
 
-### 4. Архитектурные ограничения
-- Запрещенные паттерны
-- Обязательные паттерны
-- Ограничения зависимостей
-- Требования к модульности
+---
 
-## Выходные артефакты
-
-- `specs/{ID}/constitution.md` - Конституция проекта
-- `specs/{ID}/coding-standards.md` - Стандарты кода
-- `specs/{ID}/architecture-rules.md` - Архитектурные правила
-- `specs/{ID}/review-checklist.md` - Чек-лист ревью
-
-## Интеграция
-
-**Предыдущая команда:** `speckit.tasks`
-
-**Следующая команда:** `speckit.taskstoissues`
-
-**Зависимости:** `specs/{ID}/spec.md`, `specs/{ID}/tasks.md`
-
-## Пример структуры constitution.md
+## Структура конституции
 
 ```markdown
 # Project Constitution: {Project Name}
 
 ## 1. Принципы разработки
-
 ### 1.1 Основные ценности
-- **Простота:** Предпочитать простые решения сложным
-- **Читаемость:** Код читается чаще чем пишется
-- **Тестируемость:** Нетестированный код не принимается
-- **Документированность:** Документация так же важна как код
+- Простота
+- Читаемость
+- Тестируемость
+- Документированность
+- Безопасность
 
 ### 1.2 Принципы чистого кода
 - DRY (Don't Repeat Yourself)
@@ -77,54 +73,83 @@
 - SOLID принципы
 
 ## 2. Стандарты кода
-
 ### 2.1 Стиль кодирования
-- Язык: TypeScript/JavaScript
-- Форматирование: Prettier
-- Линтер: ESLint
-- Отступы: 2 пробела
-
 ### 2.2 Соглашения об именовании
-- Переменные: camelCase
-- Функции: camelCase
-- Классы: PascalCase
-- Константы: UPPER_SNAKE_CASE
-- Файлы: kebab-case.ts
-
 ### 2.3 Требования к документации
-- JSDoc для всех публичных функций
-- README для каждого модуля
-- Комментарии для сложной логики
-- Примеры использования
 
 ## 3. Архитектурные ограничения
-
 ### 3.1 Обязательные паттерны
-- Dependency Injection
-- Repository Pattern для доступа к данным
-- Command/Query Separation
-
 ### 3.2 Запрещенные паттерны
-- Глобальные переменные
-- Singleton для бизнес-логики
-- Прямые импорты из node_modules в бизнес-логике
-
 ### 3.3 Ограничения зависимостей
-- Максимум 50 зависимостей
-- Только активные поддерживаемые пакеты
-- Обязательная проверка безопасности
-
-## 4. Практики код-ревью
-
-### 4.1 Требования к PR
-- [ ] Все тесты проходят
-- [ ] Coverage не уменьшился
-- [ ] Документация обновлена
-- [ ] Нет предупреждений линтера
-
-### 4.2 Критерии приемки кода
-- Код следует стандартам
-- Логика протестирована
-- Документация актуальна
-- Нет очевидных уязвимостей
 ```
+
+---
+
+## Интеграция
+
+**Предыдущая команда:** Нет (первая команда)
+
+**Следующая команда:** `/speckit.specify`
+
+**Зависимости:** Нет
+
+---
+
+## Пример использования
+
+**Пользователь:**
+```
+Создай конституцию для Personal Knowledge Base (PKB)
+
+Стек:
+- Frontend: React + TypeScript + Bootstrap
+- Backend: Python + FastAPI
+- БД: PostgreSQL (Supabase)
+
+Требования:
+- TDD обязательно
+- Документирование всех API
+- Безопасность данных
+```
+
+**Оркестратор:**
+1. Запускает `.qwen/specify/scripts/constitution.sh`
+2. Скрипт создаёт `.qwen/specify/memory/constitution.md`
+3. Возвращает путь к файлу
+4. Предлагает перейти к `/speckit.specify`
+
+---
+
+## Выходные данные
+
+```json
+{
+  "status": "success",
+  "files": {
+    "constitution": ".qwen/specify/memory/constitution.md",
+    "coding_standards": ".qwen/specify/memory/coding-standards.md",
+    "architecture_rules": ".qwen/specify/memory/architecture-rules.md",
+    "review_checklist": ".qwen/specify/memory/review-checklist.md"
+  },
+  "next_command": "speckit.specify"
+}
+```
+
+---
+
+## Speckit Стандарт
+
+**Согласно официальной документации Speckit:**
+- https://github.com/github/spec-kit
+- https://deepwiki.com/github/spec-kit/5.4-other-commands
+
+**Путь конституции:** `.specify/memory/constitution.md` (или `.qwen/specify/memory/constitution.md` в Qwen Orchestrator Kit)
+
+**Порядок команд:**
+1. `/speckit.constitution` ← ПЕРВАЯ
+2. `/speckit.specify`
+3. `/speckit.clarify`
+4. `/speckit.plan`
+5. `/speckit.tasks`
+6. `/speckit.analyze`
+7. `/speckit.implement`

@@ -44,10 +44,10 @@
 
 ## Выходные артефакты
 
-- `specs/{ID}/issues-log.md` - Лог создания issues
-- `specs/{ID}/github-links.md` - Ссылки на issues
-- `specs/{ID}/project-board.md` - Конфигурация проекта
-- `specs/{ID}/tasks.md` - Обновленный с ссылками
+- `.qwen/specify/.qwen/specify/specs/{ID}/issues-log.md` - Лог создания issues
+- `.qwen/specify/.qwen/specify/specs/{ID}/github-links.md` - Ссылки на issues
+- `.qwen/specify/.qwen/specify/specs/{ID}/project-board.md` - Конфигурация проекта
+- `.qwen/specify/.qwen/specify/specs/{ID}/tasks.md` - Обновленный с ссылками
 
 ## Интеграция
 
@@ -55,7 +55,7 @@
 
 **Следующая команда:** Завершение SpecKit workflow
 
-**Зависимости:** `specs/{ID}/tasks.md`, GitHub API credentials
+**Зависимости:** `.qwen/specify/.qwen/specify/specs/{ID}/tasks.md`, GitHub API credentials
 
 ## Требования к API
 
@@ -92,8 +92,8 @@ GITHUB_REPO=repository
 - Нет
 
 ## Ссылки
-- Spec: specs/PROJ-001/spec.md#FR-001
-- Plan: specs/PROJ-001/plan.md#task-001
+- Spec: .qwen/specify/specs/PROJ-001/spec.md#FR-001
+- Plan: .qwen/specify/specs/PROJ-001/plan.md#task-001
 ```
 
 ## Пример лога

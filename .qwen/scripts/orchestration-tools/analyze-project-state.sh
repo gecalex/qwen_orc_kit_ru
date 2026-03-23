@@ -52,12 +52,12 @@ check_specifications() {
 
 # Функция для проверки наличия конституции
 check_constitution() {
-    # Проверяем конституцию в корне проекта (новый формат)
-    if [ -f "constitution.md" ]; then
+    # Проверяем конституцию в правильном месте (Speckit стандарт)
+    if [ -f ".qwen/specify/memory/constitution.md" ]; then
         echo "found"
-    # Проверяем конституцию в старом месте (для совместимости)
-    elif [ -f ".specify/memory/constitution.md" ]; then
-        echo "found_legacy"
+    # Проверяем конституцию в корне проекта (проект пользователя)
+    elif [ -f "constitution.md" ]; then
+        echo "found_root"
     else
         echo "not_found"
     fi
@@ -109,7 +109,7 @@ if [ $total_code_files -eq 0 ] && [ ${#found_dirs[@]} -eq 0 ] && [ ${#found_conf
     project_state="empty"
     exit_code=10
 # Проверка на проект с полными спецификациями
-elif [ "$specs_status" == "found" ] && { [ "$constitution_status" == "found" ] || [ "$constitution_status" == "found_legacy" ]; }; then
+elif [ "$specs_status" == "found" ] && { [ "$constitution_status" == "found" ] || [ "$constitution_status" == "found_root" ]; }; then
     project_state="full_specification"
     exit_code=40
 # Проверка на проект с частичными спецификациями

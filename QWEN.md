@@ -93,6 +93,161 @@
 ### 1.3. Сбор полного контекста (ОБЯЗАТЕЛЬНО)
 Перед любым действием:
 - **Определите состояние проекта** с помощью `.qwen/scripts/orchestration-tools/analyze-project-state.sh`
+
+---
+
+### 1.4. Вызов Speckit Workflow (ОБЯЗАТЕЛЬНО)
+
+**Используй Skills и SubAgents для Speckit workflow:**
+
+#### 1.4.1. Создание конституции (код 10)
+
+**Skill: `speckit-constitution`**
+
+```bash
+task '{
+  "subagent_type": "speckit-constitution",
+  "prompt": "Создай конституцию проекта"
+}'
+```
+
+**Что сделает агент:**
+1. Запустит `.qwen/specify/scripts/constitution.sh`
+2. Создаст `.qwen/specify/memory/constitution.md`
+3. Вернёт отчёт о выполнении
+
+**Результат:**
+- ✅ Конституция в `.qwen/specify/memory/constitution.md`
+- ✅ Git commit выполнен
+- ✅ Отчёт для обратной связи
+
+---
+
+#### 1.4.2. Создание спецификаций (код 10, 20)
+
+**SubAgent: `speckit-specify-agent`**
+
+```bash
+task '{
+  "subagent_type": "speckit-specify-agent",
+  "prompt": "Создай спецификацию для модуля {Module Name} с функциями {features}"
+}'
+```
+
+**Что сделает агент:**
+1. Прочитает ТЗ и конституцию
+2. Запустит `.qwen/specify/scripts/specify.sh "{module}"`
+3. Создаст спецификацию в `.qwen/specify/specs/{ID}-{module}/`
+4. Выполнит Git Workflow
+5. Вернёт детальный отчёт
+
+**Созданные файлы:**
+- `spec.md` — спецификация модуля
+- `requirements.md` — требования
+- `spec-summary.md` — краткое содержание
+- `glossary.md` — глоссарий
+
+---
+
+#### 1.4.3. Планирование (после specify)
+
+**SubAgent: `speckit-plan-agent`**
+
+```bash
+task '{
+  "subagent_type": "speckit-plan-agent",
+  "prompt": "Создай план реализации для спецификации {ID}-{module}"
+}'
+```
+
+**Что сделает агент:**
+1. Прочитает спецификацию
+2. Запустит `.qwen/specify/scripts/plan.sh "{ID}-{module}"`
+3. Создаст технический план
+4. Выполнит Git Workflow
+5. Вернёт отчёт
+
+**Созданные файлы:**
+- `plan.md` — технический план
+- `data-model.md` — модель данных
+- `research.md` — исследования
+- `quickstart.md` — быстрый старт
+
+---
+
+#### 1.4.4. Разбивка на задачи (после plan)
+
+**SubAgent: `speckit-tasks-agent`**
+
+```bash
+task '{
+  "subagent_type": "speckit-tasks-agent",
+  "prompt": "Разбей план на задачи для {ID}-{module}"
+}'
+```
+
+**Что сделает агент:**
+1. Прочитает план
+2. Запустит `.qwen/specify/scripts/tasks.sh "{ID}-{module}"`
+3. Создаст dependency-ordered task list
+4. Выполнит Git Workflow
+5. Вернёт отчёт
+
+**Созданные файлы:**
+- `tasks.md` — список задач с зависимостями
+
+---
+
+#### 1.4.5. Универсальный запуск скриптов
+
+**Skill: `speckit-run`**
+
+Для запуска любого Speckit скрипта:
+
+```bash
+task '{
+  "subagent_type": "speckit-run",
+  "prompt": "Запусти {script_name}.sh для {ID}-{module}"
+}'
+```
+
+**Доступные скрипты:**
+- `constitution.sh` — конституция
+- `specify.sh` — спецификации
+- `clarify.sh` — уточнение
+- `plan.sh` — планирование
+- `tasks.sh` — задачи
+- `analyze.sh` — анализ
+- `implement.sh` — реализация
+- `checklist.sh` — чек-лист
+- `taskstoissues.sh` — экспорт в GitHub
+
+---
+
+#### 1.4.6. Полный Speckit Workflow
+
+**Порядок выполнения:**
+
+```
+1. analyze-project-state.sh → код состояния
+2. speckit-constitution (если код 10)
+3. speckit-specify-agent → спецификации
+4. speckit-plan-agent → планирование
+5. speckit-tasks-agent → задачи
+6. work_* агенты → реализация
+```
+
+**ВАЖНО:**
+- Не пропускай этапы
+- constitution.md должна быть создана ПЕРВОЙ
+- Каждый этап выполняет Git Workflow
+- Каждый этап возвращает отчёт
+
+---
+
+**Источники:**
+- https://github.com/github/spec-kit
+- https://deepwiki.com/github/spec-kit/5.4-other-commands
 - Прочтите связанные файлы кода
 - Изучите документацию в `specs/` и `docs/`
 - Поймите архитектурные зависимости

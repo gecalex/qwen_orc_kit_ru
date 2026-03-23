@@ -83,6 +83,14 @@ for dir in "${DIRS_TO_REMOVE[@]}"; do
     fi
 done
 
+# Удаление конституции шаблона (пользователь создаст свою)
+if [ -f ".qwen/specify/memory/constitution.md" ]; then
+    log_info "Удаление конституции шаблона..."
+    rm -f ".qwen/specify/memory/constitution.md"
+    log_success "  Конституция шаблона удалена"
+    log_info "  Пользователь создаст свою через: speckit.constitution"
+fi
+
 # Удаление старой директории .git (если существует)
 if [ -d ".git" ]; then
     log_info "Удаление старой Git истории..."

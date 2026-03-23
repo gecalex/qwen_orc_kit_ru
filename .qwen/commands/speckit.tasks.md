@@ -44,10 +44,10 @@
 
 ## Выходные артефакты
 
-- `specs/{ID}/tasks.md` - Основной документ задач
-- `specs/{ID}/traceability-matrix.md` - Матрица traceability
-- `specs/{ID}/agent-assignments.md` - Назначения агентов
-- `specs/{ID}/priority-board.md` - Доска приоритетов
+- `.qwen/specify/.qwen/specify/specs/{ID}/tasks.md` - Основной документ задач
+- `.qwen/specify/.qwen/specify/specs/{ID}/traceability-matrix.md` - Матрица traceability
+- `.qwen/specify/.qwen/specify/specs/{ID}/agent-assignments.md` - Назначения агентов
+- `.qwen/specify/.qwen/specify/specs/{ID}/priority-board.md` - Доска приоритетов
 
 ## Интеграция
 
@@ -55,7 +55,7 @@
 
 **Следующая команда:** `speckit.constitution`
 
-**Зависимости:** `specs/{ID}/spec.md`, `specs/{ID}/plan.md`, `specs/{ID}/checklist.md`
+**Зависимости:** `.qwen/specify/.qwen/specify/specs/{ID}/spec.md`, `.qwen/specify/.qwen/specify/specs/{ID}/plan.md`, `.qwen/specify/.qwen/specify/specs/{ID}/checklist.md`
 
 ## Пример структуры tasks.md
 

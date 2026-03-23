@@ -29,17 +29,17 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 check_dependencies() {
     log_info "Проверка зависимостей..."
     
-    if [ ! -f "$PROJECT_ROOT/specs/$SPEC_ID/spec.md" ]; then
+    if [ ! -f "$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/spec.md" ]; then
         log_error "spec.md не найден. Запустите сначала speckit.specify"
         exit 1
     fi
     
-    if [ ! -f "$PROJECT_ROOT/specs/$SPEC_ID/plan.md" ]; then
+    if [ ! -f "$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/plan.md" ]; then
         log_error "plan.md не найден. Запустите сначала speckit.plan"
         exit 1
     fi
     
-    if [ ! -f "$PROJECT_ROOT/specs/$SPEC_ID/checklist.md" ]; then
+    if [ ! -f "$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/checklist.md" ]; then
         log_warning "checklist.md не найден. Запустите speckit.checklist"
     fi
     
@@ -48,7 +48,7 @@ check_dependencies() {
 
 # Создание tasks.md
 create_tasks() {
-    local tasks_file="$PROJECT_ROOT/specs/$SPEC_ID/tasks.md"
+    local tasks_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/tasks.md"
     
     log_info "Создание tasks.md..."
     
@@ -214,7 +214,7 @@ EOF
 
 # Создание traceability-matrix.md
 create_traceability_matrix() {
-    local matrix_file="$PROJECT_ROOT/specs/$SPEC_ID/traceability-matrix.md"
+    local matrix_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/traceability-matrix.md"
     
     log_info "Создание traceability-matrix.md..."
     
@@ -314,7 +314,7 @@ EOF
 
 # Создание agent-assignments.md
 create_agent_assignments() {
-    local assignments_file="$PROJECT_ROOT/specs/$SPEC_ID/agent-assignments.md"
+    local assignments_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/agent-assignments.md"
     
     log_info "Создание agent-assignments.md..."
     
@@ -417,7 +417,7 @@ EOF
 
 # Создание priority-board.md
 create_priority_board() {
-    local board_file="$PROJECT_ROOT/specs/$SPEC_ID/priority-board.md"
+    local board_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/priority-board.md"
     
     log_info "Создание priority-board.md..."
     
@@ -509,7 +509,7 @@ EOF
 
 # Обновление состояния
 update_state() {
-    local state_file="$PROJECT_ROOT/specs/$SPEC_ID/state.json"
+    local state_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/state.json"
     
     log_info "Обновление состояния..."
     
@@ -527,7 +527,7 @@ main() {
     PROJECT_NAME="${2:-New Project}"
     
     if [ -z "$SPEC_ID" ]; then
-        SPEC_ID=$(ls -t "$PROJECT_ROOT/specs/" 2>/dev/null | head -1)
+        SPEC_ID=$(ls -t "$PROJECT_ROOT/.qwen/specify/specs/" 2>/dev/null | head -1)
         if [ -z "$SPEC_ID" ]; then
             log_error "SPEC_ID не указан и спецификации не найдены"
             exit 1

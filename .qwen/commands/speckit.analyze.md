@@ -37,16 +37,16 @@
 - Идентификация рисков
 
 ### 4. Генерация отчета
-- Создание `specs/{ID}/requirements.md`
+- Создание `.qwen/specify/.qwen/specify/specs/{ID}/requirements.md`
 - Структурирование требований по категориям
 - Приоритизация требований (MoSCoW)
 - Рекомендации по уточнению
 
 ## Выходные артефакты
 
-- `specs/{ID}/requirements.md` - Документ требований
-- `specs/{ID}/analysis-report.md` - Отчет об анализе
-- `specs/{ID}/questions.md` - Список вопросов для уточнения
+- `.qwen/specify/.qwen/specify/specs/{ID}/requirements.md` - Документ требований
+- `.qwen/specify/.qwen/specify/specs/{ID}/analysis-report.md` - Отчет об анализе
+- `.qwen/specify/.qwen/specify/specs/{ID}/questions.md` - Список вопросов для уточнения
 
 ## Интеграция
 

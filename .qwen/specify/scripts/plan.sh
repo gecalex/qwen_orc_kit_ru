@@ -29,7 +29,7 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 check_dependencies() {
     log_info "Проверка зависимостей..."
     
-    if [ ! -f "$PROJECT_ROOT/specs/$SPEC_ID/spec.md" ]; then
+    if [ ! -f "$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/spec.md" ]; then
         log_error "spec.md не найден. Запустите сначала speckit.specify"
         exit 1
     fi
@@ -39,7 +39,7 @@ check_dependencies() {
 
 # Создание plan.md
 create_plan() {
-    local plan_file="$PROJECT_ROOT/specs/$SPEC_ID/plan.md"
+    local plan_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/plan.md"
     
     log_info "Создание plan.md..."
     
@@ -239,7 +239,7 @@ EOF
 
 # Создание timeline.md
 create_timeline() {
-    local timeline_file="$PROJECT_ROOT/specs/$SPEC_ID/timeline.md"
+    local timeline_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/timeline.md"
     
     log_info "Создание timeline.md..."
     
@@ -297,7 +297,7 @@ EOF
 
 # Создание dependencies.md
 create_dependencies() {
-    local deps_file="$PROJECT_ROOT/specs/$SPEC_ID/dependencies.md"
+    local deps_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/dependencies.md"
     
     log_info "Создание dependencies.md..."
     
@@ -351,7 +351,7 @@ EOF
 
 # Обновление состояния
 update_state() {
-    local state_file="$PROJECT_ROOT/specs/$SPEC_ID/state.json"
+    local state_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/state.json"
     
     log_info "Обновление состояния..."
     
@@ -369,7 +369,7 @@ main() {
     PROJECT_NAME="${2:-New Project}"
     
     if [ -z "$SPEC_ID" ]; then
-        SPEC_ID=$(ls -t "$PROJECT_ROOT/specs/" 2>/dev/null | head -1)
+        SPEC_ID=$(ls -t "$PROJECT_ROOT/.qwen/specify/specs/" 2>/dev/null | head -1)
         if [ -z "$SPEC_ID" ]; then
             log_error "SPEC_ID не указан и спецификации не найдены"
             exit 1

@@ -48,9 +48,9 @@
 
 ## Выходные артефакты
 
-- `specs/{ID}/spec.md` - Основная спецификация
-- `specs/{ID}/spec-summary.md` - Краткое резюме
-- `specs/{ID}/glossary.md` - Глоссарий терминов
+- `.qwen/specify/.qwen/specify/specs/{ID}/spec.md` - Основная спецификация
+- `.qwen/specify/.qwen/specify/specs/{ID}/spec-summary.md` - Краткое резюме
+- `.qwen/specify/.qwen/specify/specs/{ID}/glossary.md` - Глоссарий терминов
 
 ## Интеграция
 
@@ -58,7 +58,7 @@
 
 **Следующая команда:** `speckit.clarify`
 
-**Зависимости:** `specs/{ID}/requirements.md`
+**Зависимости:** `.qwen/specify/.qwen/specify/specs/{ID}/requirements.md`
 
 ## Пример структуры spec.md
 

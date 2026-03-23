@@ -28,12 +28,12 @@ log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 check_dependencies() {
     log_info "Проверка зависимостей..."
     
-    if [ ! -f "$PROJECT_ROOT/specs/$SPEC_ID/spec.md" ]; then
+    if [ ! -f "$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/spec.md" ]; then
         log_error "spec.md не найден. Запустите сначала speckit.specify"
         exit 1
     fi
     
-    if [ ! -f "$PROJECT_ROOT/specs/$SPEC_ID/implementation-summary.md" ]; then
+    if [ ! -f "$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/implementation-summary.md" ]; then
         log_warning "implementation-summary.md не найден. Запустите speckit.implement"
     fi
     
@@ -42,7 +42,7 @@ check_dependencies() {
 
 # Создание checklist.md
 create_checklist() {
-    local checklist_file="$PROJECT_ROOT/specs/$SPEC_ID/checklist.md"
+    local checklist_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/checklist.md"
     
     log_info "Создание checklist.md..."
     
@@ -242,7 +242,7 @@ EOF
 
 # Создание acceptance-tests.md
 create_acceptance_tests() {
-    local tests_file="$PROJECT_ROOT/specs/$SPEC_ID/acceptance-tests.md"
+    local tests_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/acceptance-tests.md"
     
     log_info "Создание acceptance-tests.md..."
     
@@ -325,7 +325,7 @@ EOF
 
 # Создание acceptance-criteria.md
 create_acceptance_criteria() {
-    local criteria_file="$PROJECT_ROOT/specs/$SPEC_ID/acceptance-criteria.md"
+    local criteria_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/acceptance-criteria.md"
     
     log_info "Создание acceptance-criteria.md..."
     
@@ -403,7 +403,7 @@ EOF
 
 # Создание validation-report.md
 create_validation_report() {
-    local report_file="$PROJECT_ROOT/specs/$SPEC_ID/validation-report.md"
+    local report_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/validation-report.md"
     
     log_info "Создание validation-report.md..."
     
@@ -466,7 +466,7 @@ EOF
 
 # Обновление состояния
 update_state() {
-    local state_file="$PROJECT_ROOT/specs/$SPEC_ID/state.json"
+    local state_file="$PROJECT_ROOT/.qwen/specify/specs/$SPEC_ID/state.json"
     
     log_info "Обновление состояния..."
     
@@ -484,7 +484,7 @@ main() {
     PROJECT_NAME="${2:-New Project}"
     
     if [ -z "$SPEC_ID" ]; then
-        SPEC_ID=$(ls -t "$PROJECT_ROOT/specs/" 2>/dev/null | head -1)
+        SPEC_ID=$(ls -t "$PROJECT_ROOT/.qwen/specify/specs/" 2>/dev/null | head -1)
         if [ -z "$SPEC_ID" ]; then
             log_error "SPEC_ID не указан и спецификации не найдены"
             exit 1

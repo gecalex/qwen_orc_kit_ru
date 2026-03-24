@@ -1,7 +1,7 @@
 #!/bin/bash
 # SpecKit: Constitution Script
 # Назначение: Создание конституции проекта
-# Версия: 1.0.0
+# Версия: 2.0.0 (Исправление: нет зависимости от SPEC_ID)
 
 set -e
 
@@ -11,6 +11,11 @@ SPECIFY_DIR="$(dirname "$SCRIPT_DIR")"
 PROJECT_ROOT="$(dirname "$(dirname "$SPECIFY_DIR")")"
 TEMPLATES_DIR="$SPECIFY_DIR/templates"
 LOGS_DIR="$PROJECT_ROOT/logs"
+
+# constitution.md - ПЕРВАЯ команда!
+# SPEC_ID генерируется автоматически (000-constitution)
+SPEC_ID="${1:-000-constitution}"
+PROJECT_NAME="$(basename "$PROJECT_ROOT")"
 
 # Цвета для вывода
 RED='\033[0;31m'
@@ -654,33 +659,27 @@ update_state() {
 
 # Основная функция
 main() {
-    SPEC_ID="${1:-}"
-    PROJECT_NAME="${2:-New Project}"
-    
-    if [ -z "$SPEC_ID" ]; then
-        SPEC_ID=$(ls -t "$PROJECT_ROOT/.qwen/specify/specs/" 2>/dev/null | head -1)
-        if [ -z "$SPEC_ID" ]; then
-            log_error "SPEC_ID не указан и спецификации не найдены"
-            exit 1
-        fi
-    fi
-    
+    # constitution.md - ПЕРВАЯ команда!
+    # SPEC_ID уже установлен в начале скрипта (000-constitution по умолчанию)
+    # PROJECT_NAME уже установлен в начале скрипта
+
     echo "========================================"
     echo "  SpecKit: Constitution"
-    echo "  Версия: 1.0.0"
+    echo "  Версия: 2.0.0"
     echo "  Spec ID: $SPEC_ID"
+    echo "  Project: $PROJECT_NAME"
     echo "========================================"
     echo ""
-    
+
     check_dependencies
     echo ""
-    
+
     create_constitution
     echo ""
-    
+
     create_coding_standards
     echo ""
-    
+
     create_architecture_rules
     echo ""
     

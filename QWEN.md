@@ -121,6 +121,27 @@
 
 ### 1.4. Вызов Speckit Workflow (ОБЯЗАТЕЛЬНО)
 
+**После выполнения задачи подагентом:**
+
+1. **Проверить слияние ветки:**
+   ```bash
+   git branch --merged develop
+   git status
+   ```
+
+2. **Если ветка НЕ влита:**
+   ```bash
+   git checkout develop
+   git merge --no-ff feature/{branch-name}
+   git push -u origin develop
+   git branch -d feature/{branch-name}
+   ```
+
+3. **Убедиться, что develop обновлён:**
+   - Все файлы доступны
+   - Git история чистая
+   - Нет незакоммиченных изменений
+
 **Используй Skills и SubAgents для Speckit workflow:**
 
 #### 1.4.1. Создание конституции (код 10)

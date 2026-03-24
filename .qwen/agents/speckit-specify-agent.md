@@ -206,6 +206,35 @@ task '{
 3. Сформировать отчёт с ошибкой
 4. Предложить альтернативное решение
 
+## Завершение работы (ОБЯЗАТЕЛЬНО)
+
+**После выполнения задачи:**
+
+### 1. Слияние ветки в develop
+
+```bash
+git checkout develop
+git merge --no-ff feature/specify-{module} -m "Merge branch 'feature/specify-{module}'"
+git push -u origin develop
+```
+
+### 2. Удаление feature-ветки
+
+```bash
+git branch -d feature/specify-{module}
+git push origin --delete feature/specify-{module}
+```
+
+### 3. Отчёт оркестратору
+
+**Сообщи:**
+- ✅ Ветка влита в develop
+- ✅ develop обновлён
+- ✅ Feature-ветка удалена
+- ✅ Спецификация доступна в develop
+
+---
+
 ## Speckit Стандарт
 
 **Порядок команд:**

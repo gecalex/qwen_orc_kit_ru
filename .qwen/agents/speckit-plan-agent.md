@@ -268,6 +268,35 @@ fi
 3. Сформировать отчёт с ошибкой
 4. Предложить альтернативное решение
 
+## Завершение работы (ОБЯЗАТЕЛЬНО)
+
+**После выполнения задачи:**
+
+### 1. Слияние ветки в develop
+
+```bash
+git checkout develop
+git merge --no-ff feature/plan -m "Merge branch 'feature/plan'"
+git push -u origin develop
+```
+
+### 2. Удаление feature-ветки
+
+```bash
+git branch -d feature/plan
+git push origin --delete feature/plan
+```
+
+### 3. Отчёт оркестратору
+
+**Сообщи:**
+- ✅ Ветка влита в develop
+- ✅ develop обновлён
+- ✅ Feature-ветка удалена
+- ✅ Общий план доступен в develop
+
+---
+
 ## Speckit Стандарт
 
 **Порядок команд:**

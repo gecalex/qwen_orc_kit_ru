@@ -222,6 +222,35 @@ fi
 3. Сформировать отчёт с ошибкой
 4. Предложить альтернативное решение
 
+## Завершение работы (ОБЯЗАТЕЛЬНО)
+
+**После выполнения задачи:**
+
+### 1. Слияние ветки в develop
+
+```bash
+git checkout develop
+git merge --no-ff feature/constitution -m "Merge branch 'feature/constitution'"
+git push -u origin develop
+```
+
+### 2. Удаление feature-ветки
+
+```bash
+git branch -d feature/constitution
+git push origin --delete feature/constitution
+```
+
+### 3. Отчёт оркестратору
+
+**Сообщи:**
+- ✅ Ветка влита в develop
+- ✅ develop обновлён
+- ✅ Feature-ветка удалена
+- ✅ Все файлы доступны в develop
+
+---
+
 ## Speckit Стандарт
 
 **Порядок команд:**

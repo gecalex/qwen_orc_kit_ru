@@ -75,9 +75,9 @@ ls -la .qwen/specify/specs/
 **1.3. Прочитать ВСЕ спецификации:**
 ```bash
 # Для каждой директории в specs/
-for spec_dir in .qwen/specify/specs/*/; do
-    read_file "${spec_dir}spec.md"
-    read_file "${spec_dir}requirements.md"
+for dir in .qwen/specify/specs/*/; do
+    read_file "${dir}spec.md"
+    read_file "${dir}requirements.md"
 done
 ```
 

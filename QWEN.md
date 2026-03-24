@@ -125,19 +125,22 @@
 
 #### 1.4.1. Создание конституции (код 10)
 
-**Skill: `speckit-constitution`**
+**SubAgent: `speckit-constitution-agent`**
 
 ```bash
 task '{
-  "subagent_type": "speckit-constitution",
+  "subagent_type": "speckit-constitution-agent",
   "prompt": "Создай конституцию проекта"
 }'
 ```
 
 **Что сделает агент:**
-1. Запустит `.qwen/specify/scripts/constitution.sh`
-2. Создаст `.qwen/specify/memory/constitution.md`
-3. Вернёт отчёт о выполнении
+1. Создаст директорию `.qwen/specify/specs/000-constitution/`
+2. Запустит `.qwen/specify/scripts/constitution.sh`
+3. Создаст `.qwen/specify/memory/constitution.md`
+4. Создаст дополнительные файлы (coding-standards.md, architecture-rules.md, review-checklist.md)
+5. Выполнит Git Workflow
+6. Вернёт детальный отчёт
 
 **Результат:**
 - ✅ Конституция в `.qwen/specify/memory/constitution.md`

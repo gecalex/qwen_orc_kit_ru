@@ -73,13 +73,8 @@ ls -la .qwen/specify/specs/
 ```
 
 **1.3. Прочитать ВСЕ спецификации:**
-```bash
-# Для каждой директории в specs/
-for dir in .qwen/specify/specs/*/; do
-    read_file "${dir}spec.md"
-    read_file "${dir}requirements.md"
-done
-```
+
+Прочитать все spec.md и requirements.md из `.qwen/specify/specs/*/`
 
 **1.4. Получить контекст от оркестратора:**
 - Название проекта

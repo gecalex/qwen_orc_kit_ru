@@ -47,7 +47,12 @@
     "vlmSwitchMode": "once"
   },
   "context": {
-    "fileName": ["QWEN.md", "README.md", "CONTEXT.md", "constitution.md"],
+    "fileName": [
+      "QWEN.md",
+      "README.md",
+      "CONTEXT.md",
+      "constitution.md"
+    ],
     "fileFiltering": {
       "respectGitIgnore": true,
       "respectQwenIgnore": true,
@@ -67,14 +72,20 @@
     },
     "searxng": {
       "command": "npx",
-      "args": ["-y", "mcp-searxng@latest"],
+      "args": [
+        "-y",
+        "mcp-searxng@latest"
+      ],
       "env": {
         "SEARXNG_URL": "http://localhost:8080"
       }
     },
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@latest"]
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
     },
     "filesystem": {
       "command": "npx",
@@ -86,19 +97,80 @@
     },
     "git": {
       "command": "uvx",
-      "args": ["mcp-server-git@latest"],
+      "args": [
+        "mcp-server-git@latest"
+      ],
       "cwd": "/home/alex/MyProjects/qwen_orc_kit_ru"
     },
     "github": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github@latest"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github@latest"
+      ],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
       }
     },
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-playwright@latest"]
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-playwright@latest"
+      ]
     }
+  },
+  "permissions": {
+    "allow": [
+      "Bash(cat)",
+      "Bash(set *)",
+      "Bash(log_info)",
+      "Bash(})",
+      "Bash(log_success)",
+      "Bash(log_error)",
+      "Bash(check_dependencies)",
+      "Bash(log_info *)",
+      "Bash(then)",
+      "Bash(log_error *)",
+      "Bash(exit *)",
+      "Bash(fi)",
+      "Bash(do)",
+      "Bash(true)",
+      "Bash(done)",
+      "Bash(log_success *)",
+      "Bash(generate_tasks)",
+      "Bash(sed *)",
+      "Bash(**версия:** *)",
+      "Bash(**дата:** *)",
+      "Bash(**статус:** *)",
+      "Bash(**тип:** *)",
+      "Bash(---)",
+      "Bash(\\`\\`\\`)",
+      "Bash(← *)",
+      "Bash(↓)",
+      "Bash(001-notes)",
+      "Bash(002-search)",
+      "Bash(003-export-import)",
+      "Bash(**критический *)",
+      "Bash(eof)",
+      "Bash(cut *)",
+      "Bash(echo *)",
+      "Bash(- *)",
+      "Bash(задача)",
+      "Bash(требования)",
+      "Bash(статус)",
+      "Bash(приоритет)",
+      "Bash(--------)",
+      "Bash(------------)",
+      "Bash(-----------)",
+      "Bash(t-001)",
+      "Bash(fr-001)",
+      "Bash(pending)",
+      "Bash(p0)",
+      "Bash(main)",
+      "Bash(main *)",
+      "Bash(eofscript)",
+      "Bash(chmod *)"
+    ]
   }
 }

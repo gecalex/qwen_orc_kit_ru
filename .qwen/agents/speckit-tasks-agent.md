@@ -87,8 +87,8 @@ color: green
 
 3.1. **Запустить скрипт:**
    ```bash
-   # БЕЗ {ID-module} — создаётся ОДИН tasks.md на ВСЁ проект
-   .qwen/specify/scripts/tasks.sh
+   # tasks-project.sh — создаёт ОДИН tasks.md на ВСЁ проект
+   .qwen/specify/scripts/tasks-project.sh
    ```
 
 3.2. **Отслеживание прогресса**

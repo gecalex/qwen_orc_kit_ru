@@ -258,7 +258,63 @@ task '{
 
 ---
 
-#### 1.4.5. Универсальный запуск скриптов
+#### 1.4.5. Фаза 0: Назначение агентов (после tasks)
+
+**КРИТИЧЕСКИ ВАЖНО:** После создания `tasks.md` ЗАПУСТИТЬ ФАЗУ 0 для назначения агентов на задачи!
+
+**Оркестратор: `orc_planning_task_analyzer`**
+
+```bash
+task '{
+  "subagent_type": "orc_planning_task_analyzer",
+  "prompt": "Проведи Фазу 0: проанализируй tasks.md, классифицируй задачи и назначь агентов"
+}'
+```
+
+**Что сделает оркестратор:**
+
+1. **work_planning_task_classifier:**
+   - Классифицирует задачи по домену (frontend/backend/testing/docs)
+   - Определяет сложность задач
+   - Выявляет зависимости между задачами
+
+2. **work_planning_agent_requirer:**
+   - Определяет требуемых агентов для каждой задачи
+   - Выявляет отсутствующих агентов (futures)
+   - Создаёт реестр required agents
+
+3. **work_planning_executor_assigner:**
+   - Назначает существующих агентов на задачи
+   - Помечает futures-задачи (требуют создания агента)
+   - Создаёт план выполнения
+
+**Созданные файлы:**
+- `.qwen/state/futures-agents.md` — реестр отсутствующих агентов
+- `.tmp/current/plans/planning-executor-assignment-plan.json` — план назначения
+
+**Если есть futures-агенты (отсутствующие):**
+
+```bash
+# Для каждого futures-агента:
+task '{
+  "subagent_type": "work_dev_meta_agent",
+  "prompt": "Создай агента {agent_name} для домена {domain}"
+}'
+```
+
+**work_dev_meta_agent создаст:**
+- `.qwen/agents/{agent_name}.md` — новый агент
+- Обновит `docs/agents-index.md`
+- Выполнит Git Workflow
+
+**ВАЖНО:**
+- ✅ Qwen Code автоматически обновляет агентов (перезапуск НЕ требуется)
+- ✅ После создания агента продолжить назначение
+- ✅ Проверить созданного агента через `agent-structure-checker`
+
+---
+
+#### 1.4.6. Универсальный запуск скриптов
 
 **Skill: `speckit-run`**
 

@@ -54,7 +54,63 @@ color: red
 
 ## Инструкции
 
-Когда вызывается, вы должны следовать этим шагам:
+Когда вызывается, ты должен следовать этим шагам:
+
+### Фаза 0: Проверка зависимостей (ОБЯЗАТЕЛЬНО!)
+
+**КРИТИЧЕСКИ ВАЖНО: Перед установкой ЛЮБЫХ зависимостей:**
+
+0.1. **Вызвать MCP Context7 для КАЖДОГО пакета:**
+   ```bash
+   task '{
+     "subagent_type": "qwen-code-cli-specialist",
+     "prompt": "Проверь {package} через MCP Context7"
+   }'
+   ```
+
+0.2. **Использовать mcp__context7__resolve-library-id:**
+   ```python
+   mcp__context7__resolve-library-id(
+     libraryName="{package}",
+     query="{package} latest version 2026 Python 3.14 compatibility"
+   )
+   ```
+
+0.3. **Получить актуальную версию:**
+   ```python
+   mcp__context7__query-docs(
+     libraryId="/{org}/{package}",
+     query="latest version, installation, compatibility"
+   )
+   ```
+
+0.4. **Обновить requirements.txt ТОЛЬКО после Context7:**
+   ```txt
+   # БЫЛО (устарело):
+   fastapi==0.109.0
+   pytest==7.4.4
+   pytest-asyncio==0.23.3
+   
+   # СТАЛО (актуально через Context7):
+   fastapi==0.115.0
+   pytest==8.3.3
+   pytest-asyncio==0.24.0
+   ```
+
+0.5. **Quality Gate: Зависимости валидированы**
+   ```bash
+   # backend/scripts/validate-dependencies.sh
+   for package in fastapi pytest pytest-asyncio sqlalchemy; do
+     echo "Checking $package via Context7..."
+     # Вызов Context7 API
+   done
+   ```
+
+**❌ БЛОКИРУЮЩЕЕ ПРАВИЛО:**
+```
+НЕ устанавливать зависимости БЕЗ проверки через MCP Context7!
+Нарушение = Критическая ошибка Quality Gate!
+```
 
 1. **Фаза 1: Чтение файла плана**
    - Проверить наличие `.tmp/current/plans/backend-api-validation-plan.json`

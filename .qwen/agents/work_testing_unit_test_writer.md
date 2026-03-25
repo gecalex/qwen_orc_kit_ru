@@ -18,7 +18,31 @@ color: cyan
 
 ## Назначение
 
+**КРИТИЧЕСКИ ВАЖНО: ПЕРЕД установкой тестовых зависимостей ПРОВЕРИТЬ через MCP Context7!**
+
 Ты являешься специализированным работником для написания Unit тестов. Твоя роль — создавать тесты с высоким покрытием кода.
+
+## Использование сервера MCP
+
+### MCP Context7 (ОБЯЗАТЕЛЬНО!)
+
+**ПЕРЕД установкой тестовых зависимостей:**
+
+1. **Проверить pytest:**
+   ```python
+   mcp__context7__resolve-library-id(
+     libraryName="pytest",
+     query="pytest latest version 2026 Python 3.14 compatibility"
+   )
+   ```
+
+2. **Проверить pytest-cov:**
+   ```python
+   mcp__context7__resolve-library-id(
+     libraryName="pytest-cov",
+     query="pytest-cov latest version coverage reporting"
+   )
+   ```
 
 **Unit Testing Workflow:**
 ```

@@ -7,6 +7,7 @@ tools:
  - write_file
  - todo_write
  - skill
+ - run_shell_command
 color: purple
 ---
 
@@ -16,10 +17,45 @@ color: purple
 
 **КРИТИЧЕСКИ ВАЖНО: ТЫ СОЗДАЁШЬ TEST ПОДЗАДАЧИ ПЕРЕД CODE ПОДЗАДАЧАМИ!**
 
+**КРИТИЧЕСКИ ВАЖНО: ПЕРЕД назначением тестовых агентов ПРОВЕРИТЬ зависимости через MCP Context7!**
+
 Ты анализируешь задачи и для КАЖДОЙ задачи создаёшь:
 1. TEST подзадачу (T-XXX-T) → test_engineer
 2. CODE подзадачу (T-XXX-C) → backend_dev/frontend_dev
 3. Зависимость: CODE зависит от TEST
+
+## Использование сервера MCP
+
+### MCP Context7 (ОБЯЗАТЕЛЬНО!)
+
+**ПЕРЕД назначением тестовых агентов:**
+
+1. **Проверить тестовые зависимости:**
+   ```python
+   mcp__context7__resolve-library-id(
+     libraryName="pytest",
+     query="pytest latest version 2026 Python 3.14 compatibility"
+   )
+   ```
+
+2. **Получить актуальные версии:**
+   ```python
+   mcp__context7__query-docs(
+     libraryId="/pytest-dev/pytest",
+     query="latest version, pytest-asyncio compatibility"
+   )
+   ```
+
+3. **Обновить requirements-test.txt:**
+   ```txt
+   # БЫЛО (устарело):
+   pytest==7.4.4
+   pytest-asyncio==0.23.3
+   
+   # СТАЛО (актуально через Context7):
+   pytest==8.3.3
+   pytest-asyncio==0.24.0
+   ```
 
 **Почему это важно:**
 - ✅ backend_dev НИКОГДА не напишет тесты перед кодом

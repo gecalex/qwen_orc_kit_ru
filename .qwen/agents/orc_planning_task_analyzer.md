@@ -160,9 +160,26 @@ color: cyan
    - Определяйте требуемые типы агентов (оркестраторы, воркеры)
    - Определяйте отсутствующих агентов, которых нужно создать
 
-2. **Фаза 1: Назначение исполнителей**
-   - Прочитать tasks.md из `specs/{ID}/tasks.md`
-   - Назначайте исполнителей для каждой задачи
+2. **Фаза 0.5: Назначение тестовых агентов (TDD First!)**
+   - **КРИТИЧЕСКИ ВАЖНО: TDD First — тесты перед кодом!**
+   - Вызвать work_planning_test_assigner:
+     ```bash
+     task '{
+       "subagent_type": "work_planning_test_assigner",
+       "prompt": "Создай TEST/CODE разделение для всех задач из tasks.md"
+     }'
+     ```
+   - work_planning_test_assigner создаст:
+     - TEST подзадачи (T-XXX-T) → work_testing_tdd_specialist
+     - CODE подзадачи (T-XXX-C) → work_backend_api_validator / work_frontend_component_generator
+     - Зависимости: CODE зависит от TEST
+   - Результат: `.tmp/current/plans/tasks-with-test-assignments.json`
+
+3. **Фаза 1: Назначение исполнителей**
+   - Прочитать tasks-with-test-assignments.json
+   - Назначьте исполнителей для каждой TEST задачи
+   - Назначьте исполнителей для каждой CODE задачи
+   - Учтите зависимости: CODE задачи выполняются ПОСЛЕ TEST задач
    - Определяйте, соответствуют ли существующие агенты требованиям
    - Для новых агентов: создавайте задачи для work_dev_meta_agent
    - Создавайте файл назначений: `phase0-assignments.json`

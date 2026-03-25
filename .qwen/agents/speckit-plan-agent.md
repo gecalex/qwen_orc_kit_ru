@@ -216,7 +216,7 @@ wc -l .qwen/specify/*.md
 ```
 task '{
   "subagent_type": "speckit-plan-agent",
-  "prompt": "Создай общий план реализации проекта Personal Knowledge Base (PKB) на основе конституции и всех спецификаций"
+  "prompt": "Создай общий план реализации проекта {PROJECT_NAME} на основе конституции и всех спецификаций"
 }'
 ```
 
@@ -224,14 +224,14 @@ task '{
 ```markdown
 ✅ Общий план создан успешно!
 
-**Проект:** Personal Knowledge Base (PKB)
-**Модулей проанализировано:** 4 (Notes, Export/Import, Search, API)
+**Проект:** {PROJECT_NAME}
+**Модулей проанализировано:** {COUNT}
 
 **Файлы:**
-- plan.md (456 строк) — ОБЩИЙ план
-- data-model.md (234 строки) — ОБЩАЯ модель
-- research.md (123 строки) — ОБЩЕЕ исследование
-- quickstart.md (89 строк) — ОБЩИЙ быстрый старт
+- plan.md — ОБЩИЙ план
+- data-model.md — ОБЩАЯ модель
+- research.md — ОБЩЕЕ исследование
+- quickstart.md — ОБЩИЙ быстрый старт
 
 **Git:**
 - Ветка: feature/plan

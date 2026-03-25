@@ -344,3 +344,77 @@ main() {
 
 # Запуск основной функции
 main "$@"
+
+# =============================================================================
+# Проверка 6: TDD (наличие тестов)
+# =============================================================================
+check_tdd() {
+    print_section "Проверка TDD (наличие тестов)"
+    
+    local staged_files=$(git diff --cached --name-only 2>/dev/null)
+    
+    if [ -z "$staged_files" ]; then
+        print_check "Нет staged файлов" "warn"
+        return 0
+    fi
+    
+    local has_code_changes=false
+    local has_test_changes=false
+    
+    # Проверка изменений
+    while IFS= read -r file; do
+        [ -z "$file" ] && continue
+        [ ! -f "$file" ] && continue
+        
+        # Проверка файлов кода
+        if [[ "$file" == *.py ]] || [[ "$file" == *.ts ]] || [[ "$file" == *.js ]] || [[ "$file" == *.tsx ]] || [[ "$file" == *.jsx ]]; then
+            # Исключаем тестовые файлы
+            if [[ "$file" != *test* ]] && [[ "$file" != */tests/* ]] && [[ "$file" != */__tests__/* ]] && [[ "$file" != */test/* ]]; then
+                has_code_changes=true
+            fi
+            # Проверка тестовых файлов
+            if [[ "$file" == *test* ]] || [[ "$file" == */tests/* ]] || [[ "$file" == */__tests__/* ]] || [[ "$file" == */test/* ]]; then
+                has_test_changes=true
+            fi
+        fi
+    done <<< "$staged_files"
+    
+    # Если есть изменения кода, проверяем наличие тестов
+    if [ "$has_code_changes" = true ]; then
+        if [ "$has_test_changes" = true ]; then
+            print_check "TDD (тесты)" "pass"
+            echo "  ✅ Тесты написаны"
+            return 0
+        else
+            print_check "TDD (тесты)" "warn"
+            echo "  ⚠️  Код изменён без тестов (TDD не соблюдён)"
+            echo "  💡 Рекомендуется: сначала написать тесты, потом код"
+            return 0  # Не блокирующая проверка
+        fi
+    else
+        print_check "TDD (тесты)" "pass"
+        echo "  ℹ️  Изменения кода не обнаружены"
+        return 0
+    fi
+}
+
+# =============================================================================
+# Основной цикл проверок
+# =============================================================================
+main() {
+    print_header
+    
+    # Запуск всех проверок
+    check_syntax
+    check_git_workflow
+    check_commit_message
+    check_gitignore
+    check_secrets
+    check_tdd  # НОВАЯ ПРОВЕРКА!
+    
+    # Вывод итогов
+    print_summary
+}
+
+# Запуск
+main "$@"

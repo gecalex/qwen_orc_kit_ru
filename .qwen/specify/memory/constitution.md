@@ -138,7 +138,7 @@ release_preparation_report.md
 ### 2.3. Структура спецификаций
 
 ```
-.qwen/specify/specs/{ID}-{feature}/
+specs/{ID}-{feature}/
 ├── spec.md
 ├── plan.md
 ├── tasks.md

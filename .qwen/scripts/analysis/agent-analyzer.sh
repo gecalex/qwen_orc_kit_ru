@@ -85,7 +85,7 @@ for agent_file in "$AGENTS_DIR"/*.md; do
             fi
             
             # Извлекаем цвет
-            color=$(echo "$yaml_block" | grep '^color:' | sed 's/color:[[:space:]]*'//')
+            color=$(echo "$yaml_block" | grep '^color:' | sed 's/color:[[:space:]]*//')
         fi
         
         # Ищем функциональность в теле файла

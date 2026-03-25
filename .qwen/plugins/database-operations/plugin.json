@@ -1,0 +1,52 @@
+{
+  "name": "database-operations",
+  "displayName": "Database Operations",
+  "version": "1.0.0",
+  "description": "Плагин для операций с базами данных: проектирование, миграции, оптимизация",
+  "author": "Qwen Orchestrator Kit",
+  "license": "MIT",
+  "category": "database",
+  "tags": ["database", "sql", "migration", "optimization"],
+  "enabled": true,
+  "dependencies": [],
+  "components": {
+    "agents": [
+      {
+        "name": "database-architect",
+        "file": "agents/database-architect.md",
+        "description": "Агент для проектирования архитектуры баз данных"
+      },
+      {
+        "name": "sql-specialist",
+        "file": "agents/sql-specialist.md",
+        "description": "Агент для написания и оптимизации SQL запросов"
+      }
+    ],
+    "commands": [
+      {
+        "name": "database",
+        "file": "commands/database.md",
+        "description": "Команды для операций с базами данных"
+      }
+    ],
+    "skills": [
+      {
+        "name": "database-expertise",
+        "file": "skills/database-expertise.md",
+        "description": "Навыки эксперта по базам данных"
+      }
+    ]
+  },
+  "configuration": {
+    "databases": ["postgresql", "mysql", "sqlite", "mongodb"],
+    "migrationTool": "alembic",
+    "backupEnabled": true,
+    "queryLogging": true
+  },
+  "scripts": {
+    "onEnable": "echo 'Database Operations plugin enabled'",
+    "onDisable": "echo 'Database Operations plugin disabled'"
+  },
+  "createdAt": "2026-03-21",
+  "updatedAt": "2026-03-21"
+}

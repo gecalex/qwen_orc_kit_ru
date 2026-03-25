@@ -165,7 +165,7 @@ task '{
 
 **Проверка:**
 ```bash
-.qwen/scripts/quality-gates/check-specifications.sh .qwen/specify/specs/{ID}
+.qwen/scripts/quality-gates/check-specifications.sh specs/{ID}
 ```
 
 ---
@@ -186,10 +186,10 @@ task '{
 **Процесс:**
 ```bash
 # Запуск Фазы 0
-.qwen/specify/scripts/phase0-analyzer.sh .qwen/specify/specs/{ID}
+.qwen/specify/scripts/phase0-analyzer.sh specs/{ID}
 
 # Проверка результатов
-cat .qwen/specify/specs/{ID}/plans/phase0-plan.json
+cat specs/{ID}/plans/phase0-plan.json
 ```
 
 ---

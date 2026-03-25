@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "description": "E2E тестирование с Playwright",
+      "category": "testing"
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer@latest"],
+      "description": "Автоматизация браузера для тестирования",
+      "category": "testing"
+    }
+  },
+  "_metadata": {
+    "name": "testing",
+    "description": "Конфигурация MCP серверов для тестирования",
+    "version": "1.0.0",
+    "servers_count": 2
+  }
+}

@@ -20,10 +20,10 @@
 
 ```bash
 # Запустить анализ Фазы 0
-.qwen/specify/scripts/phase0-analyzer.sh .qwen/specify/specs/{ID}-{feature}
+.qwen/specify/scripts/phase0-analyzer.sh specs/{ID}-{feature}
 
 # Проверить результаты
-cat .qwen/specify/specs/{ID}/plans/phase0-plan.json
+cat specs/{ID}/plans/phase0-plan.json
 ```
 
 ### 1. Создание спецификации
@@ -34,7 +34,7 @@ cat .qwen/specify/specs/{ID}/plans/phase0-plan.json
 speckit.specify "Описание требуемой функциональности"
 ```
 
-**Расположение:** `.qwen/specify/specs/{ID}-{feature}/spec.md`
+**Расположение:** `specs/{ID}-{feature}/spec.md`
 
 Эта команда:
 - Создает новую ветку для функции
@@ -64,9 +64,9 @@ speckit.plan
 ```
 
 **Результаты Фазы 0:**
-- `.qwen/specify/specs/{ID}/plans/phase0-plan.json`
-- `.qwen/specify/specs/{ID}/plans/phase0-agents.json`
-- `.qwen/specify/specs/{ID}/plans/phase0-assignments.json`
+- `specs/{ID}/plans/phase0-plan.json`
+- `specs/{ID}/plans/phase0-agents.json`
+- `specs/{ID}/plans/phase0-assignments.json`
 
 Эта команда:
 - Создает технический план реализации
@@ -82,7 +82,7 @@ speckit.plan
 speckit.tasks
 ```
 
-**Расположение:** `.qwen/specify/specs/{ID}/tasks.md`
+**Расположение:** `specs/{ID}/tasks.md`
 
 Эта команда:
 - Разбивает реализацию на конкретные задачи
@@ -96,7 +96,7 @@ speckit.tasks
 
 ```bash
 # Проверка качества спецификации
-.qwen/scripts/quality-gates/check-specifications.sh .qwen/specify/specs/{ID}
+.qwen/scripts/quality-gates/check-specifications.sh specs/{ID}
 ```
 
 **Проверки:**
@@ -121,7 +121,7 @@ speckit.implement
 
 ## Структура спецификации
 
-**Расположение:** `.qwen/specify/specs/{ID}-{feature}/spec.md`
+**Расположение:** `specs/{ID}-{feature}/spec.md`
 
 Каждая спецификация должна содержать:
 
@@ -139,7 +139,7 @@ speckit.implement
 ## Структура директории спецификаций
 
 ```
-.qwen/specify/specs/{ID}-{feature}/
+specs/{ID}-{feature}/
 ├── spec.md                      # Спецификация функции
 ├── plan.md                      # План реализации
 ├── tasks.md                     # Задачи реализации
@@ -205,7 +205,7 @@ speckit.implement
 speckit.specify "Добавить аутентификацию пользователя через OAuth2"
 
 # 2. Инициализировать Фазу 0
-.qwen/specify/scripts/phase0-analyzer.sh .qwen/specify/specs/001-oauth2-auth
+.qwen/specify/scripts/phase0-analyzer.sh specs/001-oauth2-auth
 
 # 3. Создать план
 speckit.plan
@@ -214,7 +214,7 @@ speckit.plan
 speckit.tasks
 
 # 5. Проверить спецификацию
-.qwen/scripts/quality-gates/check-specifications.sh .qwen/specify/specs/001-oauth2-auth
+.qwen/scripts/quality-gates/check-specifications.sh specs/001-oauth2-auth
 
 # 6. Реализовать
 speckit.implement

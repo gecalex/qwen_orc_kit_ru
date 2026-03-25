@@ -1,0 +1,57 @@
+{
+  "name": "python-development",
+  "displayName": "Python Development",
+  "version": "1.0.0",
+  "description": "Плагин для Python разработки: разработка, тестирование, линтинг кода",
+  "author": "Qwen Orchestrator Kit",
+  "license": "MIT",
+  "category": "development",
+  "tags": ["python", "development", "testing", "linting"],
+  "enabled": true,
+  "dependencies": [],
+  "components": {
+    "agents": [
+      {
+        "name": "python-developer",
+        "file": "agents/python-developer.md",
+        "description": "Агент для разработки Python кода"
+      },
+      {
+        "name": "python-tester",
+        "file": "agents/python-tester.md",
+        "description": "Агент для тестирования Python кода"
+      },
+      {
+        "name": "python-linter",
+        "file": "agents/python-linter.md",
+        "description": "Агент для линтинга и форматирования Python кода"
+      }
+    ],
+    "commands": [
+      {
+        "name": "python-dev",
+        "file": "commands/python-dev.md",
+        "description": "Команды для Python разработки"
+      }
+    ],
+    "skills": [
+      {
+        "name": "python-expertise",
+        "file": "skills/python-expertise.md",
+        "description": "Навыки эксперта Python"
+      }
+    ]
+  },
+  "configuration": {
+    "pythonVersion": "3.11",
+    "linters": ["flake8", "black", "mypy"],
+    "testFrameworks": ["pytest", "unittest"],
+    "autoFormat": true
+  },
+  "scripts": {
+    "onEnable": "echo 'Python Development plugin enabled'",
+    "onDisable": "echo 'Python Development plugin disabled'"
+  },
+  "createdAt": "2026-03-21",
+  "updatedAt": "2026-03-21"
+}

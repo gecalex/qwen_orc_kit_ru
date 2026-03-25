@@ -5,12 +5,14 @@
 # Функция для подсчета файлов определенного типа
 count_files_by_extension() {
     local extension=$1
-    local count=$(find . -name "*.$extension" -type f 2>/dev/null | wc -l)
+    # Исключаем директорию .qwen/ из подсчёта (системная директория Qwen Code)
+    local count=$(find . -path "./.qwen" -prune -o -name "*.$extension" -type f -print 2>/dev/null | wc -l)
     echo $count
 }
 
 # Функция для проверки наличия директорий
 check_directories() {
+    # Исключаем системные директории (.qwen, .git, .specify)
     local dirs=("src" "lib" "app" "backend" "frontend" "api" "services" "models" "components" "core")
     local found_dirs=()
 
@@ -25,10 +27,12 @@ check_directories() {
 
 # Функция для проверки наличия файлов конфигурации
 check_config_files() {
-    local configs=("package.json" "pyproject.toml" "requirements.txt" "Gemfile" "Cargo.toml" "go.mod" "pom.xml" "build.gradle" "composer.json")
+    # Исключаем package.json из корня (может быть частью Qwen Code)
+    # Считаем только конфиги, которые указывают на наличие проекта
+    local project_configs=("pyproject.toml" "requirements.txt" "Gemfile" "Cargo.toml" "go.mod" "pom.xml" "build.gradle" "composer.json")
     local found_configs=()
 
-    for config in "${configs[@]}"; do
+    for config in "${project_configs[@]}"; do
         if [ -f "$config" ]; then
             found_configs+=("$config")
         fi
@@ -48,8 +52,12 @@ check_specifications() {
 
 # Функция для проверки наличия конституции
 check_constitution() {
-    if [ -f ".specify/memory/constitution.md" ]; then
+    # Проверяем конституцию в правильном месте (Speckit стандарт)
+    if [ -f ".qwen/specify/memory/constitution.md" ]; then
         echo "found"
+    # Проверяем конституцию в корне проекта (проект пользователя)
+    elif [ -f "constitution.md" ]; then
+        echo "found_root"
     else
         echo "not_found"
     fi
@@ -86,21 +94,37 @@ specs_status=$(check_specifications)
 constitution_status=$(check_constitution)
 
 # Определение состояния проекта
-project_state="unknown"
+# Коды состояния:
+# 10 - Пустой проект (нет кода, нет спецификаций)
+# 20 - Существующий код, но без спецификаций
+# 30 - Частичные спецификации
+# 40 - Полные спецификации
 
+project_state="unknown"
+exit_code=0
+
+# Проверка на пустой проект
 if [ $total_code_files -eq 0 ] && [ ${#found_dirs[@]} -eq 0 ] && [ ${#found_configs[@]} -eq 0 ]; then
     # Только системные файлы (git, readme, gitignore)
     project_state="empty"
-elif [ "$specs_status" == "found" ] && [ "$constitution_status" == "found" ]; then
+    exit_code=10
+# Проверка на проект с полными спецификациями
+elif [ "$specs_status" == "found" ] && { [ "$constitution_status" == "found" ] || [ "$constitution_status" == "found_root" ]; }; then
     project_state="full_specification"
-elif [ "$specs_status" == "found" ]; then
+    exit_code=40
+# Проверка на проект с частичными спецификациями
+elif [ "$specs_status" == "found" ] && [ "$constitution_status" == "not_found" ]; then
     project_state="partial_specification"
+    exit_code=30
+# Проект с кодом, но без спецификаций
 else
     project_state="existing_code_no_specs"
+    exit_code=20
 fi
 
 # Вывод результатов анализа
 echo "Состояние проекта: $project_state"
+echo "Код состояния: $exit_code"
 echo ""
 echo "Детали анализа:"
 echo "- Обнаружено файлов кода: $total_code_files"
@@ -125,32 +149,32 @@ case $project_state in
         echo "1. Создать конституцию проекта с помощью speckit.constitution"
         echo "2. Определить основные принципы и стандарты"
         echo "3. Создать первую спецификацию с помощью speckit.specify"
-        exit 10  # Код для пустого проекта
+        exit $exit_code  # Код 10 для пустого проекта
         ;;
     "existing_code_no_specs")
         echo "Проект с кодом, но без спецификаций обнаружен. Рекомендуется:"
         echo "1. Провести анализ существующего кода"
         echo "2. Создать реверс-инжиниринг спецификаций"
         echo "3. Постепенно интегрировать процесс Speckit"
-        exit 20  # Код для проекта с кодом, но без спецификаций
+        exit $exit_code  # Код 20 для проекта с кодом, но без спецификаций
         ;;
     "partial_specification")
         echo "Проект с частичными спецификациями обнаружен. Рекомендуется:"
         echo "1. Доработать существующие спецификации"
         echo "2. Заполнить пробелы в спецификациях"
         echo "3. Проверить соответствие реализации спецификациям"
-        exit 30  # Код для проекта с частичными спецификациями
+        exit $exit_code  # Код 30 для проекта с частичными спецификациями
         ;;
     "full_specification")
         echo "Проект с полными спецификациями обнаружен. Рекомендуется:"
         echo "1. Следовать стандартному процессу Speckit"
         echo "2. Проверять соответствие реализации спецификациям"
         echo "3. Использовать контрольные точки качества"
-        exit 40  # Код для проекта с полными спецификациями
+        exit $exit_code  # Код 40 для проекта с полными спецификациями
         ;;
     *)
         echo "Неопределенное состояние проекта: $project_state"
         echo "Требуется ручной анализ и определение подходящего процесса"
-        exit 0   # Неопределенное состояние
+        exit $exit_code  # Код 0 для неопределенного состояния
         ;;
 esac

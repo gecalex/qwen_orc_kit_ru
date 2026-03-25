@@ -40,14 +40,14 @@
 
 Запустить анализ Фазы 0:
 ```bash
-.qwen/specify/scripts/phase0-analyzer.sh .qwen/specify/specs/{ID}-{feature}
+.qwen/specify/scripts/phase0-analyzer.sh specs/{ID}-{feature}
 ```
 
 ### 1. Анализ задач
 
 Оркестратор читает спецификацию и анализирует задачи из:
-- `.qwen/specify/specs/{ID}/spec.md`
-- `.qwen/specify/specs/{ID}/tasks.md`
+- `specs/{ID}/spec.md`
+- `specs/{ID}/tasks.md`
 
 ### 2. Классификация
 
@@ -72,15 +72,15 @@
 ### 5. Создание плана
 
 Создается файл плана в формате JSON:
-- `.qwen/specify/specs/{ID}/plans/phase0-plan.json`
-- `.qwen/specify/specs/{ID}/plans/phase0-agents.json`
-- `.qwen/specify/specs/{ID}/plans/phase0-assignments.json`
+- `specs/{ID}/plans/phase0-plan.json`
+- `specs/{ID}/plans/phase0-agents.json`
+- `specs/{ID}/plans/phase0-assignments.json`
 
 ### 6. Проверка (Quality Gate 1)
 
 Запускается Quality Gate 1:
 ```bash
-.qwen/scripts/quality-gates/check-planning.sh .qwen/specify/specs/{ID}
+.qwen/scripts/quality-gates/check-planning.sh specs/{ID}
 ```
 
 **Проверки:**
@@ -98,19 +98,19 @@
 
 План фазы 0 создается в формате JSON и соответствует схеме `state/planning-phase.schema.json`.
 
-**Расположение:** `.qwen/specify/specs/{ID}/plans/phase0-plan.json`
+**Расположение:** `specs/{ID}/plans/phase0-plan.json`
 
 Пример:
 
 ```json
 {
   "phase": 0,
-  "specification": ".qwen/specify/specs/001-user-auth/spec.md",
+  "specification": "specs/001-user-auth/spec.md",
   "createdAt": "2026-03-18T12:00:00Z",
   "status": "initialized",
   "config": {
     "priority": "high",
-    "scope": [".qwen/specify/specs/001-user-auth"],
+    "scope": ["specs/001-user-auth"],
     "estimatedTasks": 10
   },
   "validation": {
@@ -144,7 +144,7 @@
 
 Инициализирует Фазу 0:
 ```bash
-.qwen/specify/scripts/phase0-analyzer.sh .qwen/specify/specs/{ID}-{feature}
+.qwen/specify/scripts/phase0-analyzer.sh specs/{ID}-{feature}
 ```
 
 ### speckit.tasks
@@ -157,7 +157,7 @@
 
 Проверяет завершение Фазы 0:
 ```bash
-.qwen/scripts/quality-gates/check-planning.sh .qwen/specify/specs/{ID}
+.qwen/scripts/quality-gates/check-planning.sh specs/{ID}
 ```
 
 Только после успешной проверки переходит к реализации.

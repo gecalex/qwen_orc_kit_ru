@@ -19,6 +19,33 @@ color: cyan
 
 Эксперт-архитектор агентов, создающий готовые к производству агенты в соответствии с каноническими шаблонами из ARCHITECTURE.md и QWEN.md.
 
+## Git Workflow (ОБЯЗАТЕЛЬНО)
+
+**ВОЛНОВЫЕ АГЕНТЫ выполняют Git Workflow после КАЖДОЙ задачи:**
+
+**ПОСЛЕ ВЫПОЛНЕНИЯ ЗАДАЧИ:**
+1. Pre-commit ревью:
+   ```bash
+   .qwen/scripts/git/pre-commit-review.sh "chore: <description>"
+   ```
+   Где `<type>`: feat, fix, docs, style, refactor, test, chore
+
+2. Quality Gate:
+   ```bash
+   .qwen/scripts/quality-gates/check-commit.sh
+   ```
+
+3. Коммит (только после успешного Quality Gate):
+   ```bash
+   git add -A
+   git commit -m "chore: <description>"
+   ```
+
+**ВАЖНО:**
+- Воркеры НЕ создают feature-ветки (это делает оркестратор)
+- Воркеры ДЕЛАЮТ коммиты после каждой завершённой задачи
+- Воркеры ПРОВЕРЯЮТ Quality Gate перед коммитом
+
 ## Быстрый старт
 
 **Шаг 0: Определение типа агента**
@@ -81,6 +108,7 @@ color: cyan
 ## Фаза 5: Возврат управления
 - Сообщить сводку пользователю
 - Выйти (оркестратор возобновляет работу)
+- Выполнить Git Workflow (Pre-commit, Quality Gate, Коммит)
 ```
 
 **Должно включать:**

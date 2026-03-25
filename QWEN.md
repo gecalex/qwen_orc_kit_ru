@@ -314,6 +314,77 @@ task '{
 
 ---
 
+#### 1.4.5.1. Фаза 0.5: Назначение тестовых агентов (TDD First!)
+
+**КРИТИЧЕСКИ ВАЖНО:** После Фазы 0 ЗАПУСТИТЬ Фазу 0.5 для создания TEST/CODE разделения!
+
+**Агент: `work_planning_test_assigner`**
+
+```bash
+task '{
+  "subagent_type": "work_planning_test_assigner",
+  "prompt": "Создай TEST/CODE разделение для всех задач"
+}'
+```
+
+**Что сделает агент:**
+
+1. **Прочитать tasks.md** (N задач проекта)
+
+2. **Для КАЖДОЙ задачи создать ДВЕ подзадачи:**
+   - **TEST подзадача (T-XXX-T):**
+     - Агент: `work_testing_tdd_specialist`
+     - Тип: TEST
+     - Часы: 2h
+   - **CODE подзадача (T-XXX-C):**
+     - Агент: `work_backend_api_validator` или `work_frontend_component_generator`
+     - Тип: CODE
+     - Часы: 4h
+     - **Зависимость:** T-XXX-T (TEST)
+
+3. **Создать файл:**
+   - `.tmp/current/plans/tasks-with-test-assignments.json`
+
+**Результат:**
+```json
+{
+  "tasks": [
+    {
+      "original_id": "T-004-001",
+      "test_task": {
+        "id": "T-004-001-T",
+        "agent": "work_testing_tdd_specialist",
+        "type": "TEST",
+        "hours": 2
+      },
+      "code_task": {
+        "id": "T-004-001-C",
+        "agent": "work_backend_api_validator",
+        "type": "CODE",
+        "hours": 4,
+        "depends_on": ["T-004-001-T"]
+      }
+    }
+  ]
+}
+```
+
+**TDD Workflow:**
+```
+1. ✅ work_planning_test_assigner → TEST/CODE разделение
+2. ✅ work_testing_tdd_specialist → тесты → RED
+3. ✅ work_backend_api_validator → код → GREEN
+4. ✅ orc_testing_quality_assurer → Quality Gate
+```
+
+**ВАЖНО:**
+- ✅ TEST задачи выполняются ПЕРЕД CODE задачами
+- ✅ CODE задачи НЕ могут быть начаты БЕЗ TEST задач
+- ✅ work_testing_tdd_specialist пишет тесты ПЕРЕД кодом
+- ✅ work_backend_api_validator пишет код ПОД тесты
+
+---
+
 #### 1.4.6. Анализ противоречий (после specify)
 
 **КРИТИЧЕСКИ ВАЖНО:** После создания всех спецификаций ПРОВЕРИТЬ их на противоречия!
@@ -415,7 +486,7 @@ task '{
 
 ---
 
-#### 1.4.6. Полный Speckit Workflow
+#### 1.4.9. Полный Speckit Workflow
 
 **Порядок выполнения:**
 
@@ -425,25 +496,62 @@ task '{
 3. speckit-specify-agent         → спецификации модулей
 4. speckit.clarify               → анализ противоречий ← ПОСЛЕ SPECIFY!
 5. speckit-plan-agent            → ОБЩИЙ план проекта
-6. speckit-tasks-agent           → задачи
+6. speckit-tasks-agent           → задачи (N задач)
 7. speckit.analyze               → анализ пробелов ← ПОСЛЕ TASKS!
-8. ФАЗА 0 (orc_planning_*)       → назначение агентов
-9. work_dev_meta_agent           → создание futures-агентов
-10. work_* агенты                → реализация
+8. Фаза 0 (orc_planning_*)       → классификация задач
+9. Фаза 0.5 (work_planning_*)    → TEST/CODE разделение ← НОВОЕ!
+10. work_testing_tdd_specialist  → тесты → RED
+11. work_backend_api_validator   → код → GREEN
+12. work_* агенты                → реализация
 ```
 
 **ВАЖНО:**
 - Не пропускать этап 4 (анализ противоречий)!
 - Не пропускать этап 7 (анализ пробелов)!
+- Не пропускать Фазу 0.5 (TEST/CODE разделение)!
 - constitution.md должна быть создана ПЕРВОЙ
 - Каждый этап выполняет Git Workflow
 - Каждый этап возвращает отчёт
 
 ---
 
+#### 1.4.10. TDD Architecture (Новое в v0.7.0)
+
+**Система TDD агентов:**
+
+| Агент | Назначение |
+|-------|------------|
+| **work_planning_test_assigner** | Создание TEST/CODE подзадач |
+| **work_testing_tdd_specialist** | Тесты перед кодом (RED → GREEN) |
+| **work_testing_unit_test_writer** | Unit тесты (pytest, Jest) |
+| **work_testing_integration_test_writer** | Integration тесты |
+| **work_testing_e2e_test_writer** | E2E тесты (Playwright) |
+| **work_testing_security_tester** | Security тесты (OWASP) |
+| **orc_testing_quality_assurer** | Оркестратор тестирования |
+
+**TDD Workflow:**
+```
+1. work_planning_test_assigner → TEST/CODE разделение
+2. work_testing_tdd_specialist → тесты → RED
+3. work_backend_api_validator → код → GREEN
+4. orc_testing_quality_assurer → Quality Gate
+```
+
+**Преимущества:**
+- ✅ Гарантированный TDD (тесты перед кодом)
+- ✅ Независимость (test_engineer ≠ backend_dev)
+- ✅ Качество кода (код пишется под тесты)
+- ✅ Покрытие ≥ 80%
+- ✅ Взаимодействие (test_engineer → backend_dev)
+
+---
+
 **Источники:**
 - https://github.com/github/spec-kit
 - https://deepwiki.com/github/spec-kit/5.4-other-commands
+- `.qwen/docs/architecture/tdd-architecture.md`
+- `.qwen/docs/architecture/testing-workflow.md`
+- `.qwen/docs/help/tdd-guide.md`
 - Прочтите связанные файлы кода
 - Изучите документацию в `specs/` и `docs/`
 - Поймите архитектурные зависимости
@@ -461,6 +569,17 @@ task '{
 ```
 
 **Встроенные под-агенты** (основные):
+
+**TDD агенты (Новое в v0.7.0):**
+- `work_planning_test_assigner` — создание TEST/CODE подзадач
+- `work_testing_tdd_specialist` — тесты перед кодом (RED → GREEN)
+- `work_testing_unit_test_writer` — Unit тесты (pytest, Jest)
+- `work_testing_integration_test_writer` — Integration тесты
+- `work_testing_e2e_test_writer` — E2E тесты (Playwright)
+- `work_testing_security_tester` — Security тесты (OWASP)
+- `orc_testing_quality_assurer` — оркестратор тестирования
+
+**Стандартные агенты:**
 - `bug-fixer` — исправление ошибок
 - `bug-hunter` — поиск ошибок
 - `code-quality-checker` — проверка качества кода

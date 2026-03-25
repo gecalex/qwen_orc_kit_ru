@@ -168,7 +168,7 @@ color: cyan
 ```
 task '{
   "subagent_type": "speckit-constitution-agent",
-  "prompt": "Создай конституцию для Personal Knowledge Base (PKB)"
+  "prompt": "Создай конституцию для {PROJECT_NAME}"
 }'
 ```
 
@@ -176,13 +176,13 @@ task '{
 ```markdown
 ✅ Конституция создана успешно!
 
-**Проект:** Personal Knowledge Base (PKB)
+**Проект:** {PROJECT_NAME}
 **Spec ID:** 000-constitution
 **Файлы:**
-- constitution.md (259 строк)
-- coding-standards.md (89 строк)
-- architecture-rules.md (67 строк)
-- review-checklist.md (45 строк)
+- constitution.md
+- coding-standards.md
+- architecture-rules.md
+- review-checklist.md
 
 **Git:**
 - Ветка: feature/constitution

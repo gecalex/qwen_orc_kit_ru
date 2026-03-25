@@ -175,18 +175,18 @@ task '{
 ```markdown
 ✅ Спецификация создана успешно!
 
-**Модуль:** Notes (Заметки)
-**ID:** 001-notes
-**Директория:** `.qwen/specify/specs/001-notes/`
+**Модуль:** {MODULE_NAME}
+**ID:** {SPEC_ID}
+**Директория:** `.qwen/specify/specs/{SPEC_ID}/`
 **Файлы:**
-- spec.md (245 строк)
-- requirements.md (89 строк)
-- spec-summary.md (34 строки)
-- glossary.md (56 строк)
+- spec.md
+- requirements.md
+- spec-summary.md
+- glossary.md
 
 **Git:**
-- Ветка: feature/specify-notes
-- Коммит: a1b2c3d - feat: create specification for Notes
+- Ветка: feature/specify-{MODULE_NAME}
+- Коммит: a1b2c3d - feat: create specification for {MODULE_NAME}
 
 **Следующий шаг:** speckit.plan
 ```

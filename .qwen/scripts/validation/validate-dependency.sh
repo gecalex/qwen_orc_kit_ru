@@ -9,6 +9,7 @@
 #   - Проверка наличия в package.json / requirements.txt
 #   - Проверка совместимости версий
 #   - Проверка на уязвимости
+#   - Проверка через MCP Context7 (ОБЯЗАТЕЛЬНО!)
 #   - Рекомендации по обновлению
 #
 # Использование:
@@ -39,6 +40,10 @@ show_help() {
     echo "Примеры:"
     echo "  $0 eslint"
     echo "  $0 eslint ^9.0.0"
+    echo ""
+    echo "MCP Context7 (ОБЯЗАТЕЛЬНО):"
+    echo "  Перед установкой проверьте пакет через Context7:"
+    echo "  mcp__context7__resolve-library-id(libraryName=\"$PACKAGE_NAME\", ...)"
 }
 
 # Функция логирования

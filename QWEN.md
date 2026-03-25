@@ -1196,6 +1196,74 @@ mcp__context7__query-docs(
 
 ---
 
+#### 🔒 10.6. Обязательная проверка зависимостей
+
+**ПРАВИЛО:** Перед установкой ЛЮБЫХ зависимостей:
+
+**1. Вызвать MCP Context7:**
+```bash
+task '{
+  "subagent_type": "qwen-code-cli-specialist",
+  "prompt": "Проверь {package} через MCP Context7"
+}'
+```
+
+**2. Использовать mcp__context7__resolve-library-id:**
+```python
+mcp__context7__resolve-library-id(
+  libraryName="{package}",
+  query="{package} latest version 2026 Python 3.14 compatibility"
+)
+```
+
+**3. Получить актуальную версию:**
+```python
+mcp__context7__query-docs(
+  libraryId="/{org}/{package}",
+  query="latest version, installation, compatibility"
+)
+```
+
+**4. Обновить requirements.txt ТОЛЬКО после Context7:**
+```txt
+# БЫЛО (устарело):
+fastapi==0.109.0
+pytest==7.4.4
+pytest-asyncio==0.23.3
+
+# СТАЛО (актуально через Context7):
+fastapi==0.115.0
+pytest==8.3.3
+pytest-asyncio==0.24.0
+```
+
+**5. Quality Gate: Зависимости валидированы:**
+```bash
+# backend/scripts/validate-dependencies.sh
+for package in fastapi pytest pytest-asyncio sqlalchemy; do
+  echo "Checking $package via Context7..."
+  # Вызов Context7 API
+done
+```
+
+**❌ БЛОКИРУЮЩЕЕ ПРАВИЛО:**
+```
+НЕ устанавливать зависимости БЕЗ проверки через MCP Context7!
+Нарушение = Блокирующая ошибка Quality Gate!
+```
+
+**Агенты, ОБЯЗАННЫЕ использовать Context7:**
+- ✅ work_dev_dependency_analyzer — анализ зависимостей
+- ✅ work_backend_api_validator — backend зависимости
+- ✅ work_planning_test_assigner — тестовые зависимости
+- ✅ work_testing_tdd_specialist — pytest, pytest-asyncio
+- ✅ work_testing_unit_test_writer — pytest-cov
+- ✅ work_testing_integration_test_writer — httpx
+- ✅ work_testing_e2e_test_writer — playwright
+- ✅ work_testing_security_tester — bandit, OWASP ZAP
+
+---
+
 #### 📁 Файловая система через MCP FileSystem
 
 **ПРАВИЛО:** Для работы с файлами используйте MCP сервер `filesystem`.

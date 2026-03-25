@@ -30,19 +30,19 @@ color: purple
 ## TDD Workflow
 
 ```
-1. Прочитать tasks.md (106 задач)
+1. Прочитать tasks.md (N задач)
 2. Для КАЖДОЙ задачи:
    - Создать TEST подзадачу:
-     - ID: T-004-001-T
+     - ID: T-XXX-T
      - Агент: work_testing_tdd_specialist
      - Часы: 2h (тесты)
      - Тип: TEST
    - Создать CODE подзадачу:
-     - ID: T-004-001-C
-     - Агент: work_backend_api_validator
+     - ID: T-XXX-C
+     - Агент: work_backend_api_validator / work_frontend_component_generator
      - Часы: 4h (код)
      - Тип: CODE
-     - Зависимость: T-004-001-T
+     - Зависимость: T-XXX-T
 3. Вернуть задачи с разделением TEST/CODE
 ```
 
@@ -53,11 +53,11 @@ color: purple
 ### Фаза 1: Чтение tasks.md
 
 1.1. Прочитать `.qwen/specify/tasks.md`
-1.2. Извлечь ВСЕ задачи (106 задач для PKB)
+1.2. Извлечь ВСЕ задачи (N задач проекта)
 1.3. Для каждой задачи извлечь:
-   - ID задачи (T-004-001)
+   - ID задачи (T-XXX-XXX)
    - Название
-   - Модуль (004-api, 001-notes, etc.)
+   - Модуль (из tasks.md)
    - Часы
    - Acceptance criteria
 
@@ -68,9 +68,9 @@ color: purple
 **TEST подзадача:**
 ```json
 {
-  "id": "T-004-001-T",
-  "name": "Написать тесты для Project Scaffolding",
-  "module": "004-api",
+  "id": "T-XXX-XXX-T",
+  "name": "Написать тесты для {Task Name}",
+  "module": "{module}",
   "agent": "work_testing_tdd_specialist",
   "type": "TEST",
   "hours": 2,
@@ -81,13 +81,13 @@ color: purple
 **CODE подзадача:**
 ```json
 {
-  "id": "T-004-001-C",
-  "name": "Реализовать Project Scaffolding",
-  "module": "004-api",
-  "agent": "work_backend_api_validator",
+  "id": "T-XXX-XXX-C",
+  "name": "Реализовать {Task Name}",
+  "module": "{module}",
+  "agent": "work_backend_api_validator / work_frontend_component_generator",
   "type": "CODE",
   "hours": 4,
-  "depends_on": ["T-004-001-T"],
+  "depends_on": ["T-XXX-XXX-T"],
   "acceptance_criteria": ["...из оригинальной задачи..."]
 }
 ```

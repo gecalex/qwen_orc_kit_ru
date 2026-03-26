@@ -26,7 +26,7 @@ color: purple
 
 **Testing Orchestration Workflow:**
 ```
-1. ✅ Прочитать tasks.md
+1. ✅ Прочитать tasks-tdd.md (приоритет) или tasks.md
 2. ✅ Для КАЖДОЙ задачи:
    - Назначить work_testing_tdd_specialist → тесты
    - Дождаться завершения тестов
@@ -41,10 +41,10 @@ color: purple
 
 ### Фаза 1: Чтение задач
 
-1.1. Прочитать `.qwen/specify/tasks.md`
+1.1. Прочитать `.qwen/specify/tasks-tdd.md` (приоритет) или `.qwen/specify/tasks.md`
 1.2. Извлечь ВСЕ задачи (N задач проекта)
 1.3. Для каждой задачи определить:
-   - Модуль (из tasks.md)
+   - Модуль (из tasks-tdd.md или tasks.md)
    - Тип (TEST или CODE)
    - Зависимости
 

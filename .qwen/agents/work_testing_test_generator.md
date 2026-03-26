@@ -23,7 +23,7 @@ color: yellow
 
 **TDD Workflow:**
 ```
-1. ✅ Прочитать tasks.md → найти задачи с TDD=true
+1. ✅ Прочитать tasks-tdd.md (приоритет) или tasks.md → найти задачи с TDD=true
 2. ✅ Для КАЖДОЙ задачи:
    - Прочитать acceptance criteria
    - Создать тесты (pytest/Jest)

@@ -104,7 +104,7 @@ color: purple
   "phase": 2,
   "config": {
     "priority": "critical",
-    "scope": ["specs/", "tasks.md"]
+    "scope": ["specs/", "tasks-tdd.md", "tasks.md"]
   },
   "validation": {
     "required": ["type-check", "build"],

@@ -56,7 +56,7 @@ color: red
 
 Когда вызывается, ты должен следовать этим шагам:
 
-### Фаза 0: Проверка зависимостей (ОБЯЗАТЕЛЬНО!)
+### Фаза 0: Проверка зависимостей и настроек тестирования (ОБЯЗАТЕЛЬНО!)
 
 **КРИТИЧЕСКИ ВАЖНО: Перед установкой ЛЮБЫХ зависимостей:**
 
@@ -97,7 +97,29 @@ color: red
    pytest-asyncio==0.24.0
    ```
 
-0.5. **Quality Gate: Зависимости валидированы**
+0.5. **ПРОВЕРИТЬ что pytest.ini существует:**
+   ```bash
+   if [ ! -f "backend/pytest.ini" ]; then
+     echo "❌ pytest.ini не найден!"
+     echo "⚠️ ТРЕБУЕТСЯ: Запустите work_testing_tdd_specialist для создания pytest.ini"
+     echo "⚠️ ОСТАНОВКА: Нельзя писать код без настроенного тестирования"
+     exit 1
+   fi
+   echo "✅ pytest.ini найден"
+   ```
+
+0.6. **ПРОВЕРИТЬ что conftest.py содержит сброс БД:**
+   ```bash
+   if ! grep -q "reset_database\|reset_db" backend/tests/conftest.py; then
+     echo "❌ Сброс БД не настроен в conftest.py!"
+     echo "⚠️ ТРЕБУЕТСЯ: Добавьте fixture для сброса БД"
+     echo "⚠️ ОСТАНОВКА: Нельзя писать код без изоляции тестов"
+     exit 1
+   fi
+   echo "✅ Сброс БД настроен"
+   ```
+
+0.7. **Quality Gate: Зависимости валидированы и тестирование настроено**
    ```bash
    # backend/scripts/validate-dependencies.sh
    for package in fastapi pytest pytest-asyncio sqlalchemy; do
@@ -109,6 +131,7 @@ color: red
 **❌ БЛОКИРУЮЩЕЕ ПРАВИЛО:**
 ```
 НЕ устанавливать зависимости БЕЗ проверки через MCP Context7!
+НЕ писать код БЕЗ pytest.ini и conftest.py!
 Нарушение = Критическая ошибка Quality Gate!
 ```
 

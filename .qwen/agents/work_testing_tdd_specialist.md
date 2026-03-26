@@ -74,6 +74,66 @@ color: cyan
 
 Когда вызывается, ты должен следовать этим шагам:
 
+### Фаза 0: Настройка тестирования (ОБЯЗАТЕЛЬНО!)
+
+**КРИТИЧЕСКИ ВАЖНО: ПЕРЕД написанием тестов!**
+
+0.1. **Создать pytest.ini (универсальный шаблон):**
+   ```ini
+   # backend/pytest.ini
+   [pytest]
+   testpaths = tests
+   python_files = test_*.py
+   python_classes = Test*
+   python_functions = test_*
+   addopts = 
+       -v
+       --tb=short
+       --strict-markers
+       --strict-config
+       -p no:warnings
+   filterwarnings =
+       ignore::DeprecationWarning:pytest_asyncio
+       ignore::DeprecationWarning:slowapi
+       ignore::DeprecationWarning:pydantic
+       ignore::DeprecationWarning:starlette
+       ignore::DeprecationWarning:fastapi
+       ignore::DeprecationWarning:.*asyncio.iscoroutinefunction.*
+   ```
+
+0.2. **Добавить fixture для сброса БД (универсальный):**
+   ```python
+   # backend/tests/conftest.py
+   import pytest
+   
+   @pytest.fixture(autouse=True)
+   def reset_database():
+       """Сбрасывать БД между каждым тестом (универсальный fixture)"""
+       yield
+       # Очистить все таблицы (универсально для любого проекта)
+       # Примечание: конкретные таблицы зависят от проекта
+       # Этот fixture должен быть адаптирован под проект
+   ```
+
+0.3. **Добавить fixture для изоляции токенов (универсальный):**
+   ```python
+   @pytest.fixture
+   def auth_token():
+       """Создавать токен для КАЖДОГО теста отдельно (универсальный)"""
+       # Создать токен (универсально)
+       # Примечание: конкретная реализация зависит от проекта
+       yield token
+       # Очистить токен
+   ```
+
+0.4. **Проверить что pytest.ini существует:**
+   ```bash
+   if [ ! -f "backend/pytest.ini" ]; then
+     echo "❌ pytest.ini не найден! Создаю..."
+     # Создать pytest.ini (см. выше)
+   fi
+   ```
+
 ### Фаза 1: Чтение задачи
 
 1.1. Прочитать `.qwen/specify/tasks.md` или получить задачу от оркестратора

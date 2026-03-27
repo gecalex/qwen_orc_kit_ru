@@ -25,7 +25,9 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Загрузить конфигурацию ПРОЕКТА
-if [ -f "$SCRIPT_DIR/../../config.sh" ]; then
+if [ -f "$SCRIPT_DIR/../../project-config.sh" ]; then
+  source "$SCRIPT_DIR/../../project-config.sh"
+elif [ -f "$SCRIPT_DIR/../../config.sh" ]; then
   source "$SCRIPT_DIR/../../config.sh"
 else
   # Конфигурация по умолчанию

@@ -58,12 +58,18 @@ check_test_output() {
 parse_test_results() {
   log_info "Парсинг результатов тестов..."
   
-  FAILED=$(grep -c "FAILED" "$TEST_OUTPUT" || echo "0")
-  ERRORS=$(grep -c "ERROR" "$TEST_OUTPUT" || echo "0")
-  WARNINGS=$(grep -c "warnings summary" "$TEST_OUTPUT" || echo "0")
+  # Используем tr -d '\n' для удаления переносов строк
+  FAILED=$(grep -c "FAILED" "$TEST_OUTPUT" 2>/dev/null | tr -d '\n' || echo "0")
+  ERRORS=$(grep -c "ERROR" "$TEST_OUTPUT" 2>/dev/null | tr -d '\n' || echo "0")
+  WARNINGS=$(grep -c "warnings summary" "$TEST_OUTPUT" 2>/dev/null | tr -d '\n' || echo "0")
   
   # Извлечь детали failed тестов
   FAILED_TESTS=$(grep "FAILED\|ERROR" "$TEST_OUTPUT" | head -20)
+  
+  # Проверка на пустые значения
+  FAILED=${FAILED:-0}
+  ERRORS=${ERRORS:-0}
+  WARNINGS=${WARNINGS:-0}
   
   log_success "Результаты: Failed=$FAILED, Errors=$ERRORS, Warnings=$WARNINGS"
 }

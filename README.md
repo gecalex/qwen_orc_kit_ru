@@ -1,300 +1,678 @@
 # Qwen Code Orchestrator Kit
 
-Добро пожаловать в Qwen Code Orchestrator Kit - инструмент для оркестрации задач разработки с использованием ИИ-агентов.
+[![Version](https://img.shields.io/badge/version-0.7.0-blue.svg)]()
+[![License](https://img.shields.io/badge/license-MIT-green.svg)]()
+[![Qwen Code](https://img.shields.io/badge/Qwen-Code-purple.svg)]()
 
-**Версия:** v0.6.0
-**Последнее обновление:** 21 марта 2026
-
----
-
-## 🚀 Быстрый старт
-
-**Используете этот шаблон для нового проекта?**
-
-1. **Инициализируйте проект:**
-   ```bash
-   .qwen/scripts/init/init-project.sh
-   ```
-   
-   Скрипт:
-   - Удалит файлы шаблона (README.md, CHANGELOG.md, INSTALLATION.md, и др.)
-   - Создаст пустые файлы проекта (README.md, CHANGELOG.md, package.json)
-   - Инициализирует новый Git репозиторий
-   - Сохранит QWEN.md и .qwen/
-
-2. **Запустите Qwen Code:**
-   ```bash
-   qwen
-   ```
-
-3. **Введите ваше техническое задание**
+**Интеллектуальная система оркестрации разработки с ИИ-агентами**
 
 ---
 
-## Описание проекта
+## 🚀 Quick Start
 
-Этот проект представляет собой набор инструментов и практик для автоматизации и оптимизации процесса разработки программного обеспечения с использованием ИИ-ассистентов.
+### Установка за 1 минуту
 
-## Новые возможности (v0.5.0)
+```bash
+# 1. Клонировать репозиторий
+git clone https://github.com/yourusername/qwen_orc_kit_ru.git
+cd qwen_orc_kit_ru
 
-### 1. Pre-Flight Проверки (Новое в v0.5.0)
-- **Скрипт `pre-flight-check.sh`**: 10 проверок перед началом фазы
-- **Проверки**: Git, develop, .gitignore, constitution, Quality Gates, агенты, команды, skills, MCP, scripts
-- **Блокирующая**: true (останавливает процесс при неудаче)
+# 2. Установить зависимости
+npm install -g @qwen-code/cli
 
-## Новые возможности (v0.6.0)
+# 3. Инициализировать проект
+.qwen/scripts/init/init-project.sh
 
-### 1. Feedback System (Новое в v0.6.0)
-- **5 анализаторов**: git, spec, agents, logic, quality
-- **2 генератора отчетов**: автоматическая генерация отчетов
-- **4 чек-листа**: 200 пунктов для самопроверки
-
-### 2. Git Workflow Automation (Новое в v0.6.0)
-- **create-feature-branch.sh**: создание feature-веток
-- **auto-tag-release.sh**: автоматическое создание тегов
-- **pre-commit-review.sh**: ревью перед коммитом
-- **check-workflow.sh**: проверка git workflow
-
-### 3. Pre-Commit Validation (Новое в v0.6.0)
-- **pre-commit-validation.sh**: валидация перед коммитом
-- **check-commit.sh**: Quality Gate 3
-
-### 4. Timeout Handling (Новое в v0.6.0)
-- **graceful-shutdown навык**: корректная остановка при timeout
-- **progress-logging навык**: логирование прогресса
-- **watchdog.sh**: мониторинг длительности задач
-
-### 5. Mock External APIs (Новое в v0.6.0)
-- **external-api-mocking навык**: мокирование внешних API
-- **pytest-fixtures-template.py**: шаблоны fixtures для pytest
-- **mock-testing-guide.md**: руководство по тестированию с моками
-
-### 6. Pre-Flight Проверки (v0.5.0)
-- **Скрипт `pre-flight-check.sh`**: 10 проверок перед началом фазы
-- **Проверки**: Git, develop, .gitignore, constitution, Quality Gates, агенты, команды, skills, MCP, scripts
-- **Блокирующая**: true (останавливает процесс при неудаче)
-
-## Возможности проекта (все версии)
-
-### 1. Система агентов безопасности
-- **Агент анализа безопасности** (`security-analyzer`): сканирует код на наличие уязвимостей
-- **Команда `/health-security`**: запускает комплексную проверку безопасности
-- **Навык `security-scanner`**: проверяет код на наличие известных паттернов уязвимостей
-- **Скрипт `generate-security-report.sh`**: генерирует отчеты о найденных уязвимостях
-
-### 2. Система анализа зависимостей
-- **Агент анализа зависимостей** (`dependency-analyzer`): проверяет зависимости на уязвимости и устаревание
-- **Команда `/health-deps`**: запускает аудит зависимостей
-- **Навык `dependency-auditor`**: проверяет зависимости на наличие проблем
-- **Скрипт `update-dependencies.sh`**: анализирует и предлагает обновления зависимостей
-
-### 3. Система обнаружения мертвого кода
-- **Агент обнаружения мертвого кода** (`dead-code-detector`): находит неиспользуемые компоненты
-- **Команда `/health-cleanup`**: запускает процесс очистки мертвого кода
-- **Навык `code-cleaner`**: помогает удалять мертвый код
-- **Скрипт `remove-dead-code.sh`**: анализирует и отмечает потенциальный мертвый код
-
-### 4. Контрольные точки качества
-- **Команда `/run-quality-gate`**: запускает комплексную проверку качества
-- **Скрипт `check-coverage.sh`**: проверяет покрытие кода тестами
-- **Скрипт `check-security.sh`**: проверяет проект на уязвимости
-- **Скрипт `check-bundle-size.sh`**: проверяет размер собранного проекта
-
-### 5. Система MCP-конфигураций
-- **Скрипт `switch-mcp.sh`**: позволяет динамически переключаться между конфигурациями
-- **Конфигурации**: BASE, DATABASE, FRONTEND, FULL для оптимизации использования токенов
-- **Поддержка различных сценариев**: от минимальных до полнофункциональных конфигураций
-
-### 6. Система Git worktree
-- **Команда `/worktree-create`**: создает новый worktree для изолированной разработки
-- **Команда `/worktree-list`**: показывает список всех worktree
-- **Команда `/worktree-remove`**: удаляет указанный worktree
-- **Скрипт `manage-worktree.sh`**: управляет worktree для параллельной разработки
-
-### 7. Система вебхуков
-- **Навык `webhook-sender`**: отправляет уведомления о событиях
-- **Команда `/configure-webhooks`**: помогает настроить систему уведомлений
-- **Скрипт `handle-webhooks.sh`**: обрабатывает события и отправляет уведомления
-- **Поддержка различных каналов**: Slack, Discord, email, desktop notifications
-
-### 8. Паттерн health-workflow
-- **Команда `/health-bugs`**: проверка наличия известных ошибок в системе
-- **Команда `/health-security`**: проверка безопасности системы
-- **Команда `/health-cleanup`**: проверка состояния "здоровья" кодовой базы
-- **Команда `/health-deps`**: проверка состояния зависимостей проекта
-- **Сценарии использования**: ежедневная диагностика, пред-релизная проверка, мониторинг производительности
-
-### 9. Подход "библиотека вперёд"
-- **Определение подхода**: при решении задачи разработчик сначала ищет готовые решения
-- **Шаги реализации**: анализ требований, поиск решений, оценка, тестирование, выбор
-- **Примеры поиска**: npm, PyPI, Maven Central, внутренние реестры компонентов
-- **Критерии выбора**: функциональность, лицензирование, поддержка, безопасность
-
-### 10. Расширенная фаза планирования
-- **Этапы планирования**: анализ требований, определение целей, разработка архитектуры
-- **Роли и ответственности**: архитектор, менеджер проекта, разработчики, тестировщики
-- **Процессы назначения исполнителей**: оценка навыков, сопоставление задач и навыков
-- **Критерии завершения**: утвержденные требования, архитектура, график работ
-
-### 11. Соглашения проекта
-- **Организация файлов**: структура каталогов, именование файлов, расположение конфигураций
-- **Стандарты кода**: стили написания, именование переменных, комментарии, документирование
-- **Критерии выбора агентов**: соответствие задаче, доступность инструментов, опыт
-- **Операции с системами**: безопасность, логирование, сетевые соединения
-
-### 12. Контрольные точки качества (Quality Gates)
-- **Gate 1 - Pre-Execution Gate**: проверка корректности постановки задачи
-- **Gate 2 - Post-Execution Gate**: верификация результата под-агента
-- **Gate 3 - Pre-Commit Gate**: проверки перед коммитом (линтеры, тесты, типы)
-- **Gate 4 - Pre-Merge Gate**: интеграционные проверки перед вливанием
-- **Gate 5 - Pre-Implementation Gate**: проверка качества спецификаций перед реализацией
-
-## Настройка Git
-
-Проект настроен в соответствии с Git workflow, описанным в документации:
-- Основные ветки: `main` и `develop`
-- Ветки для фич: `feature/название-фичи`
-- Ветки для багфиксов: `bugfix/описание-бага`
-- Соглашение о коммитах: Conventional Commits
-
-## Локализация
-
-Все документационные файлы в директории `.specify` переведены на русский язык:
-- Шаблоны спецификаций
-- Шаблоны планов реализации
-- Шаблоны задач
-- Bash-скрипты с комментариями
-
-## Структура проекта
-
-```
-.qwen/
-├── agents/              # Директория для агентов
-│   ├── orc_{domain}_{name}.md    # Оркестраторы
-│   └── work_{domain}_{name}.md   # Воркеры
-├── skills/              # Директория для навыков
-│   └── {skill-name}/
-│       └── SKILL.md
-├── templates/           # Шаблоны для создания новых компонентов
-└── configs/             # Конфигурации для MCP и других сервисов
-
-.qwen/scripts/
-├── agent-creation/      # Скрипты для автоматического создания агентов
-├── monitoring/          # Скрипты мониторинга и проверки соответствия
-├── validation/          # Скрипты проверки стандартов
-└── quality-gates/       # Скрипты контрольных точек качества
-
-.qwen/docs/
-├── architecture/        # Архитектурная документация
-├── help/                # Справочная документация
-└── next_step/           # Документация для следующих шагов
-
-specs/                  # Спецификации функций
-└── {###}-{feature-name}/
-    ├── spec.md         # Спецификация функции
-    ├── plan.md         # План реализации
-    ├── research.md     # Исследования
-    ├── data-model.md   # Модель данных
-    ├── quickstart.md   # Быстрый старт
-    ├── contracts/      # Контракты API
-    ├── tasks.md        # Задачи реализации
-    └── checklists/     # Чек-листы
-
-.specify/                 # Шаблоны и скрипты для спецификаций
-├── memory/              # Постоянная память для агентов
-├── .qwen/scripts/             # Bash-скрипты для автоматизации
-├── templates/           # Шаблоны для различных документов
-└── ...
-.qwen/docs/                   # Документация проекта
-├── architecture/        # Архитектурная документация
-└── ...
-.qwen/                  # Конфигурация Qwen CLI
-├── agents/              # Агенты
-├── commands/            # Команды
-└── skills/              # Навыки
-.qwen/scripts/                # Скрипты для контрольных точек качества
-├── orchestration-tools/ # Скрипты оркестрации
-└── ...
-specs/                  # Спецификации функциональности
-state/                  # Состояние системы и артефакты выполнения задач
-.mcp.*.json              # Файлы конфигурации MCP
+# 4. Запустить Qwen Code
+qwen
 ```
 
-## Вклад в проект
+### Первое использование
 
-См. `CONTRIBUTING.md` для информации о том, как внести свой вклад в проект.
+```bash
+# Введите ваше техническое задание
+qwen
+> Создай REST API для заметок с CRUD операциями
+```
 
-## Начало работы
+---
 
-1. Убедитесь, что у вас установлены необходимые инструменты
-2. Ознакомьтесь с архитектурной документацией в `.qwen/docs/architecture/`
-3. Изучите доступные агенты в `.qwen/agents/`
-4. Попробуйте выполнить простую задачу с использованием оркестратора
+## ✨ Возможности
 
-## Экспериментальные навыки агента
+### 🔹 Система обратной связи (v0.7.0)
 
-В проекте доступна экспериментальная функция навыков агента, которая позволяет расширять возможности агентов за счет модульных возможностей.
+Автоматический сбор ошибок ШАБЛОНА:
 
-Для включения навыков:
-1. Убедитесь, что в `.qwen/settings.json` включена опция экспериментальных навыков
-2. Запускайте Qwen Code с флагом `--experimental-skills`
-3. Навыки доступны в директории `.qwen/skills/`
+```bash
+# Запустить сбор обратной связи
+skill: template-feedback
 
-Навыки позволяют упаковывать экспертизу в обнаруживаемые возможности и состоят из файлов SKILL.md с инструкциями.
+# Проверить отчёты
+ls -la .qwen/state/bugs/
+cat .qwen/state/bugs/P2-*.md
+```
 
-## Разработка на основе спецификаций
+**Функционал:**
+- ✅ Автоматическое обнаружение ошибок
+- ✅ Фильтр ошибок ШАБЛОНА (.qwen/...)
+- ✅ Отправка отчётов разработчикам
+- ✅ Реестр багов
+- ✅ Подтверждение приёма
 
-Проект поддерживает подход к разработке на основе спецификаций, при котором функциональность сначала полностью описывается в виде спецификации, а затем реализуется в соответствии с этим описанием.
+### 🔹 TDD Система (v0.7.0)
 
-### Основные команды:
+Test-Driven Development интеграция:
 
-- `speckit.specify` - создание спецификации функции
-- `speckit.clarify` - уточнение спецификации
-- `speckit.plan` - создание плана реализации
-- `speckit.tasks` - генерация задач для реализации
-- `speckit.implement` - выполнение задач реализации
-- `speckit.validate` - проверка соответствия реализации спецификациям (новое)
+```bash
+# TDD специалист создаёт тесты ПЕРЕД кодом
+skill: tdd-specialist
 
-### Интеграция с системой агентов:
+# Quality Gate проверка тестов
+.qwen/scripts/quality-gates/check-tests.sh
+```
 
-- `specification-analyst` - анализ спецификаций на полноту, ясность и соответствие требованиям
-- `specification-compliance-checker` - проверка соответствия реализации требованиям спецификаций
-- Автоматическое определение нужных агентов для задач из `tasks.md`
-- Поддержка меток `[agent:AGENT_TYPE]` и `[futures:AGENT_TYPE]` в задачах
+**Агенты тестирования:**
+- `work_planning_test_assigner` — назначение тестов
+- `work_testing_tdd_specialist` — TDD специалист
+- `work_testing_unit_test_writer` — Unit тесты
+- `work_testing_integration_test_writer` — Integration тесты
+- `work_testing_e2e_test_writer` — E2E тесты
+- `work_testing_security_tester` — Security тесты
 
-### Контрольные точки качества:
+### 🔹 ИИ-Агенты
 
-- `Gate 5: Pre-Implementation Checks` - проверка качества спецификации перед реализацией
-- Проверка наличия всех обязательных разделов
-- Проверка соответствия конституции проекта
-- Проверка тестопригодности требований
+**Оркестраторы:**
+- `orc_dev_task_coordinator` — координация задач
+- `orc_backend_api_coordinator` — backend разработка
+- `orc_frontend_ui_coordinator` — frontend разработка
+- `orc_planning_task_analyzer` — анализ задач планирования
+- `orc_testing_quality_assurer` — обеспечение качества
+- `orc_research_data_analyzer` — анализ данных
+- `orc_security_security_orchestrator` — безопасность
 
-### Инструменты поддержки TDD:
+**Воркеры:**
+- `bug-fixer` — исправление ошибок
+- `bug-hunter` — поиск ошибок
+- `bug-orchestrator` — оркестрация исправления багов
+- `code-quality-checker` — проверка качества
+- `security-analyzer` — анализ безопасности
+- `security-orchestrator` — оркестрация безопасности
+- `dead-code-detector` — обнаружение мёртвого кода
+- `dependency-analyzer` — анализ зависимостей
+- `tech-translator-ru` — перевод на русский
 
-- `.qwen/scripts/specification-tools/generate-tests-from-spec.sh` - генерация тестов на основе спецификаций
-- `.qwen/scripts/specification-tools/assign-agents-to-tasks.sh` - автоматическое назначение агентов задачам
+**Специализированные агенты:**
+- `speckit-constitution-agent` — создание конституции
+- `speckit-specify-agent` — создание спецификаций
+- `speckit-plan-agent` — создание плана
+- `speckit-tasks-agent` — создание задач
+- `work_dev_meta_agent` — создание агентов
+- `qwen-code-cli-specialist` — эксперт по Qwen Code CLI
 
-### Структура спецификаций:
+### 🔹 Speckit Workflow
 
-Спецификации хранятся в директории `specs/` и следуют шаблону, определенному в `.specify/templates/spec-template.md`. Каждая спецификация должна содержать:
+Разработка на основе спецификаций:
 
-- Краткое описание
-- Контекст использования
-- Акторов (пользователей или системы)
-- Функциональные и нефункциональные требования
-- Сценарии использования
-- Условия успеха
-- Ограничения
-- Предположения
-- Возможные риски
+```bash
+# Создать спецификацию
+speckit.specify
 
-Для получения более подробной информации см. `.qwen/docs/architecture/specification-driven-development.md`.
+# Создать план
+speckit.plan
 
-## Адаптивное поведение оркестратора
+# Создать задачи
+speckit.tasks
 
-Центральный оркестратор адаптирует свое поведение в зависимости от состояния проекта:
+# Реализовать
+speckit.implement
 
-- **Пустой проект**: фокус на создение конституции и спецификаций
-- **Существующий код, но без спецификаций**: анализ кода и реверс-инжиниринг спецификаций
-- **Частичные спецификации**: доработка и проверка соответствия
-- **Полные спецификации**: стандартный процесс Speckit
+# Проверить
+speckit.validate
+```
+
+### 🔹 Quality Gates
+
+5 контрольных точек качества:
+
+| Gate | Название | Описание | Блокирующая |
+|------|----------|----------|-------------|
+| Gate 1 | Pre-Execution | Проверка корректности задачи | ❌ |
+| Gate 2 | Post-Execution | Верификация результата | ❌ |
+| Gate 3 | Pre-Commit | Валидация перед коммитом | ✅ |
+| Gate 4 | Pre-Merge | Интеграционные проверки | ✅ |
+| Gate 5 | Pre-Implementation | Проверка спецификаций | ✅ |
+
+**Скрипты проверок:**
+```bash
+# Pre-Commit валидация
+.qwen/scripts/quality-gates/pre-commit-validation.sh
+
+# Проверка тестов
+.qwen/scripts/quality-gates/check-tests.sh
+
+# Проверка безопасности
+.qwen/scripts/quality-gates/check-security.sh
+
+# Проверка покрытия
+.qwen/scripts/quality-gates/check-coverage.sh
+```
+
+### 🔹 MCP Интеграция
+
+**Доступные серверы:**
+- `context7` — документация API (актуальная, версионная)
+- `filesystem` — файловая система
+- `git` — Git операции
+- `github` — GitHub API
+- `chrome-devtools` — браузерная автоматизация
+- `searxng` — веб-поиск (70+ движков, бесплатно)
+- `playwright` — кросс-браузерная автоматизация
+- `supabase` — базы данных
+
+**Конфигурации:**
+```bash
+# Переключение MCP конфигураций
+.qwen/scripts/orchestration-tools/switch-mcp.sh
+
+# Доступные конфигурации:
+# - BASE (context7, filesystem, git)
+# - DATABASE (+ supabase)
+# - FRONTEND (+ playwright, shadcn)
+# - FULL (все серверы)
+```
+
+### 🔹 Git Workflow Automation
+
+**Скрипты:**
+- `create-feature-branch.sh` — создание feature-веток
+- `pre-commit-review.sh` — ревью перед коммитом
+- `auto-tag-release.sh` — автоматическое создание тегов
+- `check-workflow.sh` — проверка соблюдения workflow
+
+**Использование:**
+```bash
+# Создать feature-ветку
+.qwen/scripts/git/create-feature-branch.sh "my-feature"
+
+# Pre-commit ревью
+.qwen/scripts/git/pre-commit-review.sh "feat: Add feature"
+
+# Auto-tag релиза
+.qwen/scripts/git/auto-tag-release.sh "v0.7.0" "Release"
+```
+
+---
+
+## 📦 Установка
+
+### Требования
+
+| Компонент | Версия | Примечание |
+|-----------|--------|------------|
+| **Node.js** | 18+ | Для Qwen Code CLI |
+| **npm** | 9+ | Менеджер пакетов |
+| **Git** | 2.30+ | Система контроля версий |
+| **Python** | 3.9+ | Для тестов и скриптов |
+| **Qwen Code CLI** | последняя | ИИ-агент |
+
+### Шаг 1: Установка Qwen Code CLI
+
+```bash
+# Через npm
+npm install -g @qwen-code/cli
+
+# Проверка
+qwen --version
+```
+
+### Шаг 2: Клонирование проекта
+
+```bash
+git clone https://github.com/yourusername/qwen_orc_kit_ru.git
+cd qwen_orc_kit_ru
+```
+
+### Шаг 3: Инициализация
+
+```bash
+# Инициализировать проект
+.qwen/scripts/init/init-project.sh
+
+# Проверка состояния
+.qwen/scripts/orchestration-tools/analyze-project-state.sh
+```
+
+### Шаг 4: Pre-Flight проверки
+
+```bash
+# Проверка перед началом работы
+.qwen/scripts/orchestration-tools/pre-flight-check.sh "Разработка"
+
+# Проверки:
+# ✅ Git репозиторий
+# ✅ Ветка develop
+# ✅ .gitignore
+# ✅ Конституция
+# ✅ Quality Gates
+# ✅ Агенты
+# ✅ Speckit команды
+# ✅ Skills
+# ✅ MCP конфигурация
+# ✅ Скрипты
+```
+
+### Шаг 5: Настройка MCP (опционально)
+
+```bash
+# Переключение MCP конфигураций
+.qwen/scripts/orchestration-tools/switch-mcp.sh
+
+# Настройка переменных окружения
+export GITHUB_TOKEN="your_token"  # Для GitHub MCP
+```
+
+---
+
+## 📖 Использование
+
+### Базовый workflow
+
+```bash
+# 1. Запустить Qwen Code
+qwen
+
+# 2. Ввести техническое задание
+> Создай REST API для заметок
+
+# 3. Оркестратор проанализирует состояние проекта
+# 4. Создаст спецификацию (speckit.specify)
+# 5. Создаст план (speckit.plan)
+# 6. Создаст задачи (speckit.tasks)
+# 7. Назначит агентов (Фаза 0)
+# 8. Реализует задачи (speckit.implement)
+```
+
+### Работа с агентами
+
+```bash
+# Запустить конкретного агента через task команду
+task '{
+  "subagent_type": "bug-hunter",
+  "prompt": "Найти уязвимости в коде"
+}'
+
+# Использовать skill
+skill: template-feedback
+
+# Проверить доступных агентов
+ls -la .qwen/agents/
+```
+
+### Speckit Workflow
+
+```bash
+# 1. Создание конституции
+speckit.constitution
+
+# 2. Создание спецификаций
+speckit.specify
+
+# 3. Создание плана
+speckit.plan
+
+# 4. Создание задач
+speckit.tasks
+
+# 5. Фаза 0: Назначение агентов
+# (автоматически после tasks)
+
+# 6. Реализация
+speckit.implement
+
+# 7. Проверка
+speckit.validate
+```
+
+### Quality Gates
+
+```bash
+# Pre-Commit валидация (Gate 3)
+.qwen/scripts/quality-gates/pre-commit-validation.sh
+
+# Проверка тестов
+.qwen/scripts/quality-gates/check-tests.sh
+
+# Проверка безопасности (Gate 4)
+.qwen/scripts/quality-gates/check-security.sh
+
+# Полная проверка Quality Gate
+.qwen/scripts/quality-gates/run-quality-gate.sh
+```
+
+### Git Workflow
+
+```bash
+# Создать feature-ветку
+.qwen/scripts/git/create-feature-branch.sh "my-feature"
+
+# Pre-commit ревью
+.qwen/scripts/git/pre-commit-review.sh "feat: Add feature"
+
+# Quality Gate перед коммитом
+.qwen/scripts/quality-gates/check-commit.sh
+
+# Commit (после успешных проверок)
+git add -A
+git commit -m "feat: Add feature"
+
+# Push
+git push -u origin feature/my-feature
+
+# Auto-tag релиза
+.qwen/scripts/git/auto-tag-release.sh "v0.7.0" "Release"
+```
+
+### Система обратной связи
+
+```bash
+# Запустить сбор обратной связи
+skill: template-feedback
+
+# ИЛИ через скрипт
+.qwen/scripts/bug-tracking/run-template-feedback.sh
+
+# Проверить отчёты
+ls -la .qwen/state/bugs/
+cat .qwen/state/bugs/P2-*.md
+
+# Проверить реестр
+cat .qwen/state/template-feedback-registry.json | jq .
+
+# Отправить в ШАБЛОН
+.qwen/scripts/bug-tracking/send-template-feedback.sh .qwen/state/bugs/P2-*.md
+```
+
+---
+
+## 🏗️ Структура проекта
+
+```
+qwen_orc_kit_ru/
+├── .qwen/                          # Конфигурация Qwen Code
+│   ├── agents/                     # ИИ-агенты
+│   │   ├── orc_*.md               # Оркестраторы (7 файлов)
+│   │   └── work_*.md              # Воркеры (15+ файлов)
+│   ├── skills/                     # Навыки (Skills)
+│   │   ├── template-feedback/     # Сбор обратной связи
+│   │   ├── calculate-bug-priority/ # Расчёт приоритета
+│   │   └── ...
+│   ├── scripts/                    # Скрипты
+│   │   ├── bug-tracking/          # Система обратной связи
+│   │   │   ├── run-template-feedback.sh
+│   │   │   ├── template-feedback-report.sh
+│   │   │   ├── send-template-feedback.sh
+│   │   │   ├── receive-template-feedback.sh
+│   │   │   └── receive-template-confirmation.sh
+│   │   ├── git/                   # Git автоматизация
+│   │   │   ├── create-feature-branch.sh
+│   │   │   ├── pre-commit-review.sh
+│   │   │   ├── auto-tag-release.sh
+│   │   │   └── check-workflow.sh
+│   │   ├── quality-gates/         # Quality Gates
+│   │   │   ├── pre-commit-validation.sh
+│   │   │   ├── check-commit.sh
+│   │   │   ├── check-tests.sh
+│   │   │   ├── check-security.sh
+│   │   │   └── check-coverage.sh
+│   │   ├── orchestration-tools/   # Оркестрация
+│   │   │   ├── pre-flight-check.sh
+│   │   │   ├── analyze-project-state.sh
+│   │   │   └── initialize-project.sh
+│   │   └── template/              # Шаблоны
+│   ├── templates/                  # Шаблоны для создания
+│   ├── docs/                       # Документация
+│   │   ├── architecture/          # Архитектурная документация
+│   │   ├── help/                  # Помощь
+│   │   └── ...
+│   ├── config.sh                   # Конфигурация
+│   ├── settings.json               # Настройки Qwen
+│   └── mcp.*.json                  # MCP конфигурации
+├── specs/                          # Спецификации
+│   └── ###-module-name/
+│       ├── spec.md                # Спецификация
+│       ├── plan.md                # План
+│       ├── tasks.md               # Задачи
+│       ├── requirements.md        # Требования
+│       └── checklists/            # Чек-листы
+├── tests/                          # Тесты
+│   ├── test_*.py                  # Python тесты
+│   └── ...
+├── .version                        # Версия проекта
+├── CHANGELOG.md                    # История изменений
+├── CONTRIBUTING.md                 # Руководство для участников
+├── INSTALLATION.md                 # Подробная установка
+├── QUICKSTART.md                   # Быстрый старт
+├── QWEN.md                         # Парадигма оркестратора
+└── README.md                       # Этот файл
+```
+
+---
+
+## 🧪 Тестирование
+
+### Запуск тестов
+
+```bash
+# Все тесты
+pytest tests/ -v
+
+# С покрытием
+pytest tests/ -v --cov=src --cov-report=html
+
+# TDD режим (тесты ПЕРЕД кодом)
+skill: tdd-specialist
+
+# Quality Gate проверка тестов
+.qwen/scripts/quality-gates/check-tests.sh
+```
+
+### Система обратной связи
+
+```bash
+# Запустить сбор обратной связи
+skill: template-feedback
+
+# Проверить отчёты
+cat .qwen/state/bugs/*.md
+
+# Проверить реестр
+cat .qwen/state/template-feedback-registry.json | jq .
+
+# Статистика
+jq '.bugs | length' .qwen/state/template-feedback-registry.json
+```
+
+### Health Workflow
+
+```bash
+# Проверка ошибок
+/health-bugs
+
+# Проверка безопасности
+/health-security
+
+# Проверка чистоты кода
+/health-cleanup
+
+# Проверка зависимостей
+/health-deps
+```
+
+---
+
+## 📚 Документация
+
+### Основная документация
+
+| Файл | Описание |
+|------|----------|
+| **[README.md](README.md)** | Основная документация |
+| **[QWEN.md](QWEN.md)** | Парадигма оркестратора |
+| **[CONTRIBUTING.md](CONTRIBUTING.md)** | Руководство для участников |
+| **[CHANGELOG.md](CHANGELOG.md)** | История изменений |
+| **[QUICKSTART.md](QUICKSTART.md)** | Быстрый старт |
+| **[INSTALLATION.md](INSTALLATION.md)** | Подробная установка |
+
+### Архитектурная документация
+
+- `.qwen/docs/architecture/agent-orchestration.md` — Оркестрация агентов
+- `.qwen/docs/architecture/quality-gates.md` — Контрольные точки качества
+- `.qwen/docs/architecture/tdd-architecture.md` — TDD архитектура
+- `.qwen/docs/architecture/git-workflow.md` — Git workflow
+- `.qwen/docs/architecture/mcp-configurations.md` — MCP конфигурации
+- `.qwen/docs/architecture/specification-driven-development.md` — Разработка по спецификациям
+- `.qwen/docs/architecture/security-guidelines.md` — Руководство по безопасности
+- `.qwen/docs/architecture/dependency-management.md` — Управление зависимостями
+
+### Помощь
+
+- `.qwen/docs/help/tdd-guide.md` — TDD руководство
+- `.qwen/docs/help/feedback-system.md` — Система обратной связи
+- `.qwen/docs/help/git-workflow-guide.md` — Git workflow руководство
+
+### Скрипты
+
+- `.qwen/scripts/README.md` — Документация скриптов
+- `.qwen/scripts/bug-tracking/README.md` — Система обратной связи
+- `.qwen/scripts/quality-gates/README.md` — Quality Gates
+
+---
+
+## 🤝 Вклад в проект
+
+### Как внести свой вклад
+
+1. **Fork** репозиторий
+2. **Создать feature-ветку** (`git checkout -b feature/amazing-feature`)
+3. **Закоммитить изменения** (`git commit -m 'feat: Add amazing feature'`)
+4. **Push** в ветку (`git push origin feature/amazing-feature`)
+5. **Открыть Pull Request**
+
+### Требования к коду
+
+- ✅ Conventional Commits
+- ✅ Quality Gates проверки
+- ✅ Тесты для нового функционала
+- ✅ Документация
+- ✅ Pre-commit ревью
+
+### Типы коммитов
+
+| Тип | Описание | Пример |
+|-----|----------|--------|
+| `feat:` | Новый функционал | `feat: Add TDD support` |
+| `fix:` | Исправление ошибок | `fix: Correct regex pattern` |
+| `docs:` | Документация | `docs: Update README.md` |
+| `style:` | Форматирование | `style: Fix indentation` |
+| `refactor:` | Рефакторинг | `refactor: Extract method` |
+| `test:` | Тесты | `test: Add unit tests` |
+| `chore:` | Вспомогательные | `chore: Update dependencies` |
+
+### Pre-Commit проверки
+
+```bash
+# Pre-Commit валидация
+.qwen/scripts/quality-gates/pre-commit-validation.sh
+
+# Quality Gate 3
+.qwen/scripts/quality-gates/check-commit.sh
+
+# Git Workflow проверка
+.qwen/scripts/git/check-workflow.sh
+```
+
+---
+
+## 📄 Лицензия
+
+MIT License — см. файл [LICENSE](LICENSE) для деталей.
+
+---
+
+## 🔗 Ссылки
+
+### Официальные ресурсы
+
+- **GitHub:** [github.com/yourusername/qwen_orc_kit_ru](https://github.com/yourusername/qwen_orc_kit_ru)
+- **Qwen Code:** [github.com/QwenLM/qwen-code](https://github.com/QwenLM/qwen-code)
+- **Документация Qwen Code:** [qwenlm.github.io/qwen-code-docs](https://qwenlm.github.io/qwen-code-docs/)
+- **NPM Package:** [npmjs.com/package/@qwen-code/cli](https://www.npmjs.com/package/@qwen-code/cli)
+
+### Сообщество
+
+- **Discord:** [Пригласительная ссылка]
+- **Telegram:** [Пригласительная ссылка]
+- **Issues:** [github.com/issues](https://github.com/yourusername/qwen_orc_kit_ru/issues)
+
+---
+
+## 📊 Статистика
+
+| Метрика | Значение |
+|---------|----------|
+| **Версия** | 0.7.0 |
+| **Агентов** | 22 |
+| **Skills** | 12 |
+| **Скриптов** | 50+ |
+| **Тестов** | 100+ |
+| **Документации** | 30+ файлов |
+| **Коммитов** | 400+ |
+
+---
+
+## 🎉 Благодарности
+
+- **Qwen Team** за Qwen Code CLI и Qwen3-Coder модели
+- **Google** за Gemini CLI (основа Qwen Code)
+- **Сообществу** за вклад, обратную связь и баг-репорты
+- **Всем контрибьюторам** за улучшение проекта
+
+---
+
+## 📝 Changelog
+
+См. [CHANGELOG.md](CHANGELOG.md) для полной истории изменений.
+
+### [0.7.0] — 2026-03-28
+
+**Система обратной связи + TDD**
+
+- ✅ Feedback System — автоматический сбор ошибок ШАБЛОНА
+- ✅ TDD Integration — 6 агентов тестирования
+- ✅ Quality Gate 5 — TDD проверки
+- ✅ Universal Template — БЕЗ HARDCODE
+- ✅ MCP Chrome-DevTools — браузерная автоматизация
+
+### [0.6.0] — 2026-03-21
+
+**Git Workflow Automation + Mock APIs**
+
+- ✅ Git Workflow Automation
+- ✅ Pre-Commit Validation
+- ✅ Mock External APIs
+- ✅ Timeout Handling
+- ✅ Agent Analytics
+
+### [0.5.0] — 2026-03-15
+
+**Pre-Flight Automation**
+
+- ✅ Pre-Flight Checks
+- ✅ Project Initialization
+- ✅ Adaptive Orchestration
+
+---
+
+**Made with ❤️ by Qwen Code Orchestrator Kit**
+
+*Последнее обновление: 28 марта 2026*

@@ -84,7 +84,7 @@ copy_config() {
 copy_agents() {
   log_info "Копирование агентов..."
   
-  local agents=("work_monitoring_bug_tracker.md" "orc_bug_auto_fixer.md")
+  local agents=("work_template_feedback.md" "orc_bug_auto_fixer.md")
   
   for agent in "${agents[@]}"; do
     if [ -f "$TEMPLATE_ROOT/.qwen/agents/$agent" ]; then

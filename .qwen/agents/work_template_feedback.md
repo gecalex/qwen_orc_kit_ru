@@ -62,31 +62,18 @@ PKB_test: database connection failed
 
 **КРИТИЧЕСКИ ВАЖНО: НЕ использовать source .qwen/config.sh!**
 
-**Определяем переменные НАПРЯМУЮ (без bash source):**
+**Переменные определяются ЛОКАЛЬНО в функциях (не глобально):**
 
 ```bash
-# Переменные определены напрямую (БЕЗ source)
-BUGS_DIR=".qwen/state/bugs"
-BUG_REGISTRY=".qwen/state/template-feedback-registry.json"
-FEEDBACK_REGISTRY=".qwen/state/template-feedback-registry.json"
-FEEDBACK_DIR=".qwen/state/feedback"
-STATE_DIR=".qwen/state"
-SCRIPTS_DIR=".qwen/scripts"
-BUG_TRACKING_SCRIPTS=".qwen/scripts/bug-tracking"
-QUALITY_GATES_SCRIPTS=".qwen/scripts/quality-gates"
-
-# Проект (универсально — БЕЗ HARDCODE)
-PROJECT_NAME="${PROJECT_NAME:-unknown}"
-PROJECT_TYPE="${PROJECT_TYPE:-unknown}"
-PROJECT_ROOT="${PROJECT_ROOT:-$(pwd)}"
+# Переменные определяются внутри функций
+# Глобальные переменные НЕ объявляем!
 ```
 
 **Почему так:**
 
 ```
-❌ source .qwen/config.sh — НЕ работает в Qwen Code
-✅ Переменные напрямую — РАБОТАЕТ
-✅ Универсально — БЕЗ HARDCODE проектов
+❌ Глобальные переменные — Qwen Code требует context
+✅ Локальные переменные в функциях — РАБОТАЕТ
 ```
 
 ## Инструкции
@@ -192,21 +179,26 @@ PROJECT_ROOT="${PROJECT_ROOT:-$(pwd)}"
 
 5.1. **Создать отчёт (универсальный формат):**
    ```bash
-   BUG_ID="P${PRIORITY:1}-$(date +%Y%m%d-%H%M%S)"
-   BUG_FILE="$BUGS_DIR/${BUG_ID}.md"
-   
-   cat > "$BUG_FILE" << EOF
+   # Локальные переменные (внутри функции)
+   create_bug_report() {
+     local bug_id="P${PRIORITY:1}-$(date +%Y%m%d-%H%M%S)"
+     local bug_file=".qwen/state/bugs/${bug_id}.md"
+     local bugs_dir=".qwen/state/bugs"
+     
+     mkdir -p "$bugs_dir"
+     
+     cat > "$bug_file" << EOF
    ---
-   bug_id: $BUG_ID
+   bug_id: $bug_id
    priority: $PRIORITY
    status: open
    created: $(date -Iseconds)
-   project: $PROJECT_NAME
-   project_type: $PROJECT_TYPE
+   project: ${PROJECT_NAME:-unknown}
+   project_type: ${PROJECT_TYPE:-unknown}
    source: auto-detection
    ---
    
-   # Bug Report: $BUG_ID
+   # Bug Report: $bug_id
    
    ## Description
    Автоматически обнаружен в тестах
@@ -226,36 +218,44 @@ PROJECT_ROOT="${PROJECT_ROOT:-$(pwd)}"
    Запустить bug-hunter для анализа
    EOF
    
-   log_success "Отчёт создан: $BUG_FILE"
+     echo "✅ Отчёт создан: $bug_file"
+   }
+   
+   create_bug_report
    ```
 
 ### Фаза 6: Отправка в ШАБЛОН
 
 6.1. **Отправить отчёт:**
    ```bash
-   if [ -f "$BUG_TRACKING_SCRIPTS/send-to-template.sh" ]; then
-     "$BUG_TRACKING_SCRIPTS/send-to-template.sh" "$BUG_FILE"
+   if [ -f ".qwen/scripts/bug-tracking/send-template-feedback.sh" ]; then
+     .qwen/scripts/bug-tracking/send-template-feedback.sh ".qwen/state/bugs/${bug_id}.md"
    else
-     log_warning "send-to-template.sh не найден"
+     echo "⚠️ send-template-feedback.sh не найден"
    fi
    ```
 
 ### Фаза 7: Обновление реестра
 
-7.1. **Обновить bug-registry.json:**
+7.1. **Обновить template-feedback-registry.json:**
    ```bash
+   # Локальные переменные для реестра
    update_registry() {
-     if [ ! -f "$BUG_REGISTRY" ]; then
-       echo '{"bugs": []}' > "$BUG_REGISTRY"
+     local bug_registry=".qwen/state/template-feedback-registry.json"
+     local bug_id="$1"
+     local priority="$2"
+     
+     if [ ! -f "$bug_registry" ]; then
+       echo '{"bugs": []}' > "$bug_registry"
      fi
      
-     jq --arg id "$BUG_ID" --arg priority "$PRIORITY" \
+     jq --arg id "$bug_id" --arg priority "$priority" \
         '.bugs += [{"bug_id": $id, "priority": $priority, "status": "open", "created": "'$(date -Iseconds)'"}]' \
-        "$BUG_REGISTRY" > "${BUG_REGISTRY}.tmp"
-     mv "${BUG_REGISTRY}.tmp" "$BUG_REGISTRY"
+        "$bug_registry" > "${bug_registry}.tmp"
+     mv "${bug_registry}.tmp" "$bug_registry"
    }
    
-   update_registry
+   update_registry "$bug_id" "$PRIORITY"
    ```
 
 ## Quality Gate
@@ -264,18 +264,18 @@ PROJECT_ROOT="${PROJECT_ROOT:-$(pwd)}"
 
 ```bash
 # Проверить что отчёт создан
-if [ ! -f "$BUG_FILE" ]; then
-  log_error "Отчёт не создан!"
+if [ ! -f ".qwen/state/bugs/${bug_id}.md" ]; then
+  echo "❌ Отчёт не создан!"
   exit 1
 fi
 
 # Проверить что реестр обновлён
-if ! grep -q "$BUG_ID" "$BUG_REGISTRY"; then
-  log_error "Реестр не обновлён!"
+if ! grep -q "$bug_id" ".qwen/state/template-feedback-registry.json"; then
+  echo "❌ Реестр не обновлён!"
   exit 1
 fi
 
-log_success "Quality Gate пройден"
+echo "✅ Quality Gate пройден"
 ```
 
 ## Отчёт
@@ -284,26 +284,28 @@ log_success "Quality Gate пройден"
 
 ```markdown
 ## Итоговое резюме
-{Краткий обзор обнаружения багов}
+{Краткий обзор сбора обратной связи}
 
 ## Выполненная работа
+- Инициализация: Статус
 - Запуск тестов: Статус
-- Парсинг результатов: Статус
-- Классификация багов: Статус
+- Фильтрация ошибок ШАБЛОНА: Статус
 - Создание отчёта: Статус
 - Отправка в ШАБЛОН: Статус
+- Обновление реестра: Статус
 
 ## Внесенные изменения
-- Создан: $BUG_FILE
-- Обновлён: $BUG_REGISTRY
+- Создан: .qwen/state/bugs/{bug_id}.md
+- Обновлён: .qwen/state/template-feedback-registry.json
 
 ## Метрики
 - Failed: $FAILED
 - Errors: $ERRORS
 - Warnings: $WARNINGS
 - Priority: $PRIORITY
+- Bug ID: $bug_id
 
 ## Артефакты
-- $BUG_FILE
-- $BUG_REGISTRY
+- .qwen/state/bugs/{bug_id}.md
+- .qwen/state/template-feedback-registry.json
 ```

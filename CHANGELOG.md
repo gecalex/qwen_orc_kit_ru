@@ -7,6 +7,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-03-28
+
+### Priority 0 (Критическое) - 100% ✅
+
+### Added
+- **Система обратной связи (Template Feedback System)**
+  - `orc_bug_auto_fixer.md` — оркестратор авто-исправления багов
+  - `template-feedback/SKILL.md` — сбор обратной связи о ШАБЛОНЕ
+  - `calculate-bug-priority/SKILL.md` — расчёт приоритета багов
+  - `run-template-feedback.sh` — запуск сбора обратной связи
+  - `template-feedback-report.sh` — создание отчёта об ошибках
+  - `send-template-feedback.sh` — отправка в ШАБЛОН
+  - `receive-template-feedback.sh` — приём в ШАБЛОНЕ
+  - `receive-template-confirmation.sh` — подтверждение приёма
+  - `.qwen/config.sh` — универсальная конфигурация (БЕЗ HARDCODE)
+  - `deploy-to-test.sh` — автоматическое копирование в тестовый проект
+
+- **TDD Система (Test-Driven Development)**
+  - `work_planning_test_assigner.md` — назначение тестов
+  - `work_testing_tdd_specialist.md` — TDD специалист
+  - `work_testing_unit_test_writer.md` — unit тесты
+  - `work_testing_integration_test_writer.md` — integration тесты
+  - `work_testing_e2e_test_writer.md` — e2e тесты
+  - `work_testing_security_tester.md` — security тесты
+  - `check-tests.sh` — Quality Gate проверка тестов
+  - `tdd-architecture.md` — архитектура TDD
+  - `testing-workflow.md` — workflow тестирования
+  - `tdd-guide.md` — руководство по TDD
+  - TDD принцип в конституции
+  - `coding-standards.md` — стандарты кода с TDD принципами
+
+### Changed
+- **README.md** — полная перепись с актуальной информацией v0.7.0
+- **MCP Integration** — добавлен MCP Context7 во ВСЕ агенты
+- **MCP Chrome-DevTools** — добавлен для frontend разработки
+
+### Fixed
+- **HARDCODE** — удалён весь хардкод PKB из шаблона (КРИТИЧЕСКОЕ)
+- **Warnings** — исправлен рост warnings
+- **Task Divergence** — универсальное решение расхождения задач
+- **orc_planning_task_analyzer** — автоматический вызов Фазы 0.5
+
+### Priority 1 (Важное) - 100% ✅
+
+### Added
+- **Quality Gate 5** — TDD проверки в Quality Gate (Фаза 5 из 7)
+- **6 агентов тестирования** — Фаза 2 из 7
+- **5 агентов обновлено** — для TDD (Фаза 3 из 7)
+
 ## [0.6.0] - 2026-03-21
 
 ### Priority 0 (Критическое) - 100% ✅

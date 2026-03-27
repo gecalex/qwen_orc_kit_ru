@@ -24,7 +24,10 @@ set -e
 # -----------------------------------------------------------------------------
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TEMPLATE_ROOT="$SCRIPT_DIR/../.."
+
+# PROJECT_ROOT — корень проекта (где находится .qwen/)
+# Если скрипт в .qwen/scripts/bug-tracking/, то PROJECT_ROOT = ../../..
+PROJECT_ROOT="$SCRIPT_DIR/../../.."
 
 # Цвета
 RED='\033[0;31m'
@@ -57,14 +60,14 @@ log_error() {
 init_directories() {
   log_info "Инициализация директорий..."
   
-  mkdir -p "$TEMPLATE_ROOT/.qwen/state/bugs"
-  mkdir -p "$TEMPLATE_ROOT/.qwen/state/feedback"
-  mkdir -p "$TEMPLATE_ROOT/.qwen/state/feedback/inbox"
-  mkdir -p "$TEMPLATE_ROOT/.qwen/state/feedback/processed"
+  mkdir -p "$PROJECT_ROOT/.qwen/state/bugs"
+  mkdir -p "$PROJECT_ROOT/.qwen/state/feedback"
+  mkdir -p "$PROJECT_ROOT/.qwen/state/feedback/inbox"
+  mkdir -p "$PROJECT_ROOT/.qwen/state/feedback/processed"
   
   # Инициализировать реестр
-  if [ ! -f "$TEMPLATE_ROOT/.qwen/state/template-feedback-registry.json" ]; then
-    echo '{"bugs": []}' > "$TEMPLATE_ROOT/.qwen/state/template-feedback-registry.json"
+  if [ ! -f "$PROJECT_ROOT/.qwen/state/template-feedback-registry.json" ]; then
+    echo '{"bugs": []}' > "$PROJECT_ROOT/.qwen/state/template-feedback-registry.json"
   fi
   
   log_success "Директории созданы"
@@ -74,7 +77,7 @@ init_directories() {
 run_tests() {
   log_info "Запуск тестов..."
   
-  cd "$TEMPLATE_ROOT"
+  cd "$PROJECT_ROOT"
   
   # Запустить тесты и сохранить вывод
   pytest tests/ -v --tb=line 2>&1 | tee /tmp/pytest-output.txt
@@ -130,7 +133,7 @@ create_report() {
   fi
   
   local bug_id="P2-$(date +%Y%m%d-%H%M%S)"
-  local bug_file="$TEMPLATE_ROOT/.qwen/state/bugs/${bug_id}.md"
+  local bug_file="$PROJECT_ROOT/.qwen/state/bugs/${bug_id}.md"
   
   cat > "$bug_file" << EOF
 ---
@@ -176,7 +179,7 @@ update_registry() {
   
   log_info "Обновление реестра..."
   
-  local registry_file="$TEMPLATE_ROOT/.qwen/state/template-feedback-registry.json"
+  local registry_file="$PROJECT_ROOT/.qwen/state/template-feedback-registry.json"
   
   if [ ! -f "$registry_file" ]; then
     echo '{"bugs": []}' > "$registry_file"
@@ -246,8 +249,8 @@ main() {
   echo ""
   echo -e "${GREEN}✅ Сбор обратной связи завершён${NC}"
   echo ""
-  echo "Отчёты: $TEMPLATE_ROOT/.qwen/state/bugs/"
-  echo "Реестр: $TEMPLATE_ROOT/.qwen/state/template-feedback-registry.json"
+  echo "Отчёты: $PROJECT_ROOT/.qwen/state/bugs/"
+  echo "Реестр: $PROJECT_ROOT/.qwen/state/template-feedback-registry.json"
 }
 
 # Запуск

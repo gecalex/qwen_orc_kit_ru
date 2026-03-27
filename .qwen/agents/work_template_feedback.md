@@ -177,51 +177,45 @@ PKB_test: database connection failed
 
 ### Фаза 5: Создание отчёта
 
-5.1. **Создать отчёт (универсальный формат):**
+5.1. **Создать отчёт (использовать ${variable} шаблонизацию):**
    ```bash
-   # Локальные переменные с префиксом tfb_ (template feedback bug)
-   create_tfb_report() {
-     local tfb_bug_id="P${PRIORITY:1}-$(date +%Y%m%d-%H%M%S)"
-     local tfb_bug_file=".qwen/state/bugs/${tfb_bug_id}.md"
-     local tfb_bugs_dir=".qwen/state/bugs"
-     
-     mkdir -p "$tfb_bugs_dir"
-     
-     cat > "$tfb_bug_file" << EOF
-   ---
-   bug_id: $tfb_bug_id
-   priority: $PRIORITY
-   status: open
-   created: $(date -Iseconds)
-   project: ${PROJECT_NAME:-unknown}
-   project_type: ${PROJECT_TYPE:-unknown}
-   source: auto-detection
-   ---
+   # Использовать ${variable} шаблонизацию (ОФИЦИАЛЬНО!)
+   # https://qwenlm.github.io/qwen-code-docs/en/users/features/sub-agents
    
-   # Bug Report: $tfb_bug_id
+   mkdir -p ".qwen/state/bugs"
    
-   ## Description
-   Автоматически обнаружен в тестах
+   cat > ".qwen/state/bugs/P${PRIORITY:1}-$(date +%Y%m%d-%H%M%S).md" << EOF
+---
+bug_id: P${PRIORITY:1}-$(date +%Y%m%d-%H%M%S)
+priority: ${PRIORITY}
+status: open
+created: $(date -Iseconds)
+project: ${PROJECT_NAME:-unknown}
+project_type: ${PROJECT_TYPE:-unknown}
+source: auto-detection
+---
+
+# Bug Report: P${PRIORITY:1}-$(date +%Y%m%d-%H%M%S)
+
+## Description
+Автоматически обнаружена ошибка в ШАБЛОНЕ (НЕ в проекте!)
+
+## Test Results
+- Failed: ${FAILED}
+- Errors: ${ERRORS}
+- Warnings: ${WARNINGS}
+
+## Failed Tests
+${FAILED_TESTS}
+
+## Priority Calculation
+- Priority: ${PRIORITY}
+
+## Recommended Action
+Запустить bug-hunter для анализа ошибки ШАБЛОНА
+EOF
    
-   ## Test Results
-   - Failed: $FAILED
-   - Errors: $ERRORS
-   - Warnings: $WARNINGS
-   
-   ## Failed Tests
-   $FAILED_TESTS
-   
-   ## Priority Calculation
-   - Priority: $PRIORITY
-   
-   ## Recommended Action
-   Запустить bug-hunter для анализа
-   EOF
-   
-     echo "✅ Отчёт создан: $tfb_bug_file"
-   }
-   
-   create_tfb_report
+   echo "✅ Отчёт создан: .qwen/state/bugs/P${PRIORITY:1}-$(date +%Y%m%d-%H%M%S).md"
    ```
 
 ### Фаза 6: Отправка в ШАБЛОН
@@ -229,7 +223,7 @@ PKB_test: database connection failed
 6.1. **Отправить отчёт:**
    ```bash
    if [ -f ".qwen/scripts/bug-tracking/send-template-feedback.sh" ]; then
-     .qwen/scripts/bug-tracking/send-template-feedback.sh ".qwen/state/bugs/${tfb_bug_id}.md"
+     .qwen/scripts/bug-tracking/send-template-feedback.sh ".qwen/state/bugs/P${PRIORITY:1}-$(date +%Y%m%d-%H%M%S).md"
    else
      echo "⚠️ send-template-feedback.sh не найден"
    fi
@@ -237,25 +231,21 @@ PKB_test: database connection failed
 
 ### Фаза 7: Обновление реестра
 
-7.1. **Обновить template-feedback-registry.json:**
+7.1. **Обновить template-feedback-registry.json (использовать ${variable}):**
    ```bash
-   # Локальные переменные с префиксом tfb_
-   update_tfb_registry() {
-     local tfb_bug_registry=".qwen/state/template-feedback-registry.json"
-     local tfb_id="$1"
-     local tfb_priority="$2"
-     
-     if [ ! -f "$tfb_bug_registry" ]; then
-       echo '{"bugs": []}' > "$tfb_bug_registry"
-     fi
-     
-     jq --arg id "$tfb_id" --arg priority "$tfb_priority" \
-        '.bugs += [{"bug_id": $id, "priority": $priority, "status": "open", "created": "'$(date -Iseconds)'"}]' \
-        "$tfb_bug_registry" > "${tfb_bug_registry}.tmp"
-     mv "${tfb_bug_registry}.tmp" "$tfb_bug_registry"
-   }
+   # Использовать ${variable} шаблонизацию
+   BUG_ID="P${PRIORITY:1}-$(date +%Y%m%d-%H%M%S)"
    
-   update_tfb_registry "$tfb_bug_id" "$PRIORITY"
+   if [ ! -f ".qwen/state/template-feedback-registry.json" ]; then
+     echo '{"bugs": []}' > ".qwen/state/template-feedback-registry.json"
+   fi
+   
+   jq --arg id "$BUG_ID" --arg priority "$PRIORITY" \
+      '.bugs += [{"bug_id": $id, "priority": $priority, "status": "open", "created": "'"$(date -Iseconds)"'"}]' \
+      ".qwen/state/template-feedback-registry.json" > ".qwen/state/template-feedback-registry.json.tmp"
+   mv ".qwen/state/template-feedback-registry.json.tmp" ".qwen/state/template-feedback-registry.json"
+   
+   echo "✅ Реестр обновлён: $BUG_ID"
    ```
 
 ## Quality Gate
@@ -264,13 +254,15 @@ PKB_test: database connection failed
 
 ```bash
 # Проверить что отчёт создан
-if [ ! -f ".qwen/state/bugs/${tfb_bug_id}.md" ]; then
+BUG_ID="P${PRIORITY:1}-$(date +%Y%m%d-%H%M%S)"
+
+if [ ! -f ".qwen/state/bugs/${BUG_ID}.md" ]; then
   echo "❌ Отчёт не создан!"
   exit 1
 fi
 
 # Проверить что реестр обновлён
-if ! grep -q "$tfb_bug_id" ".qwen/state/template-feedback-registry.json"; then
+if ! grep -q "$BUG_ID" ".qwen/state/template-feedback-registry.json"; then
   echo "❌ Реестр не обновлён!"
   exit 1
 fi
@@ -295,17 +287,17 @@ echo "✅ Quality Gate пройден"
 - Обновление реестра: Статус
 
 ## Внесенные изменения
-- Создан: .qwen/state/bugs/{tfb_bug_id}.md
+- Создан: .qwen/state/bugs/${BUG_ID}.md
 - Обновлён: .qwen/state/template-feedback-registry.json
 
 ## Метрики
-- Failed: $FAILED
-- Errors: $ERRORS
-- Warnings: $WARNINGS
-- Priority: $PRIORITY
-- Bug ID: $tfb_bug_id
+- Failed: ${FAILED}
+- Errors: ${ERRORS}
+- Warnings: ${WARNINGS}
+- Priority: ${PRIORITY}
+- Bug ID: ${BUG_ID}
 
 ## Артефакты
-- .qwen/state/bugs/{tfb_bug_id}.md
+- .qwen/state/bugs/${BUG_ID}.md
 - .qwen/state/template-feedback-registry.json
 ```

@@ -1,20 +1,23 @@
 #!/bin/bash
 
 # =============================================================================
-# auto-report.sh - Автоматическое создание отчёта о баге
+# template-feedback-report.sh - Автоматическое создание отчёта о баге ШАБЛОНА
 # =============================================================================
-# Назначение: Автоматическое создание отчёта о баге после обнаружения
+# Назначение: Автоматическое создание отчёта о баге ШАБЛОНА (НЕ проекта!)
 # 
-# Функционал:
-#   - Парсинг результатов тестов
-#   - Расчет приоритета (через calculate-bug-priority)
-#   - Создание отчёта в универсальном формате
-#   - Обновление bug-registry.json
-#
-# ВАЖНО: БЕЗ HARDCODE! Универсально для любого проекта.
+# ВАЖНО: Собирает ТОЛЬКО ошибки в ШАБЛОНЕ:
+#   - .qwen/scripts/ - скрипты ШАБЛОНА
+#   - .qwen/agents/ - агенты ШАБЛОНА
+#   - .qwen/skills/ - навыки ШАБЛОНА
+#   - .qwen/templates/ - шаблоны ШАБЛОНА
+# 
+# ИГНОРИРУЕТ:
+#   - Тесты проекта
+#   - Код проекта
+#   - Конфигурацию проекта
 #
 # Использование:
-#   .qwen/scripts/bug-tracking/auto-report.sh [test_output_file]
+#   .qwen/scripts/bug-tracking/template-feedback-report.sh [test_output_file]
 # =============================================================================
 
 set -e
@@ -66,12 +69,39 @@ parse_test_results() {
   # Извлечь детали failed тестов
   FAILED_TESTS=$(grep "FAILED\|ERROR" "$TEST_OUTPUT" | head -20)
   
+  # ФИЛЬТР: Оставить только ошибки ШАБЛОНА
+  TEMPLATE_BUGS=$(filter_template_bugs "$FAILED_TESTS")
+  
   # Проверка на пустые значения
   FAILED=${FAILED:-0}
   ERRORS=${ERRORS:-0}
   WARNINGS=${WARNINGS:-0}
   
   log_success "Результаты: Failed=$FAILED, Errors=$ERRORS, Warnings=$WARNINGS"
+}
+
+# Фильтр: Оставить только ошибки ШАБЛОНА
+filter_template_bugs() {
+  local failed_tests="$1"
+  
+  log_info "Фильтрация ошибок ШАБЛОНА..."
+  
+  # Оставить только ошибки в компонентах ШАБЛОНА
+  echo "$failed_tests" | while read -r line; do
+    # Проверить что это ошибка ШАБЛОНА
+    if echo "$line" | grep -qE "\.qwen/(scripts|agents|skills|templates)/"; then
+      echo "$line"
+    fi
+  done
+}
+
+# Проверка: Есть ли ошибки ШАБЛОНА
+has_template_bugs() {
+  if [ -n "$TEMPLATE_BUGS" ] && [ "$TEMPLATE_BUGS" != "" ]; then
+    return 0  # Есть ошибки ШАБЛОНА
+  else
+    return 1  # Нет ошибок ШАБЛОНА
+  fi
 }
 
 # Автоматическое определение severity
@@ -183,7 +213,14 @@ calculate_priority() {
 
 # Создание отчёта
 create_bug_report() {
-  log_info "Создание отчёта о баге..."
+  log_info "Создание отчёта о баге ШАБЛОНА..."
+  
+  # Проверка: Есть ли ошибки ШАБЛОНА
+  if ! has_template_bugs; then
+    log_info "Ошибки ШАБЛОНА не найдены — отчёт не создаётся"
+    log_info "Это означает что все ошибки — в проекте, а не в ШАБЛОНЕ"
+    return 0
+  fi
   
   BUG_ID="${PRIORITY}-$(date +%Y%m%d-%H%M%S)"
   BUG_FILE="$BUGS_DIR/${BUG_ID}.md"
@@ -198,20 +235,21 @@ created: $(date -Iseconds)
 project: ${PROJECT_NAME:-unknown}
 project_type: ${PROJECT_TYPE:-unknown}
 source: auto-detection
+template_component: true
 ---
 
-# Bug Report: $BUG_ID
+# Template Bug Report: $BUG_ID
 
 ## Description
-Автоматически обнаружен в тестах
+Автоматически обнаружена ошибка в ШАБЛОНЕ (НЕ в проекте!)
 
-## Test Results
+## Template Bugs Only
+$TEMPLATE_BUGS
+
+## Test Results (все)
 - Failed: $FAILED
 - Errors: $ERRORS
 - Warnings: $WARNINGS
-
-## Failed Tests
-$FAILED_TESTS
 
 ## Priority Calculation
 - Priority: $PRIORITY ($PRIORITY_LABEL)
@@ -220,11 +258,12 @@ $FAILED_TESTS
 - Probability: $(auto_detect_probability)
 
 ## Recommended Action
-Запустить bug-hunter для анализа
+Запустить bug-hunter для анализа ошибки ШАБЛОНА
 
 ## Metadata
 - Test Output: $TEST_OUTPUT
 - Bug File: $BUG_FILE
+- Template Component: true
 EOF
 
   log_success "Отчёт создан: $BUG_FILE"

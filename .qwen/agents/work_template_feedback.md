@@ -179,17 +179,17 @@ PKB_test: database connection failed
 
 5.1. **Создать отчёт (универсальный формат):**
    ```bash
-   # Локальные переменные (внутри функции)
-   create_bug_report() {
-     local bug_id="P${PRIORITY:1}-$(date +%Y%m%d-%H%M%S)"
-     local bug_file=".qwen/state/bugs/${bug_id}.md"
-     local bugs_dir=".qwen/state/bugs"
+   # Локальные переменные с префиксом tfb_ (template feedback bug)
+   create_tfb_report() {
+     local tfb_bug_id="P${PRIORITY:1}-$(date +%Y%m%d-%H%M%S)"
+     local tfb_bug_file=".qwen/state/bugs/${tfb_bug_id}.md"
+     local tfb_bugs_dir=".qwen/state/bugs"
      
-     mkdir -p "$bugs_dir"
+     mkdir -p "$tfb_bugs_dir"
      
-     cat > "$bug_file" << EOF
+     cat > "$tfb_bug_file" << EOF
    ---
-   bug_id: $bug_id
+   bug_id: $tfb_bug_id
    priority: $PRIORITY
    status: open
    created: $(date -Iseconds)
@@ -198,7 +198,7 @@ PKB_test: database connection failed
    source: auto-detection
    ---
    
-   # Bug Report: $bug_id
+   # Bug Report: $tfb_bug_id
    
    ## Description
    Автоматически обнаружен в тестах
@@ -218,10 +218,10 @@ PKB_test: database connection failed
    Запустить bug-hunter для анализа
    EOF
    
-     echo "✅ Отчёт создан: $bug_file"
+     echo "✅ Отчёт создан: $tfb_bug_file"
    }
    
-   create_bug_report
+   create_tfb_report
    ```
 
 ### Фаза 6: Отправка в ШАБЛОН
@@ -229,7 +229,7 @@ PKB_test: database connection failed
 6.1. **Отправить отчёт:**
    ```bash
    if [ -f ".qwen/scripts/bug-tracking/send-template-feedback.sh" ]; then
-     .qwen/scripts/bug-tracking/send-template-feedback.sh ".qwen/state/bugs/${bug_id}.md"
+     .qwen/scripts/bug-tracking/send-template-feedback.sh ".qwen/state/bugs/${tfb_bug_id}.md"
    else
      echo "⚠️ send-template-feedback.sh не найден"
    fi
@@ -239,23 +239,23 @@ PKB_test: database connection failed
 
 7.1. **Обновить template-feedback-registry.json:**
    ```bash
-   # Локальные переменные для реестра
-   update_registry() {
-     local bug_registry=".qwen/state/template-feedback-registry.json"
-     local bug_id="$1"
-     local priority="$2"
+   # Локальные переменные с префиксом tfb_
+   update_tfb_registry() {
+     local tfb_bug_registry=".qwen/state/template-feedback-registry.json"
+     local tfb_id="$1"
+     local tfb_priority="$2"
      
-     if [ ! -f "$bug_registry" ]; then
-       echo '{"bugs": []}' > "$bug_registry"
+     if [ ! -f "$tfb_bug_registry" ]; then
+       echo '{"bugs": []}' > "$tfb_bug_registry"
      fi
      
-     jq --arg id "$bug_id" --arg priority "$priority" \
+     jq --arg id "$tfb_id" --arg priority "$tfb_priority" \
         '.bugs += [{"bug_id": $id, "priority": $priority, "status": "open", "created": "'$(date -Iseconds)'"}]' \
-        "$bug_registry" > "${bug_registry}.tmp"
-     mv "${bug_registry}.tmp" "$bug_registry"
+        "$tfb_bug_registry" > "${tfb_bug_registry}.tmp"
+     mv "${tfb_bug_registry}.tmp" "$tfb_bug_registry"
    }
    
-   update_registry "$bug_id" "$PRIORITY"
+   update_tfb_registry "$tfb_bug_id" "$PRIORITY"
    ```
 
 ## Quality Gate
@@ -264,13 +264,13 @@ PKB_test: database connection failed
 
 ```bash
 # Проверить что отчёт создан
-if [ ! -f ".qwen/state/bugs/${bug_id}.md" ]; then
+if [ ! -f ".qwen/state/bugs/${tfb_bug_id}.md" ]; then
   echo "❌ Отчёт не создан!"
   exit 1
 fi
 
 # Проверить что реестр обновлён
-if ! grep -q "$bug_id" ".qwen/state/template-feedback-registry.json"; then
+if ! grep -q "$tfb_bug_id" ".qwen/state/template-feedback-registry.json"; then
   echo "❌ Реестр не обновлён!"
   exit 1
 fi
@@ -295,7 +295,7 @@ echo "✅ Quality Gate пройден"
 - Обновление реестра: Статус
 
 ## Внесенные изменения
-- Создан: .qwen/state/bugs/{bug_id}.md
+- Создан: .qwen/state/bugs/{tfb_bug_id}.md
 - Обновлён: .qwen/state/template-feedback-registry.json
 
 ## Метрики
@@ -303,9 +303,9 @@ echo "✅ Quality Gate пройден"
 - Errors: $ERRORS
 - Warnings: $WARNINGS
 - Priority: $PRIORITY
-- Bug ID: $bug_id
+- Bug ID: $tfb_bug_id
 
 ## Артефакты
-- .qwen/state/bugs/{bug_id}.md
+- .qwen/state/bugs/{tfb_bug_id}.md
 - .qwen/state/template-feedback-registry.json
 ```

@@ -12555,3 +12555,7 @@ release_*.md
 TEMPLATE.md
 state/
 ORCHESTRATION_DEVELOPMENT_REPORT.md
+
+# Файлы состояния (внутренняя разработка)
+.qwen/state/
+

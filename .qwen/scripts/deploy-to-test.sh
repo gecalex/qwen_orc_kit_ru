@@ -162,8 +162,8 @@ verify_copy() {
   fi
   
   # Проверить агентов
-  if [ ! -f "$TEST_PROJECT/.qwen/agents/work_monitoring_bug_tracker.md" ]; then
-    log_error "work_monitoring_bug_tracker.md не скопирован"
+  if [ ! -f "$TEST_PROJECT/.qwen/agents/work_template_feedback.md" ]; then
+    log_error "work_template_feedback.md не скопирован"
     ((errors++))
   fi
   

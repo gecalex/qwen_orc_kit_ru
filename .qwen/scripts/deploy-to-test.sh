@@ -217,21 +217,19 @@ main() {
     echo ""
     echo "Следующий шаг:"
     echo "  cd $TEST_PROJECT"
-    echo "  git checkout -b test/bug-tracking-system"
-    echo "  .qwen/agents/work_template_feedback.md"
+    echo "  git checkout -b test/bug-tracking-system-v2"
+    echo "  "
+    echo "  # Запуск через оркестратора:"
+    echo "  task '{"
+    echo "    \"subagent_type\": \"work_template_feedback\","
+    echo "    \"prompt\": \"Запустить сбор обратной связи о ШАБЛОНЕ\""
+    echo "  }'"
   else
     echo ""
     echo -e "${RED}❌ Копирование завершено с ошибками${NC}"
     exit 1
   fi
-  
-  echo ""
-  echo "Следующий шаг:"
-  echo "  cd /home/alex/MyProjects/PKB_test"
-  echo "  git checkout -b test/bug-tracking-system-v2"
-  echo "  "
-  echo "  # Запуск через оркестратора:"
-  echo "  task '{"
-  echo "    \"subagent_type\": \"work_template_feedback\","
-  echo "    \"prompt\": \"Запустить сбор обратной связи о ШАБЛОНЕ\""
-  echo "  }'"
+}
+
+# Запуск
+main "$@"

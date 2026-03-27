@@ -84,7 +84,7 @@ copy_config() {
 copy_agents() {
   log_info "Копирование агентов..."
   
-  local agents=("work_template_feedback.md" "orc_bug_auto_fixer.md")
+  local agents=("orc_bug_auto_fixer.md")
   
   for agent in "${agents[@]}"; do
     if [ -f "$TEMPLATE_ROOT/.qwen/agents/$agent" ]; then
@@ -161,9 +161,9 @@ verify_copy() {
     ((errors++))
   fi
   
-  # Проверить агентов
-  if [ ! -f "$TEST_PROJECT/.qwen/agents/work_template_feedback.md" ]; then
-    log_error "work_template_feedback.md не скопирован"
+  # Проверить skill
+  if [ ! -f "$TEST_PROJECT/.qwen/skills/template-feedback/SKILL.md" ]; then
+    log_error "template-feedback skill не скопирован"
     ((errors++))
   fi
   

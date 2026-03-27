@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "created": "{{DATE}}",
+  "source_of_truth": "tasks-tdd.md",
+  "description": "Реестр задач для отслеживания выполнения (универсальный шаблон)",
+  "usage": {
+    "read": "Читать задачи из tasks-tdd.md",
+    "write": "Обновлять статус через update-registry.sh",
+    "priority": "tasks-tdd.md > tasks.md"
+  },
+  "tasks": {},
+  "warnings": [],
+  "metadata": {
+    "project_type": "any",
+    "module_pattern": "T-XXX-XXX",
+    "auto_generated": true,
+    "template": true
+  },
+  "scripts": {
+    "update": ".qwen/scripts/task-tools/update-registry.sh",
+    "validate": ".qwen/scripts/task-tools/validate-registry.sh"
+  }
+}

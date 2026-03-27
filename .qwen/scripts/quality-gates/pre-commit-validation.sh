@@ -457,3 +457,36 @@ main() {
 
 # Запуск основной функции
 main "$@"
+
+# =============================================================================
+# Проверка 6: TDD (наличие тестов)
+# =============================================================================
+check_tdd() {
+    print_section "Проверка TDD (наличие тестов)"
+    
+    local has_code_changes=false
+    local has_test_changes=false
+    
+    # Проверка изменённых файлов
+    for file in $(git diff --cached --name-only 2>/dev/null); do
+        if [[ "$file" == *.py ]] || [[ "$file" == *.ts ]] || [[ "$file" == *.js ]]; then
+            if [[ "$file" == *test* ]] || [[ "$file" == */tests/* ]]; then
+                has_test_changes=true
+            else
+                has_code_changes=true
+            fi
+        fi
+    done
+    
+    if [ "$has_code_changes" = true ] && [ "$has_test_changes" = false ]; then
+        print_warning "Код изменён без тестов (TDD не соблюдён)"
+        echo "  💡 TDD: сначала тесты, потом код"
+        return 0  # Не блокирующая
+    else
+        print_success "TDD соблюдён"
+        return 0
+    fi
+}
+
+# Запуск проверки TDD
+check_tdd || true

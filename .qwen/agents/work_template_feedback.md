@@ -58,20 +58,35 @@ PKB_test: database connection failed
 /home/alex/MyProjects/PKB_test/backend/tests/test_auth.py - ERROR
 ```
 
-## Использование .qwen/config.sh
+## Конфигурация
 
-**ОБЯЗАТЕЛЬНО:**
+**КРИТИЧЕСКИ ВАЖНО: НЕ использовать source .qwen/config.sh!**
+
+**Определяем переменные НАПРЯМУЮ (без bash source):**
 
 ```bash
-# Источник конфигурации
-source .qwen/config.sh
+# Переменные определены напрямую (БЕЗ source)
+BUGS_DIR=".qwen/state/bugs"
+BUG_REGISTRY=".qwen/state/template-feedback-registry.json"
+FEEDBACK_REGISTRY=".qwen/state/template-feedback-registry.json"
+FEEDBACK_DIR=".qwen/state/feedback"
+STATE_DIR=".qwen/state"
+SCRIPTS_DIR=".qwen/scripts"
+BUG_TRACKING_SCRIPTS=".qwen/scripts/bug-tracking"
+QUALITY_GATES_SCRIPTS=".qwen/scripts/quality-gates"
 
-# Использование переменных
-PROJECT_TYPE="$PROJECT_TYPE"
-BACKEND_DIR="$BACKEND_DIR"
-TEST_DIR="$TEST_DIR"
-TEST_CMD="$TEST_CMD"
-BUG_REGISTRY="$BUG_REGISTRY"
+# Проект (универсально — БЕЗ HARDCODE)
+PROJECT_NAME="${PROJECT_NAME:-unknown}"
+PROJECT_TYPE="${PROJECT_TYPE:-unknown}"
+PROJECT_ROOT="${PROJECT_ROOT:-$(pwd)}"
+```
+
+**Почему так:**
+
+```
+❌ source .qwen/config.sh — НЕ работает в Qwen Code
+✅ Переменные напрямую — РАБОТАЕТ
+✅ Универсально — БЕЗ HARDCODE проектов
 ```
 
 ## Инструкции
@@ -80,16 +95,21 @@ BUG_REGISTRY="$BUG_REGISTRY"
 
 ### Фаза 1: Инициализация
 
-1.1. **Загрузить конфигурацию:**
+1.1. **Инициализация директорий:**
    ```bash
-   source .qwen/config.sh
-   echo "✅ Конфигурация загружена: $PROJECT_NAME ($PROJECT_TYPE)"
+   # Создать директории (БЕЗ source)
+   mkdir -p .qwen/state/bugs
+   mkdir -p .qwen/state/feedback
+   mkdir -p .qwen/state/feedback/inbox
+   mkdir -p .qwen/state/feedback/processed
+   mkdir -p .qwen/state/feedback/confirmations
+   echo "✅ Директории созданы"
    ```
 
 1.2. **Проверить директорию:**
    ```bash
-   if [ ! -d "$TEST_DIR" ]; then
-     log_error "TEST_DIR не существует: $TEST_DIR"
+   if [ ! -d ".qwen/state/bugs" ]; then
+     echo "❌ .qwen/state/bugs не существует"
      exit 1
    fi
    ```

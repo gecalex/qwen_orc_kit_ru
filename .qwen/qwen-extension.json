@@ -1,6 +1,7 @@
 {
   "name": "qwen-orchestrator-kit",
   "version": "0.8.0",
+  "description": "Интеллектуальная система оркестрации разработки с ИИ-агентами, навыками, командами и MCP серверами для Qwen Code CLI",
   "contextFileName": "QWEN.md",
   "commands": "commands",
   "skills": "skills",

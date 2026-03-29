@@ -1,0 +1,210 @@
+name: Release Extension
+
+on:
+  push:
+    tags:
+      - 'v*'  # Теги версий: v0.8.0, v1.0.0, etc.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Версия для релиза (например, v0.8.0)'
+        required: true
+        type: string
+
+jobs:
+  validate:
+    name: Validate Manifest
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate qwen-extension.json
+        run: |
+          if [ ! -f ".qwen/qwen-extension.json" ]; then
+            echo "::error::Манифест .qwen/qwen-extension.json не найден!"
+            exit 1
+          fi
+
+          # Валидация JSON
+          if ! jq empty .qwen/qwen-extension.json; then
+            echo "::error::Невалидный JSON в манифесте!"
+            exit 1
+          fi
+
+          # Проверка обязательных полей
+          REQUIRED_FIELDS=("name" "version" "description" "contextFileName")
+          for field in "${REQUIRED_FIELDS[@]}"; do
+            if ! jq -e ".$field" .qwen/qwen-extension.json > /dev/null; then
+              echo "::error::Обязательное поле '$field' отсутствует в манифесте!"
+              exit 1
+            fi
+          done
+
+          echo "✅ Манифест валиден"
+          jq '.' .qwen/qwen-extension.json
+
+      - name: Validate QWEN.md
+        run: |
+          if [ ! -f ".qwen/QWEN.md" ]; then
+            echo "::error::Файл .qwen/QWEN.md не найден!"
+            exit 1
+          fi
+          echo "✅ QWEN.md найден"
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: validate
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Get version from tag
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ inputs.version }}"
+          else
+            VERSION="${{ github.ref_name }}"
+          fi
+          VERSION_NO_V="${VERSION#v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version_no_v=$VERSION_NO_V" >> $GITHUB_OUTPUT
+          echo "🏷️ Release version: $VERSION (без v: $VERSION_NO_V)"
+
+      - name: Update version in manifests
+        run: |
+          VERSION_NO_V="${{ steps.get_version.outputs.version_no_v }}"
+
+          echo "📝 Обновление версии в манифестах..."
+
+          # Обновить версию в qwen-extension.json
+          if [ -f ".qwen/qwen-extension.json" ]; then
+            jq --arg version "$VERSION_NO_V" '.version = $version' .qwen/qwen-extension.json > .qwen/qwen-extension.json.tmp
+            mv .qwen/qwen-extension.json.tmp .qwen/qwen-extension.json
+            echo "✅ .qwen/qwen-extension.json обновлён"
+          fi
+
+          # Обновить версию в package.json
+          if [ -f "package.json" ]; then
+            jq --arg version "$VERSION_NO_V" '.version = $version' package.json > package.json.tmp
+            mv package.json.tmp package.json
+            echo "✅ package.json обновлён"
+          fi
+
+          # Обновить версию в .version
+          echo "$VERSION_NO_V" > .version
+          echo "✅ .version обновлён"
+
+          # Показать изменения
+          echo ""
+          echo "📊 Изменения:"
+          git diff --stat
+
+      - name: Commit version updates
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          git add .qwen/qwen-extension.json package.json .version 2>/dev/null || true
+
+          if git diff --cached --quiet; then
+            echo "ℹ️ Нет изменений для коммита"
+          else
+            git commit -m "chore: bump version to ${{ steps.get_version.outputs.version_no_v }}"
+            git push
+            echo "✅ Версия закоммичена и отправлена"
+          fi
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+
+          echo "📝 Генерация changelog..."
+
+          if [ -z "$PREV_TAG" ]; then
+            echo "ℹ️ Первый релиз, используем все коммиты"
+            CHANGELOG=$(git log --pretty=format:"* %s (%h)" --no-merges | head -20)
+          else
+            echo "ℹ️ Changelog от $PREV_TAG до ${{ steps.get_version.outputs.version }}"
+            CHANGELOG=$(git log --pretty=format:"* %s (%h)" --no-merges "$PREV_TAG"..HEAD | head -20)
+          fi
+
+          # Сохранить в файл для отладки
+          echo "$CHANGELOG" > /tmp/changelog.md
+
+          echo "changelog<<CHANGELOG_EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "CHANGELOG_EOF" >> $GITHUB_OUTPUT
+
+          echo ""
+          echo "📋 Changelog:"
+          echo "$CHANGELOG"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ steps.get_version.outputs.version }}
+          body: |
+            ## 🎉 Changes
+
+            ${{ steps.changelog.outputs.changelog }}
+
+            ## 📦 Installation
+
+            \`\`\`bash
+            # Установка расширения
+            qwen extensions install https://github.com/${{ github.repository }} --ref ${{ steps.get_version.outputs.version }}
+            \`\`\`
+
+            ## 🔄 Update
+
+            \`\`\`bash
+            # Обновление расширения
+            qwen extensions update qwen-orchestrator-kit
+            \`\`\`
+
+            ## 📚 Documentation
+
+            См. [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) для полной истории изменений.
+
+            ---
+
+            **Auto-generated by GitHub Actions**
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify success
+        run: |
+          echo ""
+          echo "========================================"
+          echo "✅ Release ${{ steps.get_version.outputs.version }} создан успешно!"
+          echo "========================================"
+          echo ""
+          echo "🔗 Release URL: https://github.com/${{ github.repository }}/releases/tag/${{ steps.get_version.outputs.version }}"
+          echo "📦 Repository: https://github.com/${{ github.repository }}"
+          echo ""
+          echo "📝 Пользователи могут обновиться:"
+          echo "   qwen extensions update qwen-orchestrator-kit"
+          echo ""

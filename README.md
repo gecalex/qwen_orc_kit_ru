@@ -1,6 +1,6 @@
 # Qwen Code Orchestrator Kit
 
-[![Version](https://img.shields.io/badge/version-0.7.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-0.8.0-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 [![Qwen Code](https://img.shields.io/badge/Qwen-Code-purple.svg)]()
 
@@ -10,20 +10,37 @@
 
 ## 🚀 Quick Start
 
-### Установка за 1 минуту
+### Установка расширения (рекомендуется)
+
+```bash
+# Установить расширение из GitHub
+qwen extensions install https://github.com/gecalex/qwen_orc_kit_ru
+
+# Проверить установку
+qwen extensions list
+qwen extensions detail qwen-orchestrator-kit
+```
+
+### Разработка через Link (для контрибьюторов)
+
+```bash
+# Создать символическую ссылку для разработки
+qwen extensions link /path/to/qwen_orc_kit_ru/.qwen
+
+# Все изменения видны сразу без qwen extensions update!
+```
+
+### Установка из Git (альтернатива)
 
 ```bash
 # 1. Клонировать репозиторий
 git clone https://github.com/yourusername/qwen_orc_kit_ru.git
 cd qwen_orc_kit_ru
 
-# 2. Установить зависимости
+# 2. Установить Qwen Code CLI
 npm install -g @qwen-code/cli
 
-# 3. Инициализировать проект
-.qwen/scripts/init/init-project.sh
-
-# 4. Запустить Qwen Code
+# 3. Запустить Qwen Code
 qwen
 ```
 
@@ -78,6 +95,51 @@ skill: tdd-specialist
 - `work_testing_integration_test_writer` — Integration тесты
 - `work_testing_e2e_test_writer` — E2E тесты
 - `work_testing_security_tester` — Security тесты
+
+### 🔹 Extensions System (v0.8.0) ⭐ НОВОЕ!
+
+**Революционное улучшение** — переход на модель расширений Qwen Code CLI!
+
+**Преимущества:**
+- ✅ **Чистый проект** — ничего не копируется в директорию проекта
+- ✅ **Мгновенное тестирование** — не нужно `qwen extensions update`
+- ✅ **Link-разработка** — symlink между проектом и расширением
+- ✅ **Автоматические обновления** — из Git через CI/CD
+- ✅ **Простое управление** — включить/выключить одной командой
+
+**Установка:**
+```bash
+# Из GitHub (рекомендуется)
+qwen extensions install https://github.com/gecalex/qwen_orc_kit_ru
+
+# Для разработки (link)
+qwen extensions link /path/to/qwen_orc_kit_ru/.qwen
+```
+
+**Обновление:**
+```bash
+# Обновить расширение
+qwen extensions update qwen-orchestrator-kit
+
+# Обновить все расширения
+qwen extensions update --all
+```
+
+**Управление:**
+```bash
+# Список расширений
+qwen extensions list
+
+# Детали расширения
+qwen extensions detail qwen-orchestrator-kit
+
+# Включить/выключить
+qwen extensions enable qwen-orchestrator-kit
+qwen extensions disable qwen-orchestrator-kit
+
+# Удалить
+qwen extensions uninstall qwen-orchestrator-kit
+```
 
 ### 🔹 ИИ-Агенты
 

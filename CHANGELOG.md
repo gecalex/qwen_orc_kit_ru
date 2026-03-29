@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-03-29
+
+### Extensions System Migration
+
+### Added
+- **Extensions System** — переход на модель расширений Qwen Code CLI
+  - `.qwen/qwen-extension.json` — манифест расширения
+  - `.qwen/QWEN.md` — контекст расширения (синхронизированная версия)
+  - `qwen extensions link` — разработка через символическую ссылку
+  - Мгновенное тестирование без `qwen extensions update`
+  - Чистая директория проекта (ничего не копируется)
+
+- **CI/CD Automation** — автоматические релизы через GitHub Actions
+  - `.github/workflows/release.yml` — workflow создания релизов
+  - `.github/workflows/stable-sync.yml` — синхронизация stable ветки
+  - `.qwen/scripts/release/prepare-release.sh` — подготовка к релизу
+  - `.qwen/scripts/release/create-release.sh` — создание Git тега
+
+- **Скрипт синхронизации QWEN.md**
+  - `.qwen/scripts/tools/sync-qwen-md.sh` — автоматическая замена путей
+  - Копирование из корня в `.qwen/` с заменой `.qwen/` → относительные пути
+  - Поддержка двух версий QWEN.md (для проекта и для расширения)
+
+- **Документация**
+  - `docs/development/link-development.md` — руководство по link-разработке
+  - `docs/plans/extensions-migration-plan.md` — полный план миграции
+  - `docs/ci-cd/github-actions-workflows.md` — документация workflow
+  - `docs/ci-cd/release-process.md` — процесс релиза
+  - `docs/analysis/project-state-2026-03-29.md` — анализ проекта и план развития
+
+### Changed
+- **Архитектура** — переход от копирования файлов к модели расширений
+- **Процесс разработки** — link вместо ручного копирования
+- **Процесс релиза** — автоматизация через GitHub Actions
+
+### Technical Details
+- **Версия расширения**: 0.7.0 → 0.8.0
+- **Агентов**: 36
+- **Навыков**: 40
+- **Команд**: 24
+- **Скриптов**: 94
+
 ## [0.7.0] - 2026-03-28
 
 ### Priority 0 (Критическое) - 100% ✅

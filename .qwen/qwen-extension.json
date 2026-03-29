@@ -1,0 +1,80 @@
+{
+  "name": "qwen-orchestrator-kit",
+  "version": "0.7.0",
+  "contextFileName": "QWEN.md",
+  "commands": "commands",
+  "skills": "skills",
+  "agents": "agents",
+  "excludeTools": [
+    "run_shell_command(rm -rf)",
+    "run_shell_command(sudo)"
+  ],
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "description": "Документация библиотек и фреймворков"
+    },
+    "searxng": {
+      "command": "npx",
+      "args": ["-y", "mcp-searxng@latest"],
+      "env": {
+        "SEARXNG_URL": "${SEARXNG_URL}"
+      },
+      "description": "Поиск в интернете через SearXNG (70+ движков)"
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--executable-path=/usr/bin/chromium",
+        "--isolated"
+      ],
+      "description": "Автоматизация браузера Chrome/Chromium"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem@latest",
+        "${workspaceFolder}"
+      ],
+      "description": "Работа с файловой системой проекта"
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git@latest"],
+      "cwd": "${workspaceFolder}",
+      "description": "Git операции (status, diff, log, commit)"
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github@latest"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "description": "GitHub API (репозитории, issues, PR)"
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-playwright@latest"],
+      "description": "Браузерная автоматизация (Chromium, Firefox, WebKit)"
+    }
+  },
+  "settings": [
+    {
+      "name": "GitHub Token",
+      "description": "GitHub Personal Access Token для GitHub MCP",
+      "envVar": "GITHUB_TOKEN",
+      "sensitive": true
+    },
+    {
+      "name": "SearXNG URL",
+      "description": "URL локального инстанса SearXNG для веб-поиска",
+      "envVar": "SEARXNG_URL",
+      "sensitive": false,
+      "default": "http://localhost:8080"
+    }
+  ]
+}

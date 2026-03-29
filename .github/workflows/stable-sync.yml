@@ -1,0 +1,78 @@
+name: Sync Stable Branch
+
+on:
+  push:
+    branches:
+      - main  # При пуше в main
+
+jobs:
+  sync-stable:
+    name: Sync to Stable
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Check if stable branch exists
+        id: check_stable
+        run: |
+          if git show-ref --verify --quiet refs/heads/stable; then
+            echo "stable_exists=true" >> $GITHUB_OUTPUT
+            echo "✅ Stable ветка существует"
+          else
+            echo "stable_exists=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ Stable ветка не существует, будет создана"
+          fi
+
+      - name: Create or update stable branch
+        run: |
+          if [ "${{ steps.check_stable.outputs.stable_exists }}" = "true" ]; then
+            echo "🔄 Обновление stable ветки..."
+            git checkout stable
+            git pull origin stable || true
+            git merge main --no-ff -m "chore: sync stable with main ($(date +%Y-%m-%d))"
+          else
+            echo "✨ Создание stable ветки..."
+            git checkout -b stable
+          fi
+
+          git push -u origin stable
+
+      - name: Verify sync
+        run: |
+          echo "✅ Проверка синхронизации..."
+          
+          # Проверить, что stable существует
+          if ! git show-ref --verify --quiet refs/heads/stable; then
+            echo "::error::Stable ветка не создана!"
+            exit 1
+          fi
+
+          # Показать последние коммиты
+          echo ""
+          echo "📊 Последние коммиты в stable:"
+          git log --oneline -5 stable
+
+          echo ""
+          echo "📊 Статус веток:"
+          git branch -a
+
+      - name: Notify success
+        run: |
+          echo ""
+          echo "========================================"
+          echo "✅ Stable ветка синхронизирована с main"
+          echo "========================================"
+          echo ""
+          echo "🔗 Repository: https://github.com/${{ github.repository }}"
+          echo "🌿 Stable branch: https://github.com/${{ github.repository }}/tree/stable"
+          echo ""
